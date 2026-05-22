@@ -102,6 +102,24 @@ content:
         description: Describes the cover for screen readers. Leave blank if the image is purely decorative.
         type: string
 
+      - name: coverAspect
+        label: Cover crop
+        description: >-
+          How to display the cover photo. "Natural" keeps the image's own
+          proportions (no crop). The other options crop the photo to that
+          shape — portrait variants are taller than wide; landscape variants
+          are wider than tall.
+        type: select
+        default: natural
+        options:
+          values:
+            - { name: natural, label: "Natural (no crop)" }
+            - { name: "16-9",  label: "Wide — 16:9 (landscape)" }
+            - { name: "9-16",  label: "Tall — 9:16 (portrait)" }
+            - { name: "4-3",   label: "Landscape — 4:3" }
+            - { name: "3-4",   label: "Portrait — 3:4" }
+            - { name: "1-1",   label: "Square — 1:1" }
+
       - name: tags
         label: Tags
         type: string

@@ -30,6 +30,14 @@ const k = kindLabel[post.data.kind];
 // Narrow the discriminated union for the optional kind-specific fields.
 const video = post.data.kind === 'video' ? post.data : null;
 const gaming = post.data.kind === 'gaming' ? post.data : null;
+
+// Cover crop. "natural" (or unset) → no aspect-ratio; otherwise map "W-H" → "W / H".
+const coverAspect = post.data.coverAspect ?? 'natural';
+const coverIsNatural = coverAspect === 'natural';
+const coverAspectCss = coverIsNatural ? null : coverAspect.replace('-', ' / ');
+const coverFigureStyle = coverIsNatural
+  ? 'margin: 24px 0 36px'
+  : `aspect-ratio: ${coverAspectCss}; margin: 24px 0 36px`;
 ---
 <Layout title={`${post.data.title} — Journal`} description={post.data.excerpt}>
   <div class="page">
@@ -74,7 +82,7 @@ const gaming = post.data.kind === 'gaming' ? post.data : null;
 
         {/* Writing & gaming posts: cover image. Video posts already have the embed. */}
         {post.data.kind !== 'video' && post.data.cover && (
-          <figure class="cover cover--natural" style="margin: 24px 0 36px">
+          <figure class={`cover${coverIsNatural ? ' cover--natural' : ''}`} style={coverFigureStyle}>
             <img src={post.data.cover} alt={post.data.coverAlt ?? ''} />
           </figure>
         )}

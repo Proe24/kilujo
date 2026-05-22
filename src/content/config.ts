@@ -11,6 +11,10 @@ const baseFields = z.object({
   excerpt: z.string().optional(),
   cover: z.string().optional(),
   coverAlt: z.string().optional(),
+  /* How to crop the cover image. Default is "natural" — no crop. */
+  coverAspect: z
+    .enum(['natural', '16-9', '9-16', '4-3', '3-4', '1-1'])
+    .optional(),
   tags: z.array(z.string()).optional(),
   gallery: z
     .array(
