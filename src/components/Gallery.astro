@@ -16,7 +16,7 @@ const normalized = (items ?? []).map(normalize);
 {normalized.length > 0 && (
   <section class="gallery">
     {heading && <h2 class="gallery__heading">{heading}</h2>}
-    <div class="gallery__masonry">
+    <div class="gallery__grid">
       {normalized.map((img) => (
         <a
           href={img.src}
@@ -33,40 +33,3 @@ const normalized = (items ?? []).map(normalize);
     </div>
   </section>
 )}
-
-<style>
-  .gallery__masonry {
-    column-count: 3;
-    column-gap: 10px;
-  }
-  @media (max-width: 900px) {
-    .gallery__masonry { column-count: 2; }
-  }
-  @media (max-width: 520px) {
-    .gallery__masonry { column-count: 1; }
-  }
-  .gallery__item {
-    display: block;
-    margin: 0 0 10px;
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    cursor: zoom-in;
-    /* prevent column-break inside a single tile */
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .gallery__item:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-soft);
-  }
-  .gallery__item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-</style>

@@ -74,7 +74,7 @@ const gaming = post.data.kind === 'gaming' ? post.data : null;
 
         {/* Writing & gaming posts: cover image. Video posts already have the embed. */}
         {post.data.kind !== 'video' && post.data.cover && (
-          <figure class="cover" style="aspect-ratio: 16 / 9; margin: 24px 0 36px">
+          <figure class="cover cover--natural" style="margin: 24px 0 36px">
             <img src={post.data.cover} alt={post.data.coverAlt ?? ''} />
           </figure>
         )}

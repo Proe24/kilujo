@@ -339,6 +339,10 @@ a.tag:hover, button.tag:hover {
   border-radius: inherit;
 }
 
+/* natural-aspect-ratio variant — image keeps its own ratio, no cropping */
+.cover--natural { aspect-ratio: auto; }
+.cover--natural img { height: auto; object-fit: initial; }
+
 /* divider with asterism */
 .rule {
   display: flex;
