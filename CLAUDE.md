@@ -22,6 +22,9 @@ Vercel rebuilds on every push to `main`.
 3. **Keep notes up to date.** When adding features, pages, env vars, or non-obvious behavior, update `README.md` (and this file if it's about how the project is operated) so there's a written record.
 4. **Privacy by default.** No analytics scripts, no third-party trackers, no external CDNs, no embedded social widgets — unless the owner explicitly asks. Self-host anything that can be self-hosted.
 5. **Barotrauma guide lives at `public/guides/barotrauma/`.** Treat those files as a self-contained static drop. Don't rewrite their styling to match the main site — the dark submarine theme is intentional once you click into the guide.
+   - Global navigation (sticky topbar + slide-in drawer + auto prev/next) is handled by **`baro_nav.js`**. That file is the single source of truth for the page list, categories, and load order. Edit the `PAGES` array there to add or rename a mod — every page picks it up automatically.
+   - Every guide HTML file just needs `<script defer src="baro_nav.js"></script>` before `</body>`. If you add a new HTML page, add that line.
+   - The back link in the topbar points at `/guides` on the main site.
 
 ## Current env vars (set in Vercel)
 
