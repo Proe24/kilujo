@@ -3,6 +3,11 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="About — Kilujo" description="Kilo, Kujo, Gianna & Stephen — our story.">
   <article class="prose about">
+    <img
+      class="cover about__cover"
+      src="/uploads/about/family.jpg"
+      alt="Gianna, Stephen, Kilo and Kujo on a sunny hillside"
+    />
     <p class="about__eyebrow">About</p>
     <h1 class="about__title">K&nbsp;I&nbsp;L&nbsp;U&nbsp;J&nbsp;O</h1>
 
@@ -45,5 +50,8 @@ import Layout from '../layouts/Layout.astro';
   .about__lede {
     font-size: 1.15rem;
     color: var(--text);
+  }
+  .about__cover {
+    max-height: 520px;
   }
 </style>

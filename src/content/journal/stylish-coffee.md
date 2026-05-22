@@ -4,6 +4,13 @@ date: 2024-08-12
 author: "Gianna Yim"
 tags: ["coffee", "okinawa"]
 description: "Tiny togo coffee on Miyagi Street in Chatan — pour over, cold brew, and a friendly bow on the way out."
+cover: "/uploads/stylish-coffee/01.jpg"
+coverAlt: "Stylish Coffee storefront in Chatan, Okinawa"
+gallery:
+  - { src: "/uploads/stylish-coffee/02.jpg", alt: "Inside Stylish Coffee" }
+  - { src: "/uploads/stylish-coffee/03.jpg", alt: "Pour-over being prepared" }
+  - { src: "/uploads/stylish-coffee/04.jpg", alt: "Counter detail" }
+  - { src: "/uploads/stylish-coffee/05.jpg", alt: "Shelf of roasted beans for sale" }
 ---
 
 Have to start somewhere, right? Well, it begins with Stylish Coffee on Miyagi Street in Chatan. First of all, don't make the mistake and walk in the first door on the left once you park in their parking lot. It's actually a salon. Looks cool though. But, after you enter the second door from the left, you walk into a really small room. Togo coffee it is! Thought we'd have a sit-down coffee shop and work on some stuff on the lappy tappy. My fault. Didn't look in great detail at the google link to this coffee shop.

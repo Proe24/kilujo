@@ -44,6 +44,7 @@ The local `.env` mirrors these for `npm run dev` / `npm run build` on the owner'
 - **Bylines:** Gianna's posts → `author: "Gianna Yim"`. Stephen's → `author: "Stephen Underwood"`. Renders as "By {name}" on post pages.
 - **Tags (journal only):** array under `tags:` in frontmatter. Each tag generates a page at `/journal/tag/<tag>`. The journal index shows a tag-filter row when any tags exist. Coffee posts use `["coffee", "okinawa"]` so far.
 - **Vlog embeds:** put the YouTube URL in `video:` frontmatter. The post template auto-extracts the ID and embeds via `youtube-nocookie.com` (privacy-friendlier than `youtube.com`).
+- **Post images:** drop into `public/uploads/<post-slug>/` with zero-padded names (`01.jpg`, `02.jpg`, …). Reference via `cover` (hero) and `gallery` (array) in frontmatter. Gallery items can be plain strings or `{ src, alt }`. Both fields are supported on every collection via the shared `<Gallery>` component.
 
 ## Third-party embeds in use
 

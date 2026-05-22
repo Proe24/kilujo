@@ -1,0 +1,25 @@
+---
+type Item = string | { src: string; alt?: string };
+interface Props {
+  items?: Item[];
+  heading?: string;
+}
+const { items, heading } = Astro.props;
+
+function normalize(it: Item) {
+  return typeof it === 'string' ? { src: it, alt: '' } : { src: it.src, alt: it.alt ?? '' };
+}
+const normalized = (items ?? []).map(normalize);
+---
+{normalized.length > 0 && (
+  <section class="gallery">
+    {heading && <h2 class="gallery__heading">{heading}</h2>}
+    <div class="gallery__grid">
+      {normalized.map((img) => (
+        <a href={img.src} class="gallery__item" target="_blank" rel="noopener noreferrer">
+          <img src={img.src} alt={img.alt} loading="lazy" />
+        </a>
+      ))}
+    </div>
+  </section>
+)}

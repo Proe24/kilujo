@@ -44,6 +44,9 @@ Optional frontmatter (all collections):
 | `description` | Short blurb shown on the index. |
 | `author`      | Renders a byline ("By Gianna Yim"). |
 | `draft`       | `true` hides the post from the build. |
+| `cover`       | Path to a hero image (e.g. `/uploads/<slug>/01.jpg`). Rendered above the post body. |
+| `coverAlt`    | Alt text for the cover image. |
+| `gallery`     | Array of image paths or `{ src, alt }` objects. Rendered as a responsive grid below the post body. |
 
 Per-collection extras:
 
@@ -65,6 +68,10 @@ Managed entirely on Flickr — rebuild the site to refresh the album list and pe
 
 Edit `src/pages/about.astro` directly. It's a standalone page, not a markdown collection.
 
+### Post images
+
+Drop images into `public/uploads/<post-slug>/` (any image format). Reference them in the post frontmatter via the `cover` and `gallery` fields. Filenames sort lexicographically, so prefer zero-padded names (`01.jpg`, `02.jpg`, …) if you want a specific order.
+
 ## Project layout
 
 ```
@@ -73,10 +80,11 @@ Edit `src/pages/about.astro` directly. It's a standalone page, not a markdown co
 ├── package.json
 ├── public/
 │   ├── favicon.svg
-│   └── guides/
-│       └── barotrauma/      # static Barotrauma guide
+│   ├── guides/
+│   │   └── barotrauma/      # static Barotrauma guide
+│   └── uploads/             # per-post images (uploads/<slug>/*.jpg)
 ├── src/
-│   ├── components/          # Nav, Footer
+│   ├── components/          # Nav, Footer, Gallery
 │   ├── content/
 │   │   ├── config.ts        # zod schemas
 │   │   ├── journal/         # *.md

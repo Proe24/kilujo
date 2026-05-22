@@ -6,10 +6,24 @@ const postSchema = z.object({
   description: z.string().optional(),
   draft: z.boolean().default(false),
   author: z.string().optional(),
+  // Optional hero image, rendered above the post body. Path under /public.
+  cover: z.string().optional(),
+  // Optional caption / alt text for the hero.
+  coverAlt: z.string().optional(),
+  // Optional gallery rendered as a responsive grid below the post body.
+  // Each item is either a path string or { src, alt? }.
+  gallery: z
+    .array(
+      z.union([
+        z.string(),
+        z.object({ src: z.string(), alt: z.string().optional() }),
+      ])
+    )
+    .optional(),
 });
 
 const journalSchema = postSchema.extend({
-  // Free-form tags. The journal index filters by ?tag=coffee, etc.
+  // Free-form tags. The journal index links to /journal/tag/<tag>.
   tags: z.array(z.string()).optional(),
 });
 
