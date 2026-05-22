@@ -52,7 +52,7 @@ const gaming = post.data.kind === 'gaming' ? post.data : null;
           {post.data.tags && post.data.tags.length > 0 && (
             <div class="tag-row" style="margin-top: 18px">
               {post.data.tags.map((t) => (
-                <a class="tag" href={`/journal/tag/${t}`}>{t}</a>
+                <a class="tag" href={`/journal?tag=${encodeURIComponent(t)}`}>{t}</a>
               ))}
             </div>
           )}

@@ -235,25 +235,64 @@ content:
         label: Long description (optional)
         type: rich-text
 
-  # ── Home: "Now" status card at the bottom of the home page ───────────
+  # ── Home: every editable surface on the home page ────────────────────
   - name: home
-    label: Home — Now status
+    label: Home page
     type: file
     path: src/content/pages/home.md
     format: yaml-frontmatter
     fields:
-      - name: nowMonth
-        label: Month label (optional)
+      - name: heroImage
+        label: Hero image
+        description: The big photo at the top of the home page.
+        type: image
+        options:
+          media: about
+
+      - name: heroAlt
+        label: Hero image alt text
+        description: For screen readers. Describe what's in the photo.
+        type: string
+
+      - name: heroCaption
+        label: Hero caption
+        description: 'Small italic note under the photo (e.g. "The four of us, on a hillside, last spring.").'
+        type: string
+
+      - name: eyebrow
+        label: Eyebrow line
+        description: 'Small caps line above the greeting (e.g. "A small notebook · Kept since 2024 · Currently in Okinawa").'
+        type: string
+
+      - name: greeting
+        label: Greeting
         description: >-
-          Override the "Now · …" eyebrow. Leave blank to use the current month
-          automatically (e.g. "May 2026").
+          The big italic intro. Each new line becomes a separate line on the page.
+          Use "&" to get the styled ampersand.
+        type: text
+
+      - name: intro
+        label: Intro paragraph
+        description: The paragraph under the greeting.
+        type: text
+
+      - name: latelyLabel
+        label: "Latest entries" label
+        description: 'Eyebrow above the recent posts (e.g. "From the journal · Lately").'
+        type: string
+
+      - name: nowMonth
+        label: "Now" month label (optional)
+        description: >-
+          Override the "Now · …" eyebrow on the status card. Leave blank to use the
+          current month automatically (e.g. "May 2026").
         type: string
 
       - name: nowBody
-        label: Status update
+        label: "Now" status update
         description: >-
           A short paragraph shown at the bottom of the home page. Leave blank to
-          hide the card entirely.
+          hide the status card entirely.
         type: text
 
   # ── About: single-file page ───────────────────────────────────────────

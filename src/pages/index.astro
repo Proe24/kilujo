@@ -17,39 +17,59 @@ const kindLabel: Record<string, { label: string; icon: string }> = {
 };
 
 const home = await getEntry('pages', 'home');
-const nowMonth = home?.data.nowMonth
+const h = home?.data ?? {};
+
+const heroImage   = h.heroImage   ?? '/uploads/about/family.jpg';
+const heroAlt     = h.heroAlt     ?? '';
+const heroCaption = h.heroCaption ?? '';
+const eyebrow     = h.eyebrow     ?? '';
+const intro       = h.intro       ?? '';
+const latelyLabel = h.latelyLabel ?? 'From the journal · Lately';
+const nowMonth    = h.nowMonth
   ?? new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-const nowBody = home?.data.nowBody;
+const nowBody     = h.nowBody;
+
+// Render the greeting: split on newlines, escape, then style "&" as the
+// italic ampersand. set:html receives this — we control the substitution
+// so no user-supplied HTML can leak through.
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!
+  ));
+const greetingHtml = (h.greeting ?? '')
+  .split('\n')
+  .map((line) => line.trimEnd())
+  .filter((line) => line.length > 0)
+  .map((line) => escapeHtml(line).replace(/&amp;/g, '<span class="amp">&amp;</span>'))
+  .join('<br />');
 ---
 <Layout title="kilujo · a quiet corner of the internet">
   <div class="page">
     <div class="wrap-wide" style="padding-top: 0">
-      <figure class="cover home-hero" style="margin-bottom: 36px">
-        <img src="/uploads/about/family.jpg" alt="Gianna, Stephen, Kilo and Kujo on a grassy hillside." />
-        <figcaption class="home-hero-caption">
-          <span class="arrow">↑</span>
-          <span>The four of us, on a hillside, last spring.</span>
-        </figcaption>
-      </figure>
+      {heroImage && (
+        <figure class="cover home-hero" style="margin-bottom: 36px">
+          <img src={heroImage} alt={heroAlt} />
+          {heroCaption && (
+            <figcaption class="home-hero-caption">
+              <span class="arrow">↑</span>
+              <span>{heroCaption}</span>
+            </figcaption>
+          )}
+        </figure>
+      )}
 
       <div class="wrap-narrow center">
-        <div class="eyebrow" style="margin-bottom: 18px">
-          A small notebook · Kept since 2024 · Currently in Okinawa
-        </div>
+        {eyebrow && (
+          <div class="eyebrow" style="margin-bottom: 18px">{eyebrow}</div>
+        )}
 
-        <h1 class="home-greeting">
-          Hello, we're<br />
-          Kilo, Kujo, Gianna<br />
-          <span class="amp">&amp;</span> Stephen.
-        </h1>
+        {greetingHtml && (
+          <h1 class="home-greeting" set:html={greetingHtml} />
+        )}
 
-        <p class="home-intro">
-          A shiba, a jindo-collie, a Kentucky kid, and a kid from San Francisco
-          by way of Taiwan. This is where we keep notes about the coffee we
-          drink, the games we play, the places we walk to, and the quiet
-          things in between. There is nothing to sign up for and nothing to
-          buy. Welcome in.
-        </p>
+        {intro && (
+          <p class="home-intro">{intro}</p>
+        )}
 
         <div class="home-dogs">
           <DogAvatar dog="kujo" size={36} />
@@ -60,7 +80,7 @@ const nowBody = home?.data.nowBody;
       <div class="rule"><span class="rule-glyph" aria-hidden="true">· · ·</span></div>
 
       <div class="home-latest-head">
-        <div class="eyebrow">From the journal · Lately</div>
+        <div class="eyebrow">{latelyLabel}</div>
         <a href="/journal" class="ink-link home-latest-all">All entries →</a>
       </div>
 
@@ -105,13 +125,14 @@ const nowBody = home?.data.nowBody;
         )}
       </div>
 
-      <div class="rule"><span class="rule-glyph" aria-hidden="true">· · ·</span></div>
-
       {nowBody && (
-        <div class="now-card">
-          <div class="eyebrow" style="margin-bottom: 10px">Now · {nowMonth}</div>
-          <p class="now-card__body">{nowBody}</p>
-        </div>
+        <>
+          <div class="rule"><span class="rule-glyph" aria-hidden="true">· · ·</span></div>
+          <div class="now-card">
+            <div class="eyebrow" style="margin-bottom: 10px">Now · {nowMonth}</div>
+            <p class="now-card__body">{nowBody}</p>
+          </div>
+        </>
       )}
     </div>
   </div>

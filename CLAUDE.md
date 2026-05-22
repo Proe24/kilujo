@@ -112,7 +112,14 @@ Small things we've made — guides, experiments, tools. Drives `/projects`.
 Single-file content. Two singletons today:
 
 - **`about.md`** — rendered by `src/pages/about.astro` via `getEntry('pages', 'about')`. Fields: `title`, `hero`, `heroAlt`, body.
-- **`home.md`** — drives the **"Now"** status card at the bottom of the home page. Fields: `nowMonth` (optional override, e.g. `"May 2026"` — defaults to the current month) and `nowBody` (the paragraph itself; leave blank to hide the whole card).
+- **`home.md`** — drives the **entire home page** (`src/pages/index.astro` is a thin renderer). Fields:
+  - `heroImage`, `heroAlt`, `heroCaption` — the photo at the top and its italic caption.
+  - `eyebrow` — small caps line above the greeting.
+  - `greeting` — the big italic intro. Newlines render as `<br>`; any `&` is auto-styled with `.amp`.
+  - `intro` — paragraph under the greeting.
+  - `latelyLabel` — eyebrow above the latest entries (e.g. `"From the journal · Lately"`).
+  - `nowMonth` — optional override for the "Now · …" eyebrow on the status card. Blank → uses the current month.
+  - `nowBody` — the status paragraph. Blank → the whole status card is hidden.
 
 ### Photos — *not* managed
 Albums are pulled from **Flickr at build time** via `src/lib/flickr.ts` and rendered by `src/pages/photos/`. The CMS does not touch this — leave it alone.
@@ -122,7 +129,7 @@ Albums are pulled from **Flickr at build time** via `src/lib/flickr.ts` and rend
 ## Authoring conventions
 
 - **Bylines:** `author: "Gianna Yim"` (coffee posts so far) or `author: "Stephen Underwood"` (vlogs so far). Renders as "By {name}" on post pages.
-- **Tags:** array on journal posts. Each generates `/journal/tag/<tag>`. Index shows a filter row when any exist.
+- **Tags:** array on journal posts. The journal index has **client-side filter chips** for kind and tag, with state mirrored to URL params (`/journal?kind=video&tag=coffee`). Tag chips on individual posts deep-link into the filter. There is no `/journal/tag/<tag>` route — the filter is the single way to slice the list.
 - **YouTube:** `kind: video` + `youtubeId: "..."`. Rendered inline via `youtube-nocookie.com` (lowest-tracking variant — owner approved).
 - **Images:**
   - Existing hand-migrated content: `public/uploads/journal/<post-slug>/01.jpg` (zero-padded for sort order).
