@@ -17,28 +17,134 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-const formatDate = (d: Date) =>
+const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const kindLabel: Record<string, { label: string; icon: string }> = {
+  writing: { label: 'Writing', icon: '✎' },
+  video:   { label: 'Video',   icon: '▶' },
+  gaming:  { label: 'Gaming',  icon: '◆' },
+};
+const k = kindLabel[post.data.kind];
+
+// Narrow the discriminated union for the optional kind-specific fields.
+const video = post.data.kind === 'video' ? post.data : null;
+const gaming = post.data.kind === 'gaming' ? post.data : null;
 ---
-<Layout title={`${post.data.title} — Journal`} description={post.data.description}>
-  <a href="/journal" class="back-link">← Back to Journal</a>
-  <article class="prose">
-    <h1>{post.data.title}</h1>
-    <span class="post-meta">
-      {formatDate(post.data.date)}
-      {post.data.author ? ` · By ${post.data.author}` : ''}
-    </span>
-    {post.data.tags && post.data.tags.length > 0 && (
-      <div class="tag-row">
-        {post.data.tags.map((t) => (
-          <a class="tag" href={`/journal/tag/${t}`}>#{t}</a>
-        ))}
-      </div>
-    )}
-    {post.data.cover && (
-      <img class="cover" src={post.data.cover} alt={post.data.coverAlt ?? ''} />
-    )}
-    <Content />
-    <Gallery items={post.data.gallery} heading="More photos" />
-  </article>
+<Layout title={`${post.data.title} — Journal`} description={post.data.excerpt}>
+  <div class="page">
+    <div class="wrap">
+      <a href="/journal" class="ink-link back-link">← All entries</a>
+
+      <article class="prose">
+        <header style="margin-bottom: 32px">
+          <div class="post-meta" style="margin-bottom: 14px">
+            <span class="kind-badge" data-kind={post.data.kind}>
+              <span class="kind-badge-icon">{k.icon}</span>
+              <span>{k.label}</span>
+            </span>
+            <span class="dot-sep"></span>
+            <span>{fmtDate(post.data.date)}</span>
+            <span class="dot-sep"></span>
+            <span>By {post.data.author}</span>
+          </div>
+          <h1>{post.data.title}</h1>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="tag-row" style="margin-top: 18px">
+              {post.data.tags.map((t) => (
+                <a class="tag" href={`/journal/tag/${t}`}>{t}</a>
+              ))}
+            </div>
+          )}
+        </header>
+
+        {/* Video posts: YouTube embed (no-cookie variant). */}
+        {video && video.youtubeId && (
+          <div class="video-embed">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?rel=0`}
+              title={post.data.title}
+              loading="lazy"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"
+            ></iframe>
+          </div>
+        )}
+
+        {/* Writing & gaming posts: cover image. Video posts already have the embed. */}
+        {post.data.kind !== 'video' && post.data.cover && (
+          <figure class="cover" style="aspect-ratio: 16 / 9; margin: 24px 0 36px">
+            <img src={post.data.cover} alt={post.data.coverAlt ?? ''} />
+          </figure>
+        )}
+
+        {/* Gaming meta strip. */}
+        {gaming && (
+          <div class="meta-grid">
+            {gaming.game && (
+              <div class="meta-cell">
+                <div class="eyebrow" style="margin-bottom: 6px">Game</div>
+                <div class="meta-cell__value"><em>{gaming.game}</em></div>
+              </div>
+            )}
+            {gaming.rating != null && (
+              <div class="meta-cell">
+                <div class="eyebrow" style="margin-bottom: 6px">Rating</div>
+                <div class="meta-cell__value">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <span class={'rating-pip' + (i < gaming.rating! ? '' : ' rating-pip--off')}>●</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {gaming.hours != null && (
+              <div class="meta-cell">
+                <div class="eyebrow" style="margin-bottom: 6px">Hours</div>
+                <div class="meta-cell__value">{gaming.hours}h</div>
+              </div>
+            )}
+            {gaming.platform && (
+              <div class="meta-cell">
+                <div class="eyebrow" style="margin-bottom: 6px">Platform</div>
+                <div class="meta-cell__value">{gaming.platform}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <Content />
+
+        <Gallery
+          items={post.data.gallery}
+          heading={post.data.kind === 'video' ? 'Stills from the trip' : 'More photos'}
+        />
+      </article>
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 0 0 36px;
+  }
+  .meta-cell {
+    background: var(--surface);
+    padding: 16px 18px;
+  }
+  .meta-cell__value {
+    font-family: var(--serif-display);
+    font-size: 20px;
+    display: inline-flex;
+    gap: 2px;
+  }
+  .rating-pip { color: var(--accent); font-size: 16px; line-height: 1; }
+  .rating-pip--off { color: var(--border); }
+</style>

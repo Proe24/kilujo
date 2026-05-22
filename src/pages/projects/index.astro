@@ -1,0 +1,181 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.year - a.data.year);
+
+const statusClass = (s: string) =>
+  'status-' + s.toLowerCase().replace(/\s+/g, '-');
+---
+<Layout title="Projects — Kilujo" description="Small things we've made.">
+  <div class="page">
+    <div class="wrap-wide">
+      <header class="page-header">
+        <div class="eyebrow" style="margin-bottom: 12px">Projects</div>
+        <h1><em>Things we've made.</em></h1>
+        <p class="lede">A drawer full of small, mostly finished things. Some useful, some just proof of concept. All ours.</p>
+      </header>
+
+      {projects.length === 0 ? (
+        <div class="empty">No projects yet. Add one in <code>src/content/projects/</code> (or via Pages CMS).</div>
+      ) : (
+        <div class="projects-grid">
+          {projects.map((p) => {
+            const isExternal = p.data.link.startsWith('http');
+            return (
+              <a
+                href={p.data.link}
+                class="project-card"
+                style={`--card-accent: ${p.data.accent ?? 'var(--accent)'}`}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+              >
+                <div class="project-cover">
+                  {p.data.cover && <img src={p.data.cover} alt="" loading="lazy" />}
+                  <span class="project-kind">{p.data.kind}</span>
+                </div>
+                <div class="project-body">
+                  <div class="project-meta">
+                    <span>{p.data.year}</span>
+                    <span class="dot-sep"></span>
+                    <span class={`project-status ${statusClass(p.data.status)}`}>
+                      <span class="status-dot"></span>
+                      {p.data.status}
+                    </span>
+                  </div>
+                  <h3 class="project-title">{p.data.title}</h3>
+                  <p class="project-blurb">{p.data.blurb}</p>
+                  {p.data.tech && p.data.tech.length > 0 && (
+                    <div class="project-tech">
+                      {p.data.tech.map((t: string) => <span class="tech-chip">{t}</span>)}
+                    </div>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  @media (max-width: 720px) {
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    text-decoration: none;
+    color: inherit;
+    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative;
+  }
+  .project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+  }
+  .project-card::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    opacity: .82;
+  }
+  .project-cover {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--bg-alt);
+  }
+  .project-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: saturate(.95);
+    transition: transform .5s ease;
+  }
+  .project-card:hover .project-cover img { transform: scale(1.03); }
+  .project-kind {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: rgba(250, 247, 242, .92);
+    padding: 4px 10px;
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .project-body {
+    padding: 22px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  .project-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .project-status { display: inline-flex; align-items: center; gap: 6px; }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .status-live              .status-dot { background: #7c8c69; }
+  .status-in-progress       .status-dot { background: #c08a6f; }
+  .status-proof-of-concept  .status-dot { background: #9b8c5a; }
+  .status-archived          .status-dot { background: #76695f; }
+  .project-title {
+    font-family: var(--serif-display);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .project-blurb {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: auto;
+  }
+  .tech-chip {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    padding: 3px 9px;
+    background: var(--bg-alt);
+    border-radius: 999px;
+  }
+</style>

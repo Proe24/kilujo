@@ -2,13 +2,18 @@
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+// Self-hosted Newsreader (no external CDN).
+import '@fontsource/newsreader/400.css';
+import '@fontsource/newsreader/500.css';
+import '@fontsource/newsreader/400-italic.css';
+import '@fontsource/newsreader/500-italic.css';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const { title = 'Kilujo', description = 'A small, personal website.' } = Astro.props;
+const { title = 'Kilujo', description = 'A small notebook from Gianna, Stephen, Kilo & Kujo.' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -22,9 +27,7 @@ const { title = 'Kilujo', description = 'A small, personal website.' } = Astro.p
   <body>
     <Nav />
     <main>
-      <div class="container">
-        <slot />
-      </div>
+      <slot />
     </main>
     <Footer />
   </body>

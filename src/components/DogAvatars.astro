@@ -1,0 +1,39 @@
+---
+// Inline SVG avatars for Kilo (shiba) and Kujo (jindo-mix with the floppy ear).
+// Lifted from the Claude Design handoff.
+interface Props {
+  size?: number;
+  dog: 'kilo' | 'kujo';
+}
+const { size = 36, dog } = Astro.props;
+---
+{dog === 'kilo' ? (
+  <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden="true">
+    <circle cx="16" cy="16" r="16" fill="#b88a66" />
+    <path d="M7 11 L10 3.5 L13.5 12 Z" fill="#8e5d3c" />
+    <path d="M25 11 L22 3.5 L18.5 12 Z" fill="#8e5d3c" />
+    <path d="M10.4 6 L10.8 10 L12.2 11 Z" fill="#5e3d24" opacity=".55" />
+    <path d="M21.6 6 L21.2 10 L19.8 11 Z" fill="#5e3d24" opacity=".55" />
+    <ellipse cx="16" cy="18" rx="9.5" ry="8.5" fill="#d8b292" />
+    <ellipse cx="16" cy="22" rx="6" ry="5.2" fill="#f5ede2" />
+    <ellipse cx="12.6" cy="15.6" rx="1.5" ry="1.1" fill="#f5ede2" />
+    <ellipse cx="19.4" cy="15.6" rx="1.5" ry="1.1" fill="#f5ede2" />
+    <circle cx="12.8" cy="16.5" r=".95" fill="#2f2a26" />
+    <circle cx="19.2" cy="16.5" r=".95" fill="#2f2a26" />
+    <ellipse cx="16" cy="20" rx="1.1" ry=".75" fill="#2f2a26" />
+    <path d="M14 22.4 Q16 23.6 18 22.4" stroke="#2f2a26" stroke-width="1" fill="none" stroke-linecap="round" />
+  </svg>
+) : (
+  <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden="true">
+    <circle cx="16" cy="16" r="16" fill="#efe6d6" />
+    <path d="M7 10.5 Q5.5 4.5 10 4.5 Q13 5.5 12.5 9 Q10.5 12 7 10.5 Z" fill="#bca48a" />
+    <path d="M9.5 5.5 Q11.4 8 11.6 11" stroke="#8a7461" stroke-width=".6" fill="none" stroke-linecap="round" />
+    <path d="M25 11 L22.5 4 L19.5 12 Z" fill="#bca48a" />
+    <ellipse cx="16" cy="18" rx="9.2" ry="8.4" fill="#f5ede2" />
+    <circle cx="12.8" cy="16.6" r=".95" fill="#2f2a26" />
+    <circle cx="19.2" cy="16.6" r=".95" fill="#2f2a26" />
+    <ellipse cx="16" cy="20" rx="1.1" ry=".75" fill="#2f2a26" />
+    <path d="M14 22 Q16 23.4 18 22" stroke="#2f2a26" stroke-width="1" fill="none" stroke-linecap="round" />
+    <ellipse cx="16" cy="23.2" rx="1.1" ry=".8" fill="#c08a6f" />
+  </svg>
+)}

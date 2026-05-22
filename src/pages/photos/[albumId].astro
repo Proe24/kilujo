@@ -24,27 +24,33 @@ interface Props {
 const { album, photos } = Astro.props;
 ---
 <Layout title={`${album.title} — Photos`} description={album.description}>
-  <a href="/photos" class="back-link">← Back to albums</a>
-  <section class="intro">
-    <h1>{album.title || 'Untitled album'}</h1>
-    {album.description && <p>{album.description}</p>}
-    <p class="post-meta">{photos.length} photo{photos.length === 1 ? '' : 's'}</p>
-  </section>
+  <div class="page">
+    <div class="wrap-wide">
+      <a href="/photos" class="ink-link back-link">← All albums</a>
+      <header class="page-header">
+        <div class="eyebrow" style="margin-bottom: 12px">
+          {photos.length} photo{photos.length === 1 ? '' : 's'} · From Flickr
+        </div>
+        <h1><em>{album.title || 'Untitled album'}</em></h1>
+        {album.description && <p class="lede">{album.description}</p>}
+      </header>
 
-  {photos.length === 0 ? (
-    <div class="empty">No photos in this album.</div>
-  ) : (
-    <div class="card-grid">
-      {photos.map((photo) => (
-        <a class="card" href={photo.pageUrl} target="_blank" rel="noopener noreferrer">
-          <img class="card__image" src={photo.thumbUrl} alt={photo.title} loading="lazy" />
-          {photo.title && photo.title !== 'Untitled' && (
-            <div class="card__body">
-              <p class="card__meta">{photo.title}</p>
-            </div>
-          )}
-        </a>
-      ))}
+      {photos.length === 0 ? (
+        <div class="empty">No photos in this album.</div>
+      ) : (
+        <div class="card-grid">
+          {photos.map((photo) => (
+            <a class="card" href={photo.pageUrl} target="_blank" rel="noopener noreferrer">
+              <img class="card__image" src={photo.thumbUrl} alt={photo.title} loading="lazy" />
+              {photo.title && photo.title !== 'Untitled' && (
+                <div class="card__body">
+                  <p class="card__meta">{photo.title}</p>
+                </div>
+              )}
+            </a>
+          ))}
+        </div>
+      )}
     </div>
-  )}
+  </div>
 </Layout>

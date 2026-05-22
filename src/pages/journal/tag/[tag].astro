@@ -1,10 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('journal', ({ data }) => !data.draft);
-  const tagMap = new Map<string, typeof posts>();
+  const tagMap = new Map<string, CollectionEntry<'journal'>[]>();
   for (const post of posts) {
     for (const tag of post.data.tags ?? []) {
       if (!tagMap.has(tag)) tagMap.set(tag, []);
@@ -20,44 +20,38 @@ export async function getStaticPaths() {
   }));
 }
 
-interface Post {
-  slug: string;
-  data: {
-    title: string;
-    date: Date;
-    author?: string;
-    description?: string;
-    tags?: string[];
-  };
-}
 interface Props {
   tag: string;
-  posts: Post[];
+  posts: CollectionEntry<'journal'>[];
 }
 
 const { tag, posts } = Astro.props;
-const formatDate = (d: Date) =>
+const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 <Layout title={`#${tag} — Journal`}>
-  <a href="/journal" class="back-link">← Back to Journal</a>
-  <section class="intro">
-    <h1>#{tag}</h1>
-    <p>
-      {posts.length} entr{posts.length === 1 ? 'y' : 'ies'} tagged <strong>{tag}</strong>.
-    </p>
-  </section>
+  <div class="page">
+    <div class="wrap">
+      <a href="/journal" class="ink-link back-link">← All entries</a>
+      <header class="page-header">
+        <div class="eyebrow" style="margin-bottom: 12px">Tagged</div>
+        <h1><em>"{tag}"</em></h1>
+        <p class="lede">
+          {posts.length} {posts.length === 1 ? 'entry' : 'entries'} tagged {tag}.
+        </p>
+      </header>
 
-  <ul class="post-list">
-    {posts.map((post) => (
-      <li>
-        <a href={`/journal/${post.slug}`}>{post.data.title}</a>
-        <span class="post-meta">
-          {formatDate(post.data.date)}
-          {post.data.author ? ` · ${post.data.author}` : ''}
-          {post.data.description ? ` — ${post.data.description}` : ''}
-        </span>
-      </li>
-    ))}
-  </ul>
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <a href={`/journal/${post.slug}`}>{post.data.title}</a>
+            <span class="post-meta" style="display: block; margin-top: 4px">
+              {fmtDate(post.data.date)} · {post.data.author}
+              {post.data.excerpt ? ` — ${post.data.excerpt}` : ''}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
 </Layout>

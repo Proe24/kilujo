@@ -2,14 +2,15 @@
 title: "Delight Farm Coffee Stand"
 date: 2024-08-12
 author: "Gianna Yim"
+kind: writing
 tags: ["coffee", "okinawa"]
-description: "A woody little shop in Uruma, and a coffee leaf tea latte we'd never heard of."
-cover: "/uploads/delight-farm-coffee-stand/01.jpg"
+excerpt: "A woody little shop in Uruma, and a coffee leaf tea latte we'd never heard of."
+cover: "/uploads/journal/delight-farm-coffee-stand/01.jpg"
 coverAlt: "Entryway of Delight Farm Coffee Stand in Uruma, Okinawa"
 gallery:
-  - { src: "/uploads/delight-farm-coffee-stand/02.jpg", alt: "Inside the shop" }
-  - { src: "/uploads/delight-farm-coffee-stand/03.jpg", alt: "Menu and counter" }
-  - { src: "/uploads/delight-farm-coffee-stand/04.jpg", alt: "Pour over and Okinawa Coffee Tea Latte" }
+  - { src: "/uploads/journal/delight-farm-coffee-stand/02.jpg", alt: "Inside the shop" }
+  - { src: "/uploads/journal/delight-farm-coffee-stand/03.jpg", alt: "Menu and counter" }
+  - { src: "/uploads/journal/delight-farm-coffee-stand/04.jpg", alt: "Pour over and Okinawa Coffee Tea Latte" }
 ---
 
 There are quite a few coffee shops in Okinawa. And they all have their uniqueness to them. This place in Uruma is another example. Small-ish setting with two to three tables. We came here the other day to talk about the headache-ness of finding a place to stay. We don't need to talk about that process.

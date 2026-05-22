@@ -7,29 +7,34 @@ const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 ---
 <Layout title="Photos — Kilujo" description="Albums from our Flickr.">
-  <section class="intro">
-    <h1>Photos</h1>
-    <p>Albums pulled from our Flickr at build time. Click one to see what's inside.</p>
-  </section>
+  <div class="page">
+    <div class="wrap-wide">
+      <header class="page-header">
+        <div class="eyebrow" style="margin-bottom: 12px">Photos</div>
+        <h1><em>Albums.</em></h1>
+        <p class="lede">Pulled from Flickr at build time. Click into one for the full set.</p>
+      </header>
 
-  {albums.length === 0 ? (
-    <div class="empty">
-      No albums to show. Check that <code>FLICKR_API_KEY</code> and <code>FLICKR_USER_ID</code> are set,
-      then rebuild.
+      {albums.length === 0 ? (
+        <div class="empty">
+          No albums to show. Check that <code>FLICKR_API_KEY</code> and <code>FLICKR_USER_ID</code> are set,
+          then rebuild.
+        </div>
+      ) : (
+        <div class="card-grid">
+          {albums.map((album) => (
+            <a class="card" href={`/photos/${album.id}`}>
+              <img class="card__image" src={album.coverUrl} alt={album.title} loading="lazy" />
+              <div class="card__body">
+                <h3 class="card__title">{album.title || 'Untitled album'}</h3>
+                <p class="card__meta">
+                  {album.photoCount} photo{album.photoCount === 1 ? '' : 's'} · {formatDate(album.date)}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
-  ) : (
-    <div class="card-grid">
-      {albums.map((album) => (
-        <a class="card" href={`/photos/${album.id}`}>
-          <img class="card__image" src={album.coverUrl} alt={album.title} loading="lazy" />
-          <div class="card__body">
-            <h3 class="card__title">{album.title || 'Untitled album'}</h3>
-            <p class="card__meta">
-              {album.photoCount} photo{album.photoCount === 1 ? '' : 's'} · {formatDate(album.date)}
-            </p>
-          </div>
-        </a>
-      ))}
-    </div>
-  )}
+  </div>
 </Layout>

@@ -1,37 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+const entry = await getEntry('pages', 'about');
+if (!entry) throw new Error('Missing src/content/pages/about.md');
+const { Content } = await entry.render();
+const { title, hero, heroAlt } = entry.data;
 ---
-<Layout title="About — Kilujo" description="Kilo, Kujo, Gianna & Stephen — our story.">
-  <article class="prose about">
-    <img
-      class="cover about__cover"
-      src="/uploads/about/family.jpg"
-      alt="Gianna, Stephen, Kilo and Kujo on a sunny hillside"
-    />
-    <p class="about__eyebrow">About</p>
-    <h1 class="about__title">K&nbsp;I&nbsp;L&nbsp;U&nbsp;J&nbsp;O</h1>
-
-    <p class="about__lede">
-      Mid-West meets East Asia. Quiet Kentucky farmlands, steeped in generations of
-      family history, intertwine with the vibrant pulse of San Francisco, echoing
-      tales of Taiwan and Southern China.
-    </p>
-
-    <p>
-      Our journeys, both geographic and personal, paint a canvas as diverse as our
-      family. Kilo, our spirited but selectively affectionate Shiba Inu, joined us
-      during our travels through Nebraska, while Kujo, our Jindo/Border Collie mix,
-      found his way into our hearts all the way from Korea.
-    </p>
-
-    <p>
-      This is our story, captured through the lens of our everyday adventures, the
-      connections we make between cultures, and the simple beauty we discover along
-      the way.
-    </p>
-
-    <p class="signature">— Kilo, Kujo, Gianna &amp; Stephen</p>
-  </article>
+<Layout title={`${title} — Kilujo`} description="Kilo, Kujo, Gianna & Stephen — our story.">
+  <div class="page">
+    <div class="wrap">
+      <article class="prose about">
+        {hero && (
+          <figure class="cover about__cover">
+            <img src={hero} alt={heroAlt ?? ''} />
+          </figure>
+        )}
+        <p class="about__eyebrow">About</p>
+        <h1 class="about__title">{title}</h1>
+        <div class="about__body">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </div>
 </Layout>
 
 <style>
@@ -47,11 +39,17 @@ import Layout from '../layouts/Layout.astro';
     letter-spacing: 0.05em;
     margin: 0 0 2rem;
   }
-  .about__lede {
-    font-size: 1.15rem;
-    color: var(--text);
-  }
   .about__cover {
     max-height: 520px;
+    margin-bottom: 2.5rem;
+  }
+  .about__cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .about__body p:first-of-type {
+    font-size: 1.15rem;
+    color: var(--text);
   }
 </style>

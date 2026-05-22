@@ -1,0 +1,258 @@
+# Pages CMS — kilujo.com
+# https://pagescms.org/docs/configuration/
+#
+# Three editable surfaces:
+#   - Journal: unified feed (writing / video / gaming)
+#   - Projects: small things we've made
+#   - About: a single markdown page
+#
+# Photos are NOT managed here — they come from Flickr at build time
+# (src/lib/flickr.ts) and live entirely outside the CMS.
+
+# ─── Media stores ────────────────────────────────────────────────────────
+# Three named stores so each surface uploads into a distinct subfolder
+# of /public/uploads/. Pages CMS does not support dynamic per-entry
+# subfolders (e.g. uploads/journal/<post-slug>/), so journal images
+# all land in one folder. Filenames are kept unique via `rename: safe`.
+media:
+  - name: journal
+    label: Journal images
+    input: public/uploads/journal
+    output: /uploads/journal
+    extensions: [jpg, jpeg, png, webp, gif]
+    rename: safe
+  - name: projects
+    label: Project images
+    input: public/uploads/projects
+    output: /uploads/projects
+    extensions: [jpg, jpeg, png, webp, gif, svg]
+    rename: safe
+  - name: about
+    label: About image
+    input: public/uploads/about
+    output: /uploads/about
+    extensions: [jpg, jpeg, png, webp]
+    rename: safe
+
+# ─── Content ─────────────────────────────────────────────────────────────
+content:
+
+  # ── Journal: unified writing / video / gaming feed ────────────────────
+  - name: journal
+    label: Journal
+    type: collection
+    path: src/content/journal
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.title}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+      fields: [title, kind, date, author]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+
+      - name: date
+        label: Date
+        type: date
+        required: true
+        default: now
+
+      - name: author
+        label: Author
+        type: select
+        required: true
+        options:
+          values:
+            - { name: "Gianna Yim",        label: "Gianna Yim" }
+            - { name: "Stephen Underwood", label: "Stephen Underwood" }
+
+      - name: kind
+        label: Kind
+        description: >-
+          Writing = a regular post · Video = embeds a YouTube clip · Gaming = adds
+          game/rating/platform/hours fields. The kind-specific fields below are
+          all optional — only fill in the ones that match.
+        type: select
+        required: true
+        default: writing
+        options:
+          values:
+            - { name: writing, label: Writing }
+            - { name: video,   label: Video   }
+            - { name: gaming,  label: Gaming  }
+
+      - name: excerpt
+        label: Excerpt
+        description: One-line preview shown on the Journal list and the home page.
+        type: string
+
+      - name: cover
+        label: Cover image
+        type: image
+        options:
+          media: journal
+
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+
+      # ── Kind: video ─────────────────────────────────────────────────
+      - name: youtubeId
+        label: YouTube video ID
+        description: 'Only for kind = Video. Just the ID (e.g. "wpQQxUeekks"), not the full URL.'
+        type: string
+
+      # ── Kind: gaming ────────────────────────────────────────────────
+      - name: game
+        label: Game
+        description: Only for kind = Gaming.
+        type: string
+
+      - name: rating
+        label: Rating
+        description: Only for kind = Gaming. 1 to 5 stars.
+        type: number
+        options:
+          min: 1
+          max: 5
+          step: 1
+
+      - name: platform
+        label: Platform
+        description: Only for kind = Gaming. e.g. "PC", "Switch".
+        type: string
+
+      - name: hours
+        label: Hours played
+        description: Only for kind = Gaming.
+        type: number
+        options:
+          min: 0
+          step: 0.5
+
+      - name: gallery
+        label: Gallery
+        description: Shown below the body as a responsive grid.
+        type: image
+        options:
+          media: journal
+          multiple: true
+
+      - name: body
+        label: Body
+        description: 'The post itself. Supports headings (## ###), paragraphs, and blockquotes (> ...).'
+        type: rich-text
+
+  # ── Projects: small things we've made ─────────────────────────────────
+  - name: projects
+    label: Projects
+    type: collection
+    path: src/content/projects
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.title}.md"
+    view:
+      primary: title
+      sort: year
+      order: desc
+      fields: [title, kind, status, year]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+
+      - name: year
+        label: Year
+        type: number
+        required: true
+        options:
+          min: 2000
+          max: 2100
+          step: 1
+
+      - name: kind
+        label: Kind
+        type: select
+        required: true
+        options:
+          values:
+            - { name: Guide,      label: Guide }
+            - { name: Experiment, label: Experiment }
+            - { name: Tool,       label: Tool }
+
+      - name: status
+        label: Status
+        type: select
+        required: true
+        options:
+          values:
+            - { name: "Live",             label: "Live" }
+            - { name: "In progress",      label: "In progress" }
+            - { name: "Proof of concept", label: "Proof of concept" }
+            - { name: "Archived",         label: "Archived" }
+
+      - name: blurb
+        label: Blurb
+        description: One short paragraph describing the project.
+        type: text
+        required: true
+
+      - name: tech
+        label: Tech / stack
+        type: string
+        list: true
+
+      - name: cover
+        label: Cover image
+        type: image
+        options:
+          media: projects
+
+      - name: link
+        label: Link
+        description: 'Internal route (e.g. "/guides/barotrauma/baro_index.html") or external URL.'
+        type: string
+        required: true
+
+      - name: accent
+        label: Accent color
+        description: 'Hex color for the card top-edge stripe. Defaults to terracotta (#c08a6f).'
+        type: string
+
+      - name: body
+        label: Long description (optional)
+        type: rich-text
+
+  # ── About: single-file page ───────────────────────────────────────────
+  - name: about
+    label: About page
+    type: file
+    path: src/content/pages/about.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+
+      - name: hero
+        label: Hero image
+        type: image
+        options:
+          media: about
+
+      - name: heroAlt
+        label: Hero image alt text
+        type: string
+
+      - name: body
+        label: Body
+        description: 'The page itself. Supports headings, paragraphs, and emphasis.'
+        type: rich-text

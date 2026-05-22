@@ -86,7 +86,7 @@ Drop images into `public/uploads/<post-slug>/` (any image format). Reference the
 │   │   └── barotrauma/      # static Barotrauma guide
 │   └── uploads/             # per-post images (uploads/<slug>/*.jpg)
 ├── src/
-│   ├── components/          # Nav, Footer, Gallery
+│   ├── components/          # Nav, Footer, Gallery, DogAvatars
 │   ├── content/
 │   │   ├── config.ts        # zod schemas
 │   │   ├── journal/         # *.md

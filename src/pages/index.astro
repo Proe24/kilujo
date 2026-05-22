@@ -1,44 +1,145 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import DogAvatar from '../components/DogAvatars.astro';
 import { getCollection } from 'astro:content';
 
-const journal = (await getCollection('journal', ({ data }) => !data.draft))
+const recent = (await getCollection('journal', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-const formatDate = (d: Date) =>
+const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
----
-<Layout title="Home — Kilujo">
-  <section class="intro">
-    <h1>Hi, we're Gianna &amp; Stephen.</h1>
-    <p>
-      Mid-West meets East Asia — and two dogs, Kilo and Kujo, along for the ride.
-      This is a small corner of the internet where we keep track of things we love:
-      slow weekends, coffee shops we wander into, photos from our walks, and the
-      games we play together.
-    </p>
-    <p>
-      Pull up a chair and have a look around. There's more on the <a href="/about">about page</a>.
-    </p>
-  </section>
 
-  <section>
-    <div class="section-title">
-      <h2>Recent journal entries</h2>
-      <a href="/journal">All entries →</a>
+const kindLabel: Record<string, { label: string; icon: string }> = {
+  writing: { label: 'Writing', icon: '✎' },
+  video:   { label: 'Video',   icon: '▶' },
+  gaming:  { label: 'Gaming',  icon: '◆' },
+};
+
+const currentMonth = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+---
+<Layout title="kilujo · a quiet corner of the internet">
+  <div class="page">
+    <div class="wrap-wide" style="padding-top: 0">
+      <figure class="cover home-hero" style="margin-bottom: 36px">
+        <img src="/uploads/about/family.jpg" alt="Gianna, Stephen, Kilo and Kujo on a grassy hillside." />
+        <figcaption class="home-hero-caption">
+          <span class="arrow">↑</span>
+          <span>The four of us, on a hillside, last spring.</span>
+        </figcaption>
+      </figure>
+
+      <div class="wrap-narrow center">
+        <div class="eyebrow" style="margin-bottom: 18px">
+          A small notebook · Kept since 2024 · Currently in Okinawa
+        </div>
+
+        <h1 class="home-greeting">
+          Hello, we're<br />
+          Kilo, Kujo, Gianna<br />
+          <span class="amp">&amp;</span> Stephen.
+        </h1>
+
+        <p class="home-intro">
+          A shiba, a jindo-collie, a Kentucky kid, and a kid from San Francisco
+          by way of Taiwan. This is where we keep notes about the coffee we
+          drink, the games we play, the places we walk to, and the quiet
+          things in between. There is nothing to sign up for and nothing to
+          buy. Welcome in.
+        </p>
+
+        <div class="home-dogs">
+          <DogAvatar dog="kujo" size={36} />
+          <DogAvatar dog="kilo" size={36} />
+        </div>
+      </div>
+
+      <div class="rule"><span class="rule-glyph" aria-hidden="true">· · ·</span></div>
+
+      <div class="home-latest-head">
+        <div class="eyebrow">From the journal · Lately</div>
+        <a href="/journal" class="ink-link home-latest-all">All entries →</a>
+      </div>
+
+      <div>
+        {recent.length === 0 ? (
+          <p class="empty">Nothing here yet.</p>
+        ) : (
+          recent.map((post) => {
+            const k = kindLabel[post.data.kind];
+            return (
+              <a href={`/journal/${post.slug}`} class="entry-row">
+                <div class="thumb">
+                  {post.data.cover && <img src={post.data.cover} alt="" loading="lazy" />}
+                  {post.data.kind === 'video' && <div class="thumb-play" aria-hidden="true">▶</div>}
+                </div>
+                <div>
+                  <div class="post-meta" style="margin-bottom: 8px">
+                    <span class="kind-badge" data-kind={post.data.kind}>
+                      <span class="kind-badge-icon">{k.icon}</span>
+                      <span>{k.label}</span>
+                    </span>
+                    <span class="dot-sep"></span>
+                    <span>{fmtDate(post.data.date)}</span>
+                    <span class="dot-sep"></span>
+                    <span>By {post.data.author}</span>
+                  </div>
+                  <h3>{post.data.title}</h3>
+                  {post.data.excerpt && <p class="dek">{post.data.excerpt}</p>}
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <div class="post-foot-meta">
+                      <div class="tag-list">
+                        {post.data.tags.map((t: string) => (
+                          <span class="tag">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </a>
+            );
+          })
+        )}
+      </div>
+
+      <div class="rule"><span class="rule-glyph" aria-hidden="true">· · ·</span></div>
+
+      <div class="now-card">
+        <div class="eyebrow" style="margin-bottom: 10px">Now · {currentMonth}</div>
+        <p class="now-card__body">
+          Slowly making our way down the Okinawa coast. Drinking too much
+          coffee. Trying to teach Kujo not to bark at the wind. He is winning.
+        </p>
+      </div>
     </div>
-    {journal.length === 0 ? (
-      <div class="empty">No journal entries yet.</div>
-    ) : (
-      <ul class="post-list">
-        {journal.map((post) => (
-          <li>
-            <a href={`/journal/${post.slug}`}>{post.data.title}</a>
-            <span class="post-meta">{formatDate(post.data.date)}{post.data.description ? ` — ${post.data.description}` : ''}</span>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
+  </div>
 </Layout>
+
+<style>
+  .home-greeting { font-style: italic; line-height: 1.1; font-weight: 400; margin: 0; }
+  .home-intro {
+    margin-top: 32px;
+    font-size: 19px;
+    line-height: 1.7;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .home-dogs { margin-top: 22px; display: flex; justify-content: center; gap: 10px; }
+  .home-latest-head {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .home-latest-all { font-family: var(--sans); font-size: 13px; color: var(--muted); }
+  .now-card__body {
+    margin: 0;
+    font-family: var(--serif-display);
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+</style>
