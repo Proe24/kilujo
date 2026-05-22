@@ -97,6 +97,11 @@ content:
         options:
           media: journal
 
+      - name: coverAlt
+        label: Cover image alt text
+        description: Describes the cover for screen readers. Leave blank if the image is purely decorative.
+        type: string
+
       - name: tags
         label: Tags
         type: string
@@ -229,6 +234,27 @@ content:
       - name: body
         label: Long description (optional)
         type: rich-text
+
+  # ── Home: "Now" status card at the bottom of the home page ───────────
+  - name: home
+    label: Home — Now status
+    type: file
+    path: src/content/pages/home.md
+    format: yaml-frontmatter
+    fields:
+      - name: nowMonth
+        label: Month label (optional)
+        description: >-
+          Override the "Now · …" eyebrow. Leave blank to use the current month
+          automatically (e.g. "May 2026").
+        type: string
+
+      - name: nowBody
+        label: Status update
+        description: >-
+          A short paragraph shown at the bottom of the home page. Leave blank to
+          hide the card entirely.
+        type: text
 
   # ── About: single-file page ───────────────────────────────────────────
   - name: about

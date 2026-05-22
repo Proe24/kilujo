@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import DogAvatar from '../components/DogAvatars.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 
 const recent = (await getCollection('journal', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -16,7 +16,10 @@ const kindLabel: Record<string, { label: string; icon: string }> = {
   gaming:  { label: 'Gaming',  icon: '◆' },
 };
 
-const currentMonth = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+const home = await getEntry('pages', 'home');
+const nowMonth = home?.data.nowMonth
+  ?? new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+const nowBody = home?.data.nowBody;
 ---
 <Layout title="kilujo · a quiet corner of the internet">
   <div class="page">
@@ -104,13 +107,12 @@ const currentMonth = new Date().toLocaleDateString('en-US', { year: 'numeric', m
 
       <div class="rule"><span class="rule-glyph" aria-hidden="true">· · ·</span></div>
 
-      <div class="now-card">
-        <div class="eyebrow" style="margin-bottom: 10px">Now · {currentMonth}</div>
-        <p class="now-card__body">
-          Slowly making our way down the Okinawa coast. Drinking too much
-          coffee. Trying to teach Kujo not to bark at the wind. He is winning.
-        </p>
-      </div>
+      {nowBody && (
+        <div class="now-card">
+          <div class="eyebrow" style="margin-bottom: 10px">Now · {nowMonth}</div>
+          <p class="now-card__body">{nowBody}</p>
+        </div>
+      )}
     </div>
   </div>
 </Layout>

@@ -68,7 +68,7 @@ npm run preview    # serve the build locally
     │   ├── config.ts           # zod schemas (journal/projects/pages)
     │   ├── journal/            # unified feed
     │   ├── projects/           # cards on /projects
-    │   └── pages/              # singletons; currently just about.md
+    │   └── pages/              # singletons: about.md, home.md
     ├── layouts/Layout.astro
     ├── lib/flickr.ts           # build-time Flickr fetcher
     ├── pages/
@@ -84,7 +84,7 @@ npm run preview    # serve the build locally
 
 ## Content model
 
-Three editable surfaces, all defined in `.pages.yml` and `src/content/config.ts`:
+Four editable surfaces, all defined in `.pages.yml` and `src/content/config.ts`:
 
 ### Journal (`src/content/journal/`)
 Unified feed of **writing / video / gaming**. The `kind` field discriminates which extra fields apply:
@@ -109,7 +109,10 @@ Small things we've made — guides, experiments, tools. Drives `/projects`.
 `link` is either an internal path (e.g. `/guides/barotrauma/baro_index.html`) or an external URL. The Barotrauma guide is one project entry; its static files still live under `public/guides/barotrauma/`.
 
 ### Pages (`src/content/pages/`)
-Single-file content. Currently just `about.md`. `src/pages/about.astro` renders it via `getEntry('pages', 'about')`.
+Single-file content. Two singletons today:
+
+- **`about.md`** — rendered by `src/pages/about.astro` via `getEntry('pages', 'about')`. Fields: `title`, `hero`, `heroAlt`, body.
+- **`home.md`** — drives the **"Now"** status card at the bottom of the home page. Fields: `nowMonth` (optional override, e.g. `"May 2026"` — defaults to the current month) and `nowBody` (the paragraph itself; leave blank to hide the whole card).
 
 ### Photos — *not* managed
 Albums are pulled from **Flickr at build time** via `src/lib/flickr.ts` and rendered by `src/pages/photos/`. The CMS does not touch this — leave it alone.
@@ -146,7 +149,7 @@ The site uses the warm **"kilujo"** design (Claude Design handoff, May 2026):
 
 ## Pages CMS
 
-Config: **`.pages.yml`** at repo root. Three editable surfaces (Journal, Projects, About), three named media stores (one per surface, all under `public/uploads/`).
+Config: **`.pages.yml`** at repo root. Four editable surfaces (Journal, Projects, Home — Now status, About), three named media stores (one per surface, all under `public/uploads/`).
 
 - **Log in:** https://app.pagescms.org/ → Sign in with GitHub → authorize the `Proe24/kilujo` repo → click into it.
 - Commits land on `main`. Vercel auto-rebuilds.

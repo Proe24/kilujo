@@ -68,12 +68,18 @@ const projectsSchema = z.object({
 });
 
 /**
- * Pages — single-file content (currently just /about).
+ * Pages — single-file content (home + about).
+ *
+ * Most fields are optional because different singletons use different shapes:
+ *   - about.md uses { title, hero, heroAlt }
+ *   - home.md  uses { nowMonth?, nowBody }
  */
 const pagesSchema = z.object({
-  title: z.string(),
+  title: z.string().optional(),
   hero: z.string().optional(),
   heroAlt: z.string().optional(),
+  nowMonth: z.string().optional(),
+  nowBody: z.string().optional(),
 });
 
 export const collections = {

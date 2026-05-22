@@ -221,9 +221,9 @@ body.baro-locked{overflow:hidden;}
   // --- Build topbar ------------------------------------------------------
   function buildTopbar() {
     const titleText = currentEntry ? currentEntry.title : 'Barotrauma Guide';
-    const back = h('a', { class: 'baro-back', href: '/guides', 'aria-label': 'Back to Guides on kilujo.com' },
+    const back = h('a', { class: 'baro-back', href: '/projects', 'aria-label': 'Back to Projects on kilujo.com' },
       h('span', { class: 'baro-arrow', 'aria-hidden': 'true' }, '←'),
-      h('span', null, 'kilujo / guides'));
+      h('span', null, 'kilujo / projects'));
 
     const title = h('div', { class: 'baro-title' },
       'Field Manual',
