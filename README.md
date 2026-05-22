@@ -60,7 +60,7 @@ Per-collection extras:
 
 Drop a self-contained static guide into `public/guides/<slug>/`, then add a card to `src/data/guides.ts`. The guide keeps its own styles — the landing page wraps it with the main site palette.
 
-**The Barotrauma guide** at `public/guides/barotrauma/` has its own global nav (sticky topbar + slide-in drawer + auto prev/next) handled by `baro_nav.js`. To add or rename a mod page, edit the `PAGES` array at the top of that file — every page picks it up automatically. Any new HTML page in that folder just needs `<script defer src="baro_nav.js"></script>` before `</body>`.
+**The Barotrauma guide** at `public/guides/barotrauma/` has its own global nav (sticky topbar + responsive sidebar + auto prev/next) handled by `baro_nav.js`. The sidebar is pinned open on viewports ≥ 1280 px and slides in from the right below that. To add or rename a mod page, edit the `PAGES` array at the top of that file — every page picks it up automatically. Any new HTML page in that folder just needs `<script defer src="baro_nav.js"></script>` before `</body>`.
 
 ### Photos
 

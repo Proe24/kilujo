@@ -178,6 +178,25 @@
 
 /* Lock body scroll while drawer is open */
 body.baro-locked{overflow:hidden;}
+
+/* ── Wide screens: drawer becomes a persistent right-side sidebar ── */
+@media (min-width: 1280px) {
+  /* Make room for the sidebar so page content never hides behind it. */
+  body { padding-right: 340px; }
+  /* Pin the drawer open and visible. */
+  .baro-drawer{
+    width:340px;
+    transform:none;
+    box-shadow:none;
+    border-left:1px solid #1d3540;
+  }
+  /* Backdrop and hamburger become redundant. */
+  .baro-backdrop,
+  .baro-menu-btn,
+  .baro-close { display:none !important; }
+  /* Don't lock body scroll when sidebar is persistent — / just focuses the filter. */
+  body.baro-locked { overflow:auto; }
+}
 `;
 
   // --- DOM build helpers -------------------------------------------------
