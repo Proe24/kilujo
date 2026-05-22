@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barotraumatic — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>03 / 17 &middot; Monsters, events &amp; radio</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2518816103" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Creature, Event &amp; Radio Overhaul</div>
+  <h1>Barotraumatic</h1>
+  <p class="lead">Floods Europa with danger: 258+ creatures, monsters inside wrecks and ruins, biome-specific threats, and more frequent missions and events &mdash; plus a complete radio overhaul where your headset itself becomes a hazard. The pack's combat backbone.</p>
+  <div class="badges">
+    <span class="badge">Mission / Item / Monster / Event set</span>
+    <span class="badge">Top of load order</span>
+    <span class="badge tip">Safe to add/remove anytime</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A creature/spawn/mission and radio overhaul by Draconis &amp; team (the consolidated successor to several legacy monster packs).</dd>
+  <dt>Load position</dt><dd>Generally safe at the <strong>top</strong> of the list. Any mod that edits the spawn list, event manager, or vanilla afflictions must load <strong>below</strong> it.</dd>
+  <dt>Campaign safety</dt><dd>Safe to add or remove from a campaign at any time (you lose its items if removed).</dd>
+  <dt>Performance</dt><dd>Heavy on spawns &mdash; pairs well with <a href="baro_02_performance_fix.html">Performance Fix</a>; there's a creature config to raise FPS.</dd>
+</dl>
+
+<h2><span class="ic">&#9673;</span>What it adds</h2>
+<h3>Creatures &amp; populated environments</h3>
+<ul>
+  <li>Roughly <strong>258+ creatures</strong> &mdash; common, rare, and insidious. Not all are hostile; some are neutral or passive-aggressive. You may encounter things you've never seen as your playstyle and biomes change.</li>
+  <li><strong>Wrecks, large ruins and caves are populated</strong> &mdash; no more empty salvage. Ruins become the most reliable place to find alien materials.</li>
+  <li>Higher spawn frequency and variety overall, and more missions/events.</li>
+</ul>
+<div class="callout"><strong>By design, there's no in-game wiki or guide for its creatures.</strong> You learn them by encountering them &mdash; bring more meds and ammo than you would in vanilla, and treat the abyss and cave-diving as genuinely unknown territory.</div>
+
+<h3>Biomes</h3>
+<p>Each biome gets its own set of creatures and difficulty curve, pushing you to learn the underlying mechanics of each threat, your submarine, and sometimes stealth, to survive.</p>
+
+<h3>Radio overhaul</h3>
+<p>Barotraumatic completely overhauls the radio system &mdash; <strong>distortions, interference and even death can come through your headset</strong>. There are <strong>5 craftable radios</strong>, each with unique features such as noise-cancelling and a chemical battery (so some don't need conventional batteries).</p>
+
+<h2><span class="ic">&#9888;</span>Installation &amp; conflicts</h2>
+<ul>
+  <li><strong>Do NOT also run the legacy packs it absorbed</strong> &mdash; Xansmonsters 1&amp;2, Extended Monsters, Monster Test Pack, Europa Fishies, MN Creatures, Creatures of the Depth, etc. Running them alongside causes crashes and errors. The separate "Barotraumatic Creature Pack" is no longer needed (it's built in).</li>
+  <li>Other mods that edit the spawn list, event manager, or vanilla afflictions must load <strong>below</strong> Barotraumatic.</li>
+  <li>If you hit "missing files / can't join / red in the loader" after an update, the install is likely corrupted &mdash; right-click the mod in the in-game manager &rarr; View Details &rarr; <strong>Reinstall</strong> (or delete folder <code>2518816103</code> from your Barotrauma mod staging folder to force a clean reinstall).</li>
+</ul>
+
+<h2><span class="ic">&#9873;</span>How to play around it</h2>
+<ul>
+  <li>Over-supply on ammo and medical &mdash; wrecks and caves now fight back.</li>
+  <li>Mind your sonar discipline (active sonar attracts swarms); coordinate with your <a href="baro_05_jobsextended.html">Navigator/Security</a>.</li>
+  <li>Use the creature config to dial spawn density up or down for your crew's skill and your PC's performance.</li>
+  <li>It pairs naturally with <a href="baro_17_dynamiceuropa.html">DynamicEuropa</a> (load order between them doesn't matter, per DE's dev) and with <a href="baro_16_neurotrauma.html">Neurotrauma</a> for the injuries the new creatures cause.</li>
+</ul>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2518816103" target="_blank">Barotraumatic &mdash; Steam Workshop (features, load order, incompatibilities)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_02_performance_fix.html"><span class="pn-label">Previous</span><span class="pn-title">Performance Fix</span></a>
+  <a class="pn-next" href="baro_04_vanilla_weapons_overhaul.html"><span class="pn-label">Next</span><span class="pn-title">Vanilla Weapons Overhaul</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. The creature roster is intentionally undocumented by the author &mdash; discovery is the point.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

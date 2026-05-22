@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAlbums, getAlbumPhotos, type FlickrAlbum, type FlickrPhoto } from '../../lib/flickr';
+
+export async function getStaticPaths() {
+  const albums = await getAlbums();
+  const entries = await Promise.all(
+    albums.map(async (album) => ({
+      params: { albumId: album.id },
+      props: {
+        album,
+        photos: await getAlbumPhotos(album.id),
+      },
+    }))
+  );
+  return entries;
+}
+
+interface Props {
+  album: FlickrAlbum;
+  photos: FlickrPhoto[];
+}
+
+const { album, photos } = Astro.props;
+---
+<Layout title={`${album.title} — Photos`} description={album.description}>
+  <a href="/photos" class="back-link">← Back to albums</a>
+  <section class="intro">
+    <h1>{album.title || 'Untitled album'}</h1>
+    {album.description && <p>{album.description}</p>}
+    <p class="post-meta">{photos.length} photo{photos.length === 1 ? '' : 's'}</p>
+  </section>
+
+  {photos.length === 0 ? (
+    <div class="empty">No photos in this album.</div>
+  ) : (
+    <div class="card-grid">
+      {photos.map((photo) => (
+        <a class="card" href={photo.pageUrl} target="_blank" rel="noopener noreferrer">
+          <img class="card__image" src={photo.thumbUrl} alt={photo.title} loading="lazy" />
+          {photo.title && photo.title !== 'Untitled' && (
+            <div class="card__body">
+              <p class="card__meta">{photo.title}</p>
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+  )}
+</Layout>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DynamicEuropa — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>17 / 17 &middot; World / map total conversion</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2532991202" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">World / Map Total Conversion</div>
+  <h1>DynamicEuropa</h1>
+  <p class="lead">Rebuilds Europa as a living world: 20+ specialised outposts that grow, get attacked, can be taken over or destroyed; spreading monster lairs and husk swarms; a biome overhaul; integrated pirate content; and food/roleplay flavour. Your routing and faction choices drive the whole campaign.</p>
+  <div class="badges">
+    <span class="badge warn">Fresh campaign required</span>
+    <span class="badge warn">Never remove mid-campaign</span>
+    <span class="badge">Total conversion &middot; very bottom</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A campaign-mode world overhaul by hUbert / _]|M|[_ / MasonMachineGuns. Official wiki: dynamiceuropa.wiki.gg.</dd>
+  <dt>Load position</dt><dd>The <strong>very bottom</strong> of the list (everything else loads above it).</dd>
+  <dt>Hard rules</dt><dd>Requires a <strong>fresh campaign</strong> on first install and <strong>must never be removed from an ongoing campaign</strong> &mdash; doing so kills the map. Locations only update behind the sub, not ahead.</dd>
+  <dt>Bundled</dt><dd>Integrates Pirates Ahoy! content and a subset of Hungry Europans food/drinks.</dd>
+</dl>
+
+<h2><span class="ic">&#127759;</span>The location system &mdash; 7 outpost families</h2>
+<p>Regular outposts come in <strong>7 families</strong>, each split into tiers. The family decides which services exist; higher tiers add more (missions, stores, NPCs, crew-for-hire, sub upgrades). <strong>Not every outpost offers every service</strong> &mdash; a clinic has no hire/store/upgrades &mdash; so plan routes.</p>
+<table>
+<thead><tr><th>Family</th><th>Purpose / services</th><th>Tier examples</th></tr></thead>
+<tbody>
+<tr><td>Habitation</td><td>General colonist settlements; broadest service mix at higher tiers</td><td>Hamlet &rarr; Village &rarr; Town &rarr; City <span class="unv">(tier names)</span></td></tr>
+<tr><td>Military</td><td>Arm/upgrade the sub &amp; crew; spare weapons/security; can deploy Military Forces to clear nearby Feeding Grounds</td><td>Camp &rarr; Base &rarr; Fortress</td></tr>
+<tr><td>Medical</td><td>Healing &amp; medical goods; no hire/store/upgrades at clinic tier</td><td>Clinic &rarr; Hospital</td></tr>
+<tr><td>Research</td><td>Labs / study stations; research services</td><td>Lab / Study</td></tr>
+<tr><td>Mining</td><td>Resource extraction</td><td>Mine</td></tr>
+<tr><td>Industrial</td><td>Production / manufacturing</td><td>Factory</td></tr>
+<tr><td>Food</td><td>Currently just Hydroponics (grow plants, feed Europans); offers missions, hire, food</td><td>Hydroponics</td></tr>
+</tbody>
+</table>
+<p>Other notes: <strong>Construction Sites &amp; Surveys</strong> are special outposts that can't be reactor-destroyed (flood them 50% instead). Outposts can come under monster attack, and <span class="unv">an outpost exposed to Jovian radiation for ~10 rounds becomes an Abandoned Outpost</span>. Job boards only offer a job <strong>~20% of the time</strong> (tunable with the cheat-spawned DE-Configurator).</p>
+
+<h3>Faction-specific &amp; special locations</h3>
+<ul>
+  <li><strong>Pirate Outposts / Havens</strong> (Bandits faction) &mdash; trade stolen goods + illegal missions. Enter by paying a toll, negotiating, or forcing in. <strong>&gt;20 Coalition rep raises the toll; &gt;60 makes them hostile.</strong></li>
+  <li><strong>Church of Husk / Husk Temples</strong> &mdash; advanced medical + research; gateway to the <strong>"Way to Ascension"</strong> questline.</li>
+  <li><strong>The Sinking Circus</strong> &mdash; a wandering balloon vessel; cheap clown supplies and the <strong>"Ultimate Jest"</strong> questline. Only one exists at a time.</li>
+</ul>
+
+<h2><span class="ic">&#9876;</span>Outpost takeovers</h2>
+<div class="step"><div class="n">1</div><div class="c">Build <strong>faction reputation</strong> (and reach <strong>&le; &minus;30 reputation</strong> with the enemy faction for takeovers to appear).</div></div>
+<div class="step"><div class="n">2</div><div class="c">Your first takeover is a <strong>mission from a Sergeant NPC</strong>; clear it.</div></div>
+<div class="step"><div class="n">3</div><div class="c">The Sergeant gives you a <strong>radio</strong>; activating it lets you start <strong>manual takeovers</strong> thereafter.</div></div>
+<div class="step"><div class="n">4</div><div class="c">Eliminate the defenders. <span class="unv">Known quirk: flooding/explosives may register as Mission Failed &mdash; finishing enemies in melee is the reliable route.</span></div></div>
+
+<h2><span class="ic">&#128165;</span>Outpost destruction</h2>
+<ol>
+  <li>Bring explosives (detonator, grenades).</li>
+  <li><strong>Kill every NPC</strong> at the station.</li>
+  <li><strong>Blow up the reactor.</strong></li>
+  <li>With every NPC dead and the reactor destroyed, the station is marked destroyed.</li>
+  <li><strong>Exception:</strong> Construction Sites &amp; Surveys can't be reactor-destroyed &mdash; flood them to <strong>&ge;50%</strong> instead.</li>
+</ol>
+
+<h2><span class="ic">&#128027;</span>Monster lairs, feeding grounds &amp; husk swarms</h2>
+<ul>
+  <li><strong>Monster Lairs</strong> &mdash; monsters nest and spread to nearby locations. Clear a lair to make the area habitable.</li>
+  <li><strong>Feeding Grounds</strong> &mdash; locations next to a lair with elevated activity; they <strong>block outposts from settling</strong> there until cleared. <strong>Military outposts can deploy forces</strong> to clear ordinary lairs.</li>
+  <li><strong>Husked Grounds</strong> &mdash; a husk-infested lair variant that spawns <strong>husk swarms</strong> patrolling nearby Natural Formations. <strong>The military WON'T clear these</strong> (infection risk) &mdash; players must destroy husked grounds themselves to stop the swarms.</li>
+</ul>
+
+<h2><span class="ic">&#9760;</span>Pirates Ahoy! (integrated)</h2>
+<p>Three signature mission types, all with stronger-hulled, bigger-crewed pirate vessels and ~double the payout of vanilla pirate missions:</p>
+<ul>
+  <li><strong>Heavy Pirate Vessel</strong> &mdash; reinforced-hull ship to hunt and clear.</li>
+  <li><strong>Strange Pirate Vessel</strong> &mdash; creates an anomaly to defend itself; keep your distance.</li>
+  <li><strong>Raving Vessel</strong> &mdash; drunken pirates blasting music that <strong>drags monsters toward you</strong>; you can detach and install their music player on your sub.</li>
+</ul>
+<p>There are <strong>11 collectible music CDs</strong> (40s&ndash;2:30 mono loops). Pirate outposts work like habitation outposts with city-tier + pirate goods. Signature vessel: the <strong>Warden</strong>.</p>
+
+<h2><span class="ic">&#127869;</span>Hungry Europans integration</h2>
+<p>DynamicEuropa bundles a small subset of Hungry Europans foods/drinks for flavour. <strong>For the full experience &mdash; butchering, cooking, hunger/thirst, the Chef job &mdash; install the full Hungry Europans mod and place it ABOVE DynamicEuropa.</strong> Full HE adds a Meat Cleaver (butcher any corpse, incl. husks; husk meat makes husks neutral to you), ingredient-buff meals, optional Hunger/Thirst and NEEDS systems, alcohol/gardening reworks, and kitchen stations. <span class="unv">Note: Performance Fix can distort food/thirst values; Neurotrauma needs a patch.</span></p>
+
+<h2><span class="ic">&#9873;</span>Practical campaign tips</h2>
+<ul>
+  <li>Start fresh; never uninstall mid-campaign.</li>
+  <li>Plan routes around services &mdash; clinics, shipyards/military and hydroponics don't all overlap.</li>
+  <li>Job boards fire only ~20% of the time &mdash; don't rely on one board for income.</li>
+  <li>For takeovers: clear the first Sergeant mission to unlock the radio; keep enemy rep &le; &minus;30; be ready to melee-finish defenders.</li>
+  <li>Husked grounds are a player problem &mdash; the military won't help.</li>
+  <li>Run <a href="baro_02_performance_fix.html">Performance Fix</a> in big cities/husk biomes &mdash; many players consider it essential for DE framerates.</li>
+</ul>
+
+<h2><span class="ic">&#9888;</span>Incompatibilities &amp; load order</h2>
+<p>DE overrides a lot. Without a patch, expect conflicts with mods that add missions, modify/add factions, add hireable characters, or edit the map/biomes. Compatibility-patch collection: <strong>id 3440594332</strong>.</p>
+<div class="grid2">
+  <div class="box"><h4>Load ABOVE DynamicEuropa (dev-confirmed)</h4>
+    <ul><li>Any DE compatibility patch</li><li>Enhanced Husks</li><li>Enhanced Reactors</li><li>Immersive Repairs</li><li>Hungry Europans</li></ul>
+  </div>
+  <div class="box"><h4>Load order doesn't matter (dev-confirmed)</h4>
+    <ul><li>Artifacts &amp; Ruins Enhanced</li><li>Barotraumatic (+ Creature Pack)</li><li>Improved/Enhanced Husks</li><li>More Level Content</li><li>Neurotrauma</li><li>LuaCsForBarotrauma</li></ul>
+  </div>
+</div>
+<p>Wreck &amp; beacon mods are "generally always compatible." Mods with <strong>custom traders are usually NOT compatible</strong> (placed below DE you may keep the mod minus its trader).</p>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2532991202" target="_blank">DynamicEuropa &mdash; Steam Workshop</a></li>
+  <li><a href="https://dynamiceuropa.wiki.gg/" target="_blank">DynamicEuropa Wiki (Locations, Missions, Events, Monster Lairs)</a></li>
+  <li><a href="https://steamcommunity.com/workshop/filedetails/discussion/2532991202/4356745682748557682/" target="_blank">DE &mdash; Recommended Load Orders discussion</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2885238752" target="_blank">Pirates Ahoy!</a> &middot; <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2954998725" target="_blank">Hungry Europans</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_16_neurotrauma.html"><span class="pn-label">Previous</span><span class="pn-title">Neurotrauma</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. Some wiki tier/mission lists were reconstructed from search snippets &mdash; verify exhaustive lists on the wiki.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

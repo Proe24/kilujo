@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuaCsForBarotrauma — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>01 / 17 &middot; Scripting framework</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2559634234" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Scripting Framework (Dependency)</div>
+  <h1>LuaCsForBarotrauma</h1>
+  <p class="lead">The foundation the scripted mods stand on. It adds Lua (and optional C#) modding to Barotrauma, doing things XML can't. Not a content mod itself &mdash; but Neurotrauma, Performance Fix and Enhanced Immersion's Lua features won't run without it.</p>
+  <div class="badges">
+    <span class="badge lua">Library</span>
+    <span class="badge">Required by 3 mods in this pack</span>
+    <span class="badge">Client + server side</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A modding framework (by Evil Factory) adding Lua + optional C# support. It's a base layer, not gameplay content.</dd>
+  <dt>Needed by</dt><dd><a href="baro_16_neurotrauma.html">Neurotrauma</a>, <a href="baro_02_performance_fix.html">Performance Fix</a>, and <a href="baro_15_enhanced_immersion.html">Enhanced Immersion</a>'s Lua features (zoom, zDoors).</dd>
+  <dt>Load order</dt><dd>Irrelevant for Lua/CS &mdash; or simply at the top if using the classic content-package method. With the launch-option method it isn't a workshop item at all.</dd>
+</dl>
+
+<h2><span class="ic">&#9881;</span>Client vs server side (the #1 confusion)</h2>
+<ul>
+  <li><strong>Client-side</strong> runs on your game &mdash; always required for <strong>single-player</strong> and the sub editor.</li>
+  <li><strong>Server-side</strong> runs on the host. Some mods need only one side, some both &mdash; check each mod's page. (e.g. Neurotrauma works in MP with only server-side; Enhanced Immersion's zoom needs client-side per player.)</li>
+</ul>
+
+<h2><span class="ic">&#10003;</span>Installing it</h2>
+<h3>Recommended: launch-option auto-updater</h3>
+<div class="step"><div class="n">1</div><div class="c">Close the game. In Steam, right-click Barotrauma &rarr; Properties &rarr; Launch Options.</div></div>
+<div class="step"><div class="n">2</div><div class="c">Paste the platform-specific auto-updater command from the LuaCs Workshop page (Windows/Linux/macOS each have one).</div></div>
+<div class="step"><div class="n">3</div><div class="c"><strong>Keep the LuaCs workshop item DISABLED.</strong> It now installs both sides from GitHub every launch and <strong>survives game updates and file verification</strong>.</div></div>
+
+<h3>Classic content-package method</h3>
+<ul>
+  <li>Subscribe/enable the workshop mod; pick <strong>LuaForBarotrauma</strong> in the <strong>Server Executable</strong> dropdown to host (server-side).</li>
+  <li>While hosting, open the F3 console and run <code>install_cl_lua</code>, then restart (client-side).</li>
+  <li><strong>You must redo the client step after every game update or file verification.</strong> (Linux uses a separate "Lua For Barotrauma Linux" package; macOS needs a manual install.)</li>
+</ul>
+
+<h2><span class="ic">&#128269;</span>Verifying it works</h2>
+<ul>
+  <li>Client check: press <code>F3</code> and type <code>cl_reloadluacs</code>. "Command not found" = not installed client-side.</li>
+  <li>Server check: host, then type <code>reloadluacs</code>. "Command not found" = not installed server-side.</li>
+</ul>
+<div class="callout tip"><strong>Multiplayer rule of thumb:</strong> everyone subscribes to the same mod list, everyone runs the LuaCs launch-option installer, and the host selects <code>LuaForBarotrauma</code> as the Server Executable before hosting.</div>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2559634234" target="_blank">LuaCsForBarotrauma &mdash; Steam Workshop (install methods, test commands)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-next" href="baro_02_performance_fix.html"><span class="pn-label">Next</span><span class="pn-title">Performance Fix</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

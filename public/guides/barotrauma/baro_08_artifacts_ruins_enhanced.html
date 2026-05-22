@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artifacts and Ruins Enhanced — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>08 / 17 &middot; Artifact research &amp; ruins</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3218219821" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Research, Artifacts &amp; Alien Ruins</div>
+  <h1>Artifacts and Ruins Enhanced</h1>
+  <p class="lead">Artifacts now arrive unidentified and become a research tree: identify them, generate serums, unlock alien technologies, and craft new gear at a research workbench. Ruins are reworked into indestructible, artifact-guaranteed, more dangerous dungeons.</p>
+  <div class="badges">
+    <span class="badge">Items / Art / Environment</span>
+    <span class="badge">Research tech tree</span>
+    <span class="badge">Semi-compatible with artifact mods</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>An artifact &amp; ruin overhaul by <em>_]|M|[_</em>, using Ruins Enhanced modules (by hUbert 2) and a Devourer artifact (by Grass).</dd>
+  <dt>Load position</dt><dd>Enhanced Reactors &rarr; <strong>Artifacts &amp; Ruins Enhanced</strong> &rarr; Robotrauma &rarr; Extract it! &rarr; other ruin-item mods. If you can't research artifacts, another mod is overriding the Research Station &mdash; move A&amp;RE higher.</dd>
+  <dt>Compatibility</dt><dd>Semi-compatible with other artifact mods &mdash; their artifacts still spawn and work, but you can't research them and their names stay visible.</dd>
+</dl>
+
+<h2><span class="ic">&#128300;</span>The research workflow</h2>
+<div class="step"><div class="n">1</div><div class="c"><h4>Find an unidentified artifact</h4>In ruins, on ice walls, or on the sea floor. Its name is hidden until you observe its effects or research it.</div></div>
+<div class="step"><div class="n">2</div><div class="c"><h4>Identify it</h4>Place it in a <strong>Research Station</strong> with <strong>Alien Circuitry</strong>. This reveals which artifact it is. Identified artifacts sell for far more &mdash; military &amp; research merchants pay best.</div></div>
+<div class="step"><div class="n">3</div><div class="c"><h4>Generate a serum</h4>Research an <em>already-identified</em> artifact again &rarr; it produces an <strong>Unknown Serum</strong>.</div></div>
+<div class="step"><div class="n">4</div><div class="c"><h4>Research the serum</h4>Place the unknown serum in the Research Station with <strong>Stabilozine</strong>. It either <strong>unlocks a technology</strong> (a "Knowledge Serum") or gives a <strong>negative genetic effect</strong>. Identified serums can be sold.</div></div>
+<div class="step"><div class="n">5</div><div class="c"><h4>Unlock &amp; craft</h4><strong>Inject</strong> a Knowledge Serum to unlock its recipe, then craft items at the <strong>Research Workbench</strong> (built at a regular Fabricator and placed on your sub).</div></div>
+<div class="step"><div class="n">6</div><div class="c"><h4>Bad-luck bypass</h4>Researching serums also yields <strong>Research Data</strong> (stored in the added Clipboard item). With enough Research Data you can craft specific Knowledge Serums directly &mdash; so you can still get tech even if the right artifact never spawns.</div></div>
+<div class="callout tip"><strong>Artifact Scanner</strong> (crafted at the Research Workbench): point at an unidentified artifact; <strong>fast/red beeping = dangerous</strong>, <strong>slow/green = harmless/helpful</strong>. Use it to decide whether you can transport/store an artifact without a Transport Case. A powered Research Station also suppresses artifact effects.</div>
+
+<h2><span class="ic">&#9889;</span>Unlockable technologies</h2>
+<table>
+<thead><tr><th>Technology</th><th>Unlocked by</th><th>What it gives you</th></tr></thead>
+<tbody>
+<tr><td>Artifact Containment</td><td>Containment Knowledge Serum (now any artifact)</td><td>Artifact Containment Unit &mdash; safely store/transport artifacts (suppresses effects)</td></tr>
+<tr><td>Gene Cleansing</td><td>From a Cleansing Artifact</td><td>Cleanse permanent negative serum/genetic effects via a powered ruin <strong>alien device</strong> + activated Cleansing Artifact</td></tr>
+<tr><td>Living Metal</td><td>From a Living Metal Artifact</td><td>Self-repair emitter that heals the sub (~15 HP/sec) while powered; glow + sound, drains energy, fixed range</td></tr>
+<tr><td>Stasis</td><td>From a Stasis Artifact</td><td><strong>Stasis Rifle</strong> (freezes/stuns targets)</td></tr>
+<tr><td>Teleportation</td><td>From a Teleportation Artifact</td><td><strong>Teleportation Anchor</strong> + Recall Teleport Device &mdash; teleport a crewmate back to the anchor via the health interface (rescue downed crew); recharged with an Alien Power Cell; misuse risks Teleportation Sickness</td></tr>
+<tr><td>Power Cell (bonus)</td><td>From a Faraday Artifact</td><td>Power Cell Recharger</td></tr>
+<tr><td>Regenerative Energy (bonus)</td><td>From an Addictive Healing Artifact</td><td>Health Blaster &mdash; NT-compatible ranged healing (won't fix organs)</td></tr>
+</tbody>
+</table>
+
+<h2><span class="ic">&#9672;</span>Artifact types &amp; effects</h2>
+<h4>Vanilla artifacts (now unidentified)</h4>
+<table>
+<thead><tr><th>Artifact</th><th>Effect</th><th>Danger</th></tr></thead>
+<tbody>
+<tr><td>Thermal</td><td>Periodically generates fire (~30s); harmless underwater</td><td>Red</td></tr>
+<tr><td>Faraday</td><td>EMP blast (~8m) every 15s; out of water it shocks (stun + burn)</td><td>Red</td></tr>
+<tr><td>Nasonov</td><td>Attracts creatures (~100m) and disrupts sonar</td><td>Red</td></tr>
+<tr><td>Psychosis</td><td>+0.5% psychosis/sec while held (hallucinations)</td><td>Red</td></tr>
+<tr><td>Skyholder ("Sky")</td><td>Siphons oxygen (and water) from the hull extremely fast</td><td>Red</td></tr>
+</tbody>
+</table>
+<p class="lead"><span class="unv">Note: "Sufforin / Static / Pressure" artifact names from older guides don't match the current vanilla set (Thermal, Faraday, Nasonov, Psychosis, Skyholder) &mdash; they may be community shorthand or from other mods.</span></p>
+
+<h4>Added / mod-specific artifacts</h4>
+<table>
+<thead><tr><th>Artifact</th><th>Effect</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Living Metal</td><td>Repairs the sub (~15 HP/sec) while powered</td><td>Helpful; unlocks Living Metal tech</td></tr>
+<tr><td>Stasis</td><td>Stasis (freeze/stun) in a range around it</td><td>Unlocks Stasis tech</td></tr>
+<tr><td>Teleportation</td><td>Teleportation effect</td><td>Unlocks Teleportation tech</td></tr>
+<tr><td>Infection</td><td>Alien infection in a range; can cause alien-infection coma</td><td>Cured by <strong>analarin</strong></td></tr>
+<tr><td>Muting</td><td>Damages vocal cords &mdash; "Muting Influence" (can't speak / give orders)</td><td>Cured by <strong>anarmu</strong>; outpost doctors can treat</td></tr>
+<tr><td>Sacrificial</td><td>Harmful sacrificial affliction</td><td>Cured by <strong>ansain</strong></td></tr>
+<tr><td>Cleansing</td><td>When activated, powers the ruin alien device to cleanse negative effects</td><td>Helpful; unlocks Gene Cleansing</td></tr>
+<tr><td>Addictive Healing</td><td>Heals you but is addictive</td><td>Unlocks Regenerative Energy &rarr; Health Blaster</td></tr>
+<tr><td>Corrosion</td><td>Damages walls over time</td><td>Dangerous</td></tr>
+<tr><td>Invulnerability</td><td>Temporary invulnerability, then internal damage</td><td>Mixed</td></tr>
+<tr><td>Gill</td><td>Lets you breathe/dive in a ~10m range; pressure protection to ~6650m</td><td>Helpful (Abyss-suit depth)</td></tr>
+<tr><td>Water-Draining</td><td>Rapidly drains water</td><td>Mixed</td></tr>
+<tr><td><span class="unv">Devourer</span></td><td>Spawns/attracts a devourer threat</td><td><strong>Currently disabled</strong> &mdash; broken by a game update; turns into a random artifact if present</td></tr>
+</tbody>
+</table>
+
+<h2><span class="ic">&#9877;</span>Antidotes</h2>
+<p>Antidotes have deliberately obscure names that all start with <strong>"an"</strong> &mdash; search <code>an</code> in the <strong>Medical Fabricator</strong>. Each is crafted from the matching artifact's researched serum. (A May 2026 update added readable descriptions, so item tooltips now tell you what each cures.)</p>
+<table>
+<thead><tr><th>Antidote</th><th>Cures</th></tr></thead>
+<tbody>
+<tr><td>analarin</td><td>Alien-infection coma (Infection Artifact)</td></tr>
+<tr><td>anarmu</td><td>Muting / vocal-cord damage (Muting Artifact) &mdash; restores speech</td></tr>
+<tr><td>ansain</td><td>Sacrificial artifact affliction</td></tr>
+</tbody>
+</table>
+<p class="lead"><span class="unv">Only these three names are confirmed; other harmful artifacts very likely have "an…" antidotes whose exact names aren't publicly catalogued. Unknown artifact afflictions can also be healed at outpost doctors for a hefty sum.</span></p>
+
+<h2><span class="ic">&#127963;</span>Ruins changes</h2>
+<ul>
+  <li><strong>Indestructible</strong> and always contain at least one artifact.</li>
+  <li>Hold unidentified serums + alien circuitry as bonus loot; more danger, modules, and loot.</li>
+  <li>Doors no longer slam in your face unless a monster is actively fighting you.</li>
+  <li>Sonar markers appear on the main ruin entrance within ~40m (unmarked openings exist).</li>
+  <li>Vault rooms hold artifacts in Artifact Holders; alien terminals and security modules reworked.</li>
+</ul>
+
+<h2><span class="ic">&#9888;</span>Compatibility notes</h2>
+<ul>
+  <li>If you can't research artifacts/serums, a mod is overriding the Research Station &mdash; move A&amp;RE higher.</li>
+  <li><span class="unv">Reported conflicts: Baroverhaul Research Station override, Neurotrauma sprite-path changes, and "Enhanced Medical Operation" (duplicate internal-bleeding affliction).</span></li>
+  <li>Affliction rule of thumb: if two mods override the same affliction, the higher one wins; if only one uses overrides, the override mod loads below.</li>
+</ul>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3218219821" target="_blank">Artifacts and Ruins Enhanced &mdash; Steam Workshop</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/comments/3218219821" target="_blank">A&amp;RE &mdash; comments (dev research FAQ + antidote list)</a></li>
+  <li><a href="https://barotraumagame.com/wiki/Artifacts" target="_blank">Official Barotrauma Wiki &mdash; Artifacts (vanilla baseline)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_07_immersive_repairs.html"><span class="pn-label">Previous</span><span class="pn-title">Immersive Repairs</span></a>
+  <a class="pn-next" href="baro_09_adv_beacon_stations.html"><span class="pn-label">Next</span><span class="pn-title">ADV Beacon Stations</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. Antidote names beyond the three confirmed ones: check the in-game medical fabricator.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

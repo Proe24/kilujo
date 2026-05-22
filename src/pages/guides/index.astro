@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { guides } from '../../data/guides';
+---
+<Layout title="Guides — A Quiet Corner" description="Long-form guides and playbooks.">
+  <section class="intro">
+    <h1>Guides</h1>
+    <p>
+      Long-form playbooks for games and projects I keep coming back to. Each guide is
+      a self-contained little site — click in and you'll land in its own world.
+    </p>
+  </section>
+
+  <div class="card-grid">
+    {guides.map((g) => (
+      <a class="card" href={g.href}>
+        <div
+          class="card__image"
+          style={g.cover ? `background-image:url('${g.cover}');background-size:cover;background-position:center` : ''}
+          aria-hidden="true"
+        ></div>
+        <div class="card__body">
+          <h3 class="card__title">{g.title}</h3>
+          <p class="card__meta">{g.description}</p>
+          {g.meta && <p class="card__meta" style="margin-top:.4rem">{g.meta}</p>}
+        </div>
+      </a>
+    ))}
+  </div>
+</Layout>

@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const journal = (await getCollection('journal', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Layout title="Home — A Quiet Corner">
+  <section class="intro">
+    <h1>Hi, I'm here with my wife.</h1>
+    <p>
+      This is a small corner of the internet where we keep track of things we love —
+      slow weekends, photos from our walks, the games we play together, and the
+      occasional thought worth writing down.
+    </p>
+    <p>
+      Pull up a chair and have a look around.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>Recent journal entries</h2>
+      <a href="/journal">All entries →</a>
+    </div>
+    {journal.length === 0 ? (
+      <div class="empty">No journal entries yet.</div>
+    ) : (
+      <ul class="post-list">
+        {journal.map((post) => (
+          <li>
+            <a href={`/journal/${post.slug}`}>{post.data.title}</a>
+            <span class="post-meta">{formatDate(post.data.date)}{post.data.description ? ` — ${post.data.description}` : ''}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Layout>

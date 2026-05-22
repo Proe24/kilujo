@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barotrauma Modded Co-op Campaign Guide</title>
+<style>
+  :root{
+    --bg:#0a1419;
+    --panel:#0f1f28;
+    --panel2:#13283312;
+    --ink:#d7e6ec;
+    --muted:#8aa6b1;
+    --amber:#f0a830;
+    --amber-soft:#caa14a;
+    --teal:#36c2c2;
+    --teal-deep:#1d6e72;
+    --red:#e2604c;
+    --green:#62b56a;
+    --line:#1d3540;
+    --chip:#16323d;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    font-size:16px;
+  }
+  .wrap{display:flex; max-width:1240px; margin:0 auto; gap:0;}
+  /* Sidebar TOC */
+  nav.toc{
+    position:sticky; top:0; align-self:flex-start;
+    width:280px; min-width:280px; height:100vh; overflow-y:auto;
+    background:linear-gradient(180deg,#0c1b22,#0a141a);
+    border-right:1px solid var(--line);
+    padding:22px 16px 60px 20px;
+  }
+  nav.toc h2{
+    font-size:13px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--amber); margin:18px 0 8px; border-bottom:1px solid var(--line); padding-bottom:6px;
+  }
+  nav.toc h2:first-child{margin-top:0;}
+  nav.toc a{
+    display:block; color:var(--muted); text-decoration:none; font-size:13.5px;
+    padding:3px 8px; border-radius:5px; border-left:2px solid transparent;
+  }
+  nav.toc a:hover{color:var(--ink); background:var(--chip); border-left-color:var(--teal);}
+  main{flex:1; min-width:0; padding:30px 42px 120px;}
+  header.hero{
+    background:radial-gradient(900px 240px at 18% -10%,rgba(54,194,194,.18),transparent),
+               linear-gradient(160deg,#102b33,#0a161c);
+    border:1px solid var(--line); border-radius:14px; padding:30px 34px; margin-bottom:28px;
+  }
+  header.hero .kicker{color:var(--teal); letter-spacing:3px; text-transform:uppercase; font-size:12px; font-weight:700;}
+  header.hero h1{margin:6px 0 8px; font-size:32px; line-height:1.15; color:#fff;}
+  header.hero p{margin:6px 0; color:var(--muted); max-width:760px;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .pill{background:var(--chip); border:1px solid var(--line); color:var(--amber-soft);
+    padding:4px 12px; border-radius:999px; font-size:12.5px; font-weight:600;}
+  h2.sec{font-size:24px; color:#fff; margin:46px 0 6px; padding-top:8px; border-top:2px solid var(--teal-deep);}
+  h2.sec .num{color:var(--teal); font-variant-numeric:tabular-nums; margin-right:10px;}
+  h3{font-size:18.5px; color:var(--amber); margin:26px 0 8px;}
+  h4{font-size:15.5px; color:var(--teal); margin:18px 0 6px; letter-spacing:.3px;}
+  p{margin:10px 0;}
+  a{color:var(--teal);}
+  .lead{color:var(--muted); font-size:16.5px;}
+  ul,ol{margin:10px 0 10px 4px; padding-left:22px;}
+  li{margin:5px 0;}
+  code{background:#0b2027; border:1px solid var(--line); padding:1px 6px; border-radius:5px;
+    font-family:"Consolas",monospace; font-size:13.5px; color:var(--amber);}
+  .callout{border-left:4px solid var(--teal); background:var(--panel); padding:14px 18px; border-radius:0 10px 10px 0; margin:16px 0;}
+  .callout.warn{border-left-color:var(--red);}
+  .callout.warn strong{color:var(--red);}
+  .callout.tip{border-left-color:var(--green);}
+  .callout.tip strong{color:var(--green);}
+  .callout strong{color:var(--teal);}
+  /* Load order table */
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:14px;}
+  th,td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:#0d2129; color:var(--amber); text-transform:uppercase; letter-spacing:1px; font-size:11.5px;}
+  tr:hover td{background:#0d2027;}
+  .lo-num{color:var(--teal); font-weight:700; font-variant-numeric:tabular-nums; width:34px;}
+  .band{background:linear-gradient(90deg,#13323b,#0e2027)!important;}
+  .band td{color:var(--amber); font-weight:700; letter-spacing:1px; text-transform:uppercase; font-size:12px;}
+  .tag{display:inline-block; background:var(--chip); border:1px solid var(--line); color:var(--muted);
+    font-size:11px; padding:1px 7px; border-radius:5px; margin:2px 3px 2px 0;}
+  .tag.dep{color:var(--red); border-color:#5a2b27;}
+  .tag.lua{color:var(--teal);}
+  .tag.xml{color:var(--green);}
+  /* Mod cards */
+  details.mod, details.role{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    margin:12px 0; overflow:hidden;
+  }
+  details.mod>summary, details.role>summary{
+    cursor:pointer; padding:14px 18px; font-weight:700; color:#fff; font-size:16px;
+    list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  details.mod>summary::-webkit-details-marker, details.role>summary::-webkit-details-marker{display:none;}
+  details.mod>summary::after, details.role>summary::after{content:"+"; color:var(--teal); font-size:20px; font-weight:700;}
+  details[open]>summary::after{content:"–";}
+  details.mod>summary:hover, details.role>summary:hover{background:#13282f;}
+  .mod-body, .role-body{padding:4px 20px 18px; border-top:1px solid var(--line);}
+  .role-cat{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .summary-left{display:flex; flex-direction:column;}
+  .summary-left small{color:var(--muted); font-weight:500; font-size:12.5px; letter-spacing:.4px;}
+  .kv{display:grid; grid-template-columns:120px 1fr; gap:4px 14px; margin:10px 0; font-size:14px;}
+  .kv dt{color:var(--teal); font-weight:600;}
+  .kv dd{margin:0; color:var(--ink);}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr;}}
+  .box{background:#0c1c23; border:1px solid var(--line); border-radius:9px; padding:12px 16px;}
+  .box h4{margin-top:4px;}
+  .buy-list{list-style:none; padding-left:0; margin:6px 0;}
+  .buy-list li{padding:3px 0 3px 22px; position:relative; border-bottom:1px dashed #16303a;}
+  .buy-list li::before{content:"▸"; color:var(--amber); position:absolute; left:4px;}
+  .role-tag{font-size:11px; padding:1px 8px; border-radius:5px; font-weight:700; letter-spacing:.5px;}
+  .rt-cmd{background:#3a2a10; color:var(--amber);}
+  .rt-sec{background:#3a1a16; color:#ee8c7c;}
+  .rt-med{background:#10303a; color:#5fd0d0;}
+  .rt-eng{background:#2a3210; color:#c3d24a;}
+  .rt-mech{background:#1a2c3a; color:#7fb0e0;}
+  .rt-civ{background:#23323a; color:#9fd0c0;}
+  .step{display:flex; gap:14px; margin:14px 0; align-items:flex-start;}
+  .step .n{flex:0 0 38px; height:38px; border-radius:50%; background:var(--teal-deep); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; border:1px solid var(--teal);}
+  .step .c{flex:1; background:var(--panel); border:1px solid var(--line); border-radius:9px; padding:10px 16px;}
+  .step .c h4{margin:2px 0 4px;}
+  hr.soft{border:none; border-top:1px solid var(--line); margin:30px 0;}
+  .footer{color:var(--muted); font-size:13px; margin-top:50px; border-top:1px solid var(--line); padding-top:18px;}
+  .footer a{color:var(--amber-soft);}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; margin:10px 0 0; font-size:12.5px; color:var(--muted);}
+  .legend span b{color:var(--ink);}
+  .toc-top{font-size:12px;color:var(--muted);text-decoration:none;display:inline-block;margin-top:10px;}
+  .anchor{scroll-margin-top:16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===================== SIDEBAR ===================== -->
+<nav class="toc">
+  <h2>Start Here</h2>
+  <a href="#overview">Overview &amp; how to use</a>
+  <a href="#setup">Critical setup (read first)</a>
+  <a href="#loadorder">Recommended load order</a>
+  <h2>The Mods</h2>
+  <a href="#m-framework">Framework &amp; performance</a>
+  <a href="#m-overhaul">Gameplay overhauls</a>
+  <a href="#m-content">Beacons &amp; wrecks</a>
+  <a href="#m-immersion">Immersion &amp; world</a>
+  <h2>Playing Your Role</h2>
+  <a href="#roles-intro">How the mods reshape roles</a>
+  <a href="#r-command">Command (Captain / XO / Navigator)</a>
+  <a href="#r-security">Security (HoS / SO / Prisoner)</a>
+  <a href="#r-medical">Medical (CMO / Doctor)</a>
+  <a href="#r-eng">Engineering (COB / Engineer)</a>
+  <a href="#r-mech">Logistics (Quartermaster / Mechanic / Custodian)</a>
+  <a href="#r-civ">Civilian (Assistant / Passenger)</a>
+  <h2>First Voyages</h2>
+  <a href="#first5">First 5 missions plan</a>
+  <a href="#economy">Money &amp; buying priorities</a>
+  <a href="#sources">Sources</a>
+</nav>
+
+<!-- ===================== MAIN ===================== -->
+<main>
+
+<header class="hero">
+  <div class="kicker">Europa Field Manual</div>
+  <h1>Barotrauma Modded Co-op Campaign Guide</h1>
+  <p class="lead">A complete reference for a 17-mod multiplayer campaign: a suggested load order, what every mod actually does, and a role-by-role playbook for your crew's first five missions &mdash; what to buy, what to focus on, and how to keep your station alive.</p>
+  <div class="meta-row">
+    <span class="pill">17 mods covered</span>
+    <span class="pill">MP / Co-op campaign</span>
+    <span class="pill">All roles + modded jobs</span>
+    <span class="pill">Load order included</span>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<h2 class="sec anchor" id="overview"><span class="num">01</span>Overview &amp; how to use this guide</h2>
+<p>This pack turns vanilla Barotrauma into a dense, dangerous, role-driven experience. The mods fall into five jobs: a <strong>framework</strong> that makes scripted mods possible, a set of <strong>system overhauls</strong> (medicine, reactors, repairs, weapons, jobs, artifacts), a pile of <strong>additive content</strong> (new beacons and wrecks), a <strong>world overhaul</strong> (DynamicEuropa), and <strong>quality-of-life / performance</strong> tools.</p>
+<p>Read the guide in order the first time. <a href="#setup">Setup</a> and <a href="#loadorder">load order</a> are not optional &mdash; several of these mods will silently misbehave or break your save if installed wrong. After that, jump to <a href="#roles-intro">your role</a> and the <a href="#first5">first-5-missions plan</a>.</p>
+<div class="legend">
+  <span><b>Legend:</b></span>
+  <span><span class="tag dep">requires</span> hard dependency</span>
+  <span><span class="tag lua">Lua</span> needs LuaCs scripting</span>
+  <span><span class="tag xml">XML</span> no scripting needed</span>
+</div>
+
+<!-- SETUP -->
+<h2 class="sec anchor" id="setup"><span class="num">02</span>Critical setup &mdash; read before you touch the mod list</h2>
+
+<div class="callout warn">
+  <strong>1. Install LuaCsForBarotrauma first, the modern way.</strong> Several mods here (Neurotrauma, Performance Fix, Enhanced Immersion) will not work without it. The recommended method is the <em>launch-option installer</em>: close the game, right-click Barotrauma in Steam → Properties → Launch Options, and paste the auto-updater command from the LuaCs page. With this method you should <em>keep the LuaCs workshop item disabled</em> &mdash; it installs client- and server-side automatically every launch and survives game updates. The older "classic" method (enable the workshop package, host, run <code>install_cl_lua</code> in the F3 console, restart) still works but must be redone after every verify/update.
+</div>
+
+<div class="callout warn">
+  <strong>2. DynamicEuropa needs a brand-new campaign and must NEVER be removed mid-campaign.</strong> Installing or removing it on an existing save will corrupt the map. Decide up front whether you're running it, then start fresh.
+</div>
+
+<div class="callout">
+  <strong>3. Client-side vs. server-side (this is the #1 source of "it doesn't work").</strong> In multiplayer, the host's server runs the gameplay mods, but some features need each player to also have the mod client-side:
+  <ul>
+    <li><strong>Neurotrauma</strong> works in MP with the mod server-side; client-side LuaCs is only required for single-player or the sub editor.</li>
+    <li><strong>Enhanced Immersion's</strong> zoom camera and zDoors are <span class="tag lua">Lua</span> features &mdash; every player who wants them needs client-side LuaCs. The sound/texture changes work without it.</li>
+    <li><strong>Performance Fix</strong> boosts the server with only server-side LuaCs; for client-side FPS gains each player installs client-side LuaCs too.</li>
+  </ul>
+  Rule of thumb: everyone subscribes to the same mod list, everyone runs the LuaCs launch-option installer, and the host selects <code>LuaForBarotrauma</code> as the <em>Server Executable</em> before hosting.
+</div>
+
+<div class="callout tip">
+  <strong>4. Match the load order on the host AND every client.</strong> In multiplayer the host's order is what counts, but mismatched lists cause join errors and "missing file" prompts. If a mod ever errors or shows red in the loader, open the in-game Workshop menu, right-click it, and hit <em>Reinstall</em> before anything else.
+</div>
+
+<!-- LOAD ORDER -->
+<h2 class="sec anchor" id="loadorder"><span class="num">03</span>Recommended load order</h2>
+<p>Barotrauma's mod list runs <strong>top &rarr; bottom</strong>. For this pack I've followed each author's own "place X above Y" instructions, which are internally consistent: the rule that matters for these mods is <em>a mod higher in the list keeps priority over the lower mods it overlaps with</em>. Practically, you only need to preserve the <strong>relative positions</strong> below.</p>
+
+<p>The non-negotiable relationships, straight from the mod pages:</p>
+<ul>
+  <li><strong>LuaCs</strong> sits at the very top (or is installed via launch option and isn't in the list at all).</li>
+  <li><strong>Barotraumatic</strong> goes high; any mod that edits the spawn list, event manager, or vanilla afflictions belongs <em>below</em> it.</li>
+  <li><strong>Vanilla Weapons Overhaul</strong> goes above other weapon overhauls (e.g. Baroverhaul) to keep its weapon changes.</li>
+  <li><strong>Enhanced Reactors</strong> must be <em>above</em> Immersive Repairs, Neurotrauma, Artifacts &amp; Ruins Enhanced, DynamicEuropa, and anything else touching fuel rods / ores / reactors / radiation.</li>
+  <li><strong>Immersive Repairs</strong> goes below Enhanced Reactors.</li>
+  <li><strong>DynamicEuropa</strong> goes at the very bottom.</li>
+</ul>
+
+<table>
+  <thead><tr><th class="lo-num">#</th><th>Mod</th><th>Type</th><th>Why here</th></tr></thead>
+  <tbody>
+    <tr class="band"><td></td><td colspan="3">Band 1 &middot; Framework &amp; performance (top)</td></tr>
+    <tr><td class="lo-num">1</td><td><b>LuaCsForBarotrauma</b></td><td><span class="tag lua">Library</span></td><td>Scripting base for everything. Ideally installed via launch option (then not in the list); otherwise place it first.</td></tr>
+    <tr><td class="lo-num">2</td><td><b>Performance Fix</b></td><td><span class="tag lua">Lua</span> <span class="tag dep">LuaCs</span></td><td>Global Lua optimiser; doesn't override content, so it rides near the top.</td></tr>
+    <tr class="band"><td></td><td colspan="3">Band 2 &middot; Major gameplay overhauls</td></tr>
+    <tr><td class="lo-num">3</td><td><b>Barotraumatic</b></td><td><span class="tag">Monsters/Events</span></td><td>Author: safe at the top; spawn / event / affliction mods go below it.</td></tr>
+    <tr><td class="lo-num">4</td><td><b>Vanilla Weapons Overhaul (Draconis)</b></td><td><span class="tag">Items/NPC</span></td><td>Above any other weapon overhaul; edits afflictions/damage, so below Barotraumatic.</td></tr>
+    <tr><td class="lo-num">5</td><td><b>JobsExtended</b></td><td><span class="tag">Total conversion</span></td><td>Adds the expanded job roster. No hard conflict; sits in the overhaul band.</td></tr>
+    <tr><td class="lo-num">6</td><td><b>Enhanced Reactors</b></td><td><span class="tag xml">XML</span></td><td>Above Immersive Repairs, Neurotrauma, A&amp;RE, DynamicEuropa, and any reactor/radiation mod.</td></tr>
+    <tr><td class="lo-num">7</td><td><b>Immersive Repairs</b></td><td><span class="tag xml">XML</span></td><td>Directly below Enhanced Reactors, per its own load-order note.</td></tr>
+    <tr><td class="lo-num">8</td><td><b>Artifacts and Ruins Enhanced</b></td><td><span class="tag">Items/Env</span></td><td>Below Enhanced Reactors; above ruin-item mods like Robotrauma / Extract it!.</td></tr>
+    <tr class="band"><td></td><td colspan="3">Band 3 &middot; Additive content &mdash; order among these is flexible</td></tr>
+    <tr><td class="lo-num">9</td><td><b>ADV Beacon Stations</b></td><td><span class="tag">Beacons</span></td><td>Additive beacon variants; campaign-safe to add anytime.</td></tr>
+    <tr><td class="lo-num">10</td><td><b>Beacons Extended</b></td><td><span class="tag">Beacons</span></td><td>Additive; no vanilla changes. Keep below Barotraumatic.</td></tr>
+    <tr><td class="lo-num">11</td><td><b>Even More Beacon Stations</b></td><td><span class="tag">Beacons</span></td><td>Additive; compatible with the other beacon mods.</td></tr>
+    <tr><td class="lo-num">12</td><td><b>Facehurt's Beacon Stations</b></td><td><span class="tag">Beacons</span></td><td>Additive, vanilla-balanced.</td></tr>
+    <tr><td class="lo-num">13</td><td><b>Shipwrecks Extended</b></td><td><span class="tag">Wrecks</span></td><td>Additive wrecks; compatible with all wreck mods.</td></tr>
+    <tr><td class="lo-num">14</td><td><b>Astra's Wrecks</b></td><td><span class="tag">Wrecks</span></td><td>Additive wrecks (incl. Thalamus versions).</td></tr>
+    <tr class="band"><td></td><td colspan="3">Band 4 &middot; Immersion / QoL</td></tr>
+    <tr><td class="lo-num">15</td><td><b>Enhanced Immersion</b></td><td><span class="tag lua">Lua</span> <span class="tag dep">LuaCs</span></td><td>Author: load below other mods, above wreck mods you want it to affect.</td></tr>
+    <tr class="band"><td></td><td colspan="3">Band 5 &middot; Medical &amp; world (bottom)</td></tr>
+    <tr><td class="lo-num">16</td><td><b>Neurotrauma</b></td><td><span class="tag">Medical</span> <span class="tag dep">LuaCs</span></td><td>Below Enhanced Reactors &amp; Immersive Repairs. Sits low so the medical overhaul wins on Human.xml.</td></tr>
+    <tr><td class="lo-num">17</td><td><b>DynamicEuropa</b></td><td><span class="tag">World / Total conversion</span></td><td>Very bottom. Fresh campaign required; never remove mid-campaign.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>One known author disagreement.</strong> The Immersive Repairs page lists the order as <em>Enhanced Reactors → Immersive Repairs → DynamicEuropa → Neurotrauma</em> (Neurotrauma below DynamicEuropa), while DynamicEuropa's own page says it should sit at the <em>very bottom</em>. I've followed DynamicEuropa's hard rule (bottom) and placed Neurotrauma just above it, which is the most common working setup. If you ever see medical items from Neurotrauma being overridden by DynamicEuropa, swap 16 and 17.
+</div>
+<div class="callout tip">
+  <strong>Optional but recommended extras</strong> the authors point to: <em>Hungry Europans</em> (place ABOVE DynamicEuropa) for cooking/butchering, and the relevant <em>compatibility patches</em> (Enhanced Reactors ↔ Baroverhaul, Immersive Repairs' Vanilla Oxygen/Welding patches) if you add those base mods. None are required for the 17 listed here.
+</div>
+
+<!-- ============ MOD-BY-MOD ============ -->
+<h2 class="sec anchor" id="m-framework"><span class="num">04</span>The mods, explained &mdash; Framework &amp; performance</h2>
+
+<details class="mod" open>
+  <summary><span class="summary-left"><span>LuaCsForBarotrauma</span><small>Library &middot; the foundation</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it is</dt><dd>Adds Lua and optional C# modding support to Barotrauma. It's not a content mod &mdash; it's the engine that lets scripted mods (Neurotrauma, Performance Fix, Enhanced Immersion's Lua features) exist.</dd>
+      <dt>How to use</dt><dd>Install via the Steam launch-option auto-updater (keep the workshop item disabled). Verify it works: press <code>F3</code> and type <code>cl_reloadluacs</code> (client) or host and type <code>reloadluacs</code> (server). "Command not found" means it isn't installed on that side.</dd>
+      <dt>Gotchas</dt><dd>Client-side install is reverted whenever you verify game files or the game updates &mdash; the launch-option method re-applies it automatically; the classic method does not.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Performance Fix</span><small>Lua optimiser &middot; requires LuaCs</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Reduces how often map entities update, which can dramatically raise FPS on heavy modded servers and big subs. Includes a config (console command <code>performancefix</code>) and an option to disable shadow-casting lights globally.</dd>
+      <dt>How to use</dt><dd>Open the config with <code>performancefix</code> (use <code>cl_reloadlua</code> first if you're at the main menu). Start with a Client Entity Interval of 1&ndash;2 for a good balance. Use <code>showperf</code> to find what's lagging.</dd>
+      <dt>Gotchas</dt><dd>The author notes the base game has improved since release, so gains vary &mdash; but the community still finds it valuable with heavy packs like this (Neurotrauma + DynamicEuropa cities). Higher intervals can make some items behave oddly; add their IDs to the priority list if so.</dd>
+    </dl>
+  </div>
+</details>
+
+<h2 class="sec anchor" id="m-overhaul"><span class="num">05</span>Gameplay overhauls</h2>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Barotraumatic</span><small>Monsters, events, missions &amp; radio</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Massively increases the variety and frequency of monster spawns (~258+ creatures), and fills wrecks and ruins with enemies. Adds new biomes flavour, new missions/events, and a full radio overhaul with five craftable radios (noise-cancelling, chemical-battery, etc.) where interference and death can come through your headset.</dd>
+      <dt>How to use</dt><dd>Bring more meds and ammo than vanilla &mdash; empty caves and wrecks are gone. There's deliberately no in-game wiki for its creatures; learn by encountering them. Safe to add or remove from a campaign at any time (you lose its items if removed).</dd>
+      <dt>Gotchas</dt><dd>Do <em>not</em> also run the legacy monster packs it absorbed (Xansmonsters, Extended Monsters, etc.) &mdash; that causes crashes. Other mods that edit the spawn list, event manager, or vanilla afflictions must load below it.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Vanilla Weapons Overhaul (Draconis)</span><small>Weapons, armour &amp; NPC loadouts</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Reworks vanilla weapons/armour with a dynamic recoil &amp; bloom system that improves as your weapon skill rises, and adds new gear in three tiers (basic / intermediate / advanced). Adds a "parts kit" resource for crafting/upgrading higher-tier weapons, functional spear/harpoon melee, weapon attachments (flashlight, stab-light, laser, scopes coming), and reworked bags/packs with restricted slots. Station and submarine NPCs are rearmed and buffed to be a real threat.</dd>
+      <dt>How to use</dt><dd>Lower-skill crew can still be deadly with basic pistols/carbines. Several weapon groups need Mechanical, Electrical, or even Medical skill instead of pure Weapons skill &mdash; a progression path for non-security roles. Heavy weapons (hand cannons, large rifles) have brutal recoil that can stun or injure low-skill users; wear an Exosuit/Exoskeleton to negate it.</dd>
+      <dt>Gotchas</dt><dd>Don't stack other weapon mods (EHA, CoL, THG). Place VWO above Baroverhaul if you use it. Its added damage types (frag/blunt/bleed-on-hit) deliberately complicate Neurotrauma injuries &mdash; expect more limb incapacitation.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>JobsExtended</span><small>The expanded job roster &mdash; core of your crew</small></span></summary>
+  <div class="mod-body">
+    <p>This is the mod that adds the new roles your crew will pick. It's built for multiplayer roleplay and larger crews (8+), with 15 jobs, each having 3 sub-roles for further specialisation. Heads of department get Captain-style talents woven in to grow their team's skills faster and act as mentors.</p>
+    <h4>The new jobs</h4>
+    <ul>
+      <li><strong>Captain (CO)</strong> &mdash; the one in charge; only one allowed.</li>
+      <li><strong>Executive Officer (XO)</strong> &mdash; second-in-command; a Captain with the Warlord (security) tree instead of politics, +5 vitality, supports the gunnery deck.</li>
+      <li><strong>Navigator</strong> &mdash; drives the boat; a Captain with the Frogman tree; leads the dive team / drones / mineral-finding.</li>
+      <li><strong>Head of Security (HoS)</strong> &mdash; runs the armoury; Security with Captain-style gunslinger pistol focus; uniquely has Medical/Engineering/Mechanical access for cabinets.</li>
+      <li><strong>Chief Medical Officer (CMO)</strong> &mdash; runs the infirmary and keeps medical supplied.</li>
+      <li><strong>Chief of the Boat (COB)</strong> &mdash; supervises electrical systems and leads technical staff; an Engineer with Bosun leadership.</li>
+      <li><strong>Quartermaster (QM)</strong> &mdash; head Mechanic; manages materials and keeps every cabinet and weapon stocked with ammo.</li>
+      <li><strong>Custodian</strong> &mdash; assists the Quartermaster; an Assistant crossed with the engineer + mechanic maintenance trees.</li>
+      <li><strong>Passenger</strong> &mdash; civilian guest; low skill, supports the crew with buffs while growing into a role.</li>
+      <li><strong>Prisoner</strong> &mdash; melee/pistol-focused assistant (a work-release "trustee"); can't be a clown (failed the background check).</li>
+      <li><strong>Vanilla roles</strong> &mdash; Medical Doctor, Engineer, Mechanic, Security Officer remain essentially the same.</li>
+    </ul>
+    <dl class="kv">
+      <dt>How to use</dt><dd>Each player picks a job at the lobby. An optional Karma system lets admins gate higher roles (CO needs 95 karma, XO/COB 85, HoS/CMO 75, NAV 65, QM/SO 55, DR 50, ENG 45, MEC 25, down to Prisoner 0) &mdash; useful for controlling griefing and clearances.</dd>
+      <dt>Gotchas</dt><dd>You can only buy the vanilla 5 bot jobs from stations, not the modded ones (DynamicEuropa enables buying modded bots via cross-mod magic). Forced low-skill starts are removed except for Janitor/Convict/Passenger types. Job uniforms have pockets, but items inside drop if you move the clothing to your hotbar &mdash; intentional anti-hoarding.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Enhanced Reactors</span><small>Reactor &amp; radiation overhaul &middot; XML</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Reactors now radiate heat and leak radiation based on damage. Radiation splits into <em>Radiation Sickness</em> (treat with activated-carbon tablets; potassium-iodide for protection) and <em>Contamination</em> (only detectable with a Geiger counter; spreads sickness to nearby crew). Distance, walls and doors all reduce exposure. Fuel rods glow and irradiate once started, can't be pocket-stacked, must be moved with tongs or in fuel-rod crates, and meltdown size scales with the rod inside.</dd>
+      <dt>How to use</dt><dd><strong>Always turn a reactor off and wait for its lights to die before repairing</strong> &mdash; repairing a live reactor triggers a 30-second critical state where you must spam the repair button or it explodes. Keep potassium-iodide and activated-carbon tablets aboard. Use a craftable hazmat suit when handling rods. Corpses that died contaminated keep irradiating &mdash; dispose of them.</dd>
+      <dt>Bots</dt><dd>Bot-friendly for single-player, but equip your reactor operator with a hazmat suit (they won't on their own) and give them a higher-priority "clean up items" order so they store spent rods instead of dropping them.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Immersive Repairs</span><small>Repairs overhaul &middot; XML</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Repairs take more time and coordination. The right tool matters (jackhammer for mining, plasma cutter for structures). Turrets and discharge coils wear out and must be repaired &mdash; turrets and hull breaches now need outside diving repairs with shorter-range welders. Adds: engines that need <em>oil</em> (and explode when run dry), oxygen generators that need cleanable <em>air filters</em>, vents that need <em>vent blades</em>, hidden loose-vent inventories (open with a crowbar + E), a reactor critical-state failure (like Enhanced Reactors but no radiation), an "Automatic Welder" placeable, a multitool repair-pack replacement, fixfoam reworked into a sprayer, and a "Welder's Eye" affliction if you weld without a mask.</dd>
+      <dt>How to use</dt><dd>Stock oil and spare air filters/vent blades, especially after any flooding. Wear a welding mask. Keep an automatic welder for leaks you can't reach. Don't try to repair a running engine or live reactor unless someone's standing by with an extinguisher.</dd>
+      <dt>Gotchas</dt><dd>Bots try to repair external turrets, grab a diving suit, then get stuck &mdash; a known unavoidable quirk. Load it directly below Enhanced Reactors.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Neurotrauma</span><small>Deep medical overhaul &middot; requires LuaCs</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Completely overhauls human health: individual organ damage and failure, surgeries (including amputation and organ transplants), infection, combustion, and a huge amount of medical equipment and symptoms. Causes must be diagnosed from symptoms or with a health scanner, and over-medicating actively harms the patient.</dd>
+      <dt>How to use</dt><dd>Configure it via the ESC menu → "Neurotrauma". There's an official training map to practise on, and a community Trello guide. Surgery requires adequate medical skill &mdash; low skill turns incisions into "nasty lacerations" (a failed skill check), so let trained medics operate.</dd>
+      <dt>Gotchas</dt><dd>This is the fork version &mdash; do <em>not</em> add NT Unstunned, Consent Required Extended, or NT Better Scanner (already merged). Incompatible with any non-patch mod that overwrites <code>Human.xml</code> or vanilla medicine. Known issues: bots won't treat injuries, and you currently can't open the health menu of someone lying on a bed.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Artifacts and Ruins Enhanced</span><small>Research, artifacts &amp; alien ruins</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Artifacts no longer reveal what they are on sight &mdash; you identify them by observing effects or scanning, then <em>research</em> them at a research station using alien circuitry (identified artifacts sell for far more). Researching a known artifact yields an unknown serum, which you research with stabilozine to unlock new tech: Artifact Containment, Gene Cleansing, Living Metal, Stasis, Teleportation. Ruins are reworked &mdash; indestructible, always hold at least one artifact, more modules, loot (serums, alien circuitry), and danger.</dd>
+      <dt>How to use</dt><dd>Build the new research workbench at a fabricator, then craft unlocked items there after injecting the right serum. Use an artifact scanner to gauge danger (fast/red = dangerous, slow/green = safe) before transporting without a case. Note: cure items for artifact afflictions have deliberately obscure names &mdash; in the medical fabricator, search <code>an</code> to find antidotes (e.g. <em>analarin</em> for alien-infection coma, <em>anarmu</em> for the muting artifact, <em>ansain</em> for the sacrificial artifact).</dd>
+      <dt>Gotchas</dt><dd>Semi-compatible with other artifact mods (theirs still spawn but won't gain these research mechanics). Load below Enhanced Reactors, above Robotrauma / Extract it!.</dd>
+    </dl>
+  </div>
+</details>
+
+<h2 class="sec anchor" id="m-content"><span class="num">06</span>Additive content &mdash; beacons &amp; wrecks</h2>
+<p>These six mods simply enlarge the pool of beacon stations and shipwrecks the game can spawn. They make no vanilla changes, are broadly compatible with each other and with DynamicEuropa, and most can be added to a campaign at any time. Order among them barely matters &mdash; just keep them below Barotraumatic and above DynamicEuropa.</p>
+
+<div class="grid2">
+  <details class="mod"><summary><span class="summary-left"><span>ADV Beacon Stations</span><small>~54 new beacons</small></span></summary>
+    <div class="mod-body"><p>A big pack of beacon stations for variety, playable in any mode and addable to ongoing campaigns. Activation works as normal (repair hull/equipment, rewire, restore power, pump water, activate sonar). <strong>Watch out:</strong> mines surround stations ADVBS-037 and ADVBS-041 &mdash; approach carefully. Confirmed compatible with DynamicEuropa.</p></div>
+  </details>
+  <details class="mod"><summary><span class="summary-left"><span>Beacons Extended</span><small>~56 community beacons</small></span></summary>
+    <div class="mod-body"><p>Adds 56 beacons from various authors to the rotation with no vanilla edits, so it's compatible with all basic beacon mods unless filenames clash. Note: it does <em>not</em> add new mission types &mdash; just beacon variety. Pairs with the same team's Shipwrecks Extended.</p></div>
+  </details>
+  <details class="mod"><summary><span class="summary-left"><span>Even More Beacon Stations</span><small>8 stations (5 + 3 bandit)</small></span></summary>
+    <div class="mod-body"><p>Eight beacons from small to large, including three bandit variants; larger ones are designed to be easy to fix. Confirmed compatible with Beacons Extended. <strong>Warning:</strong> at least one station has a nuclear depth-charge docking trap that has ended ironman runs &mdash; dock cautiously and watch for alarm indicators.</p></div>
+  </details>
+  <details class="mod"><summary><span class="summary-left"><span>Facehurt's Beacon Stations</span><small>4 biodome beacons</small></span></summary>
+    <div class="mod-body"><p>Four cinematic "underwater biodome" glass-exterior beacon stations, balanced around vanilla using only vanilla tags and assets. Some come with secure cabinets that can spawn starter weapons/ammo &mdash; a small early-game windfall.</p></div>
+  </details>
+  <details class="mod"><summary><span class="summary-left"><span>Shipwrecks Extended</span><small>Many new wrecks</small></span></summary>
+    <div class="mod-body"><p>Adds a large number of new shipwrecks &mdash; some dangerous, some harmless, some dockable. Compatible with all known wreck mods (including More Wrecks for Barotrauma). Great salvage variety; pairs with Beacons Extended.</p></div>
+  </details>
+  <details class="mod"><summary><span class="summary-left"><span>Astra's Wrecks</span><small>7 themed wrecks</small></span></summary>
+    <div class="mod-body"><p>Adds wrecked versions of several ships (Kessel, Azimuth Type 2 Okayu, Orca, Remora, Venture, Destiny, Kessel-B), including Thalamus-infested variants &mdash; rounding out vanilla ships that lacked wrecks. Lightweight and additive.</p></div>
+  </details>
+</div>
+
+<h2 class="sec anchor" id="m-immersion"><span class="num">07</span>Immersion &amp; world</h2>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>Enhanced Immersion</span><small>Sound, visuals, zoom &amp; hidden rooms &middot; requires LuaCs</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>Adds visual interactions + sound effects to junction boxes, capacitors, lockers, cabinets, etc.; rebalances ambient audio (quieter water, shorter reactor sound range) so you can hear threats; replaces door buttons with ID-scanner textures; lets you wire many decorative items on/off. <span class="tag lua">Lua</span> features: a zoomed-in camera that pulls back when you aim, and "zDoors" integration that opens extra background rooms.</dd>
+      <dt>How to use</dt><dd>Non-Lua features (sound/texture) work for anyone with the mod. For the zoom camera and zDoors, each player needs client-side LuaCs. The zoom only scales correctly at 1920&times;1080 or lower.</dd>
+      <dt>Gotchas</dt><dd>Items overridden by other mods won't get its new sounds/interactions. It changes combat diving-suit stats and can overwrite Immersive Diving Gear (load it below that mod if you run both). A lighter "Enhanced Immersion (lua only)" version exists if you only want the camera.</dd>
+    </dl>
+  </div>
+</details>
+
+<details class="mod">
+  <summary><span class="summary-left"><span>DynamicEuropa</span><small>World / map total conversion &middot; bottom of list</small></span></summary>
+  <div class="mod-body">
+    <dl class="kv">
+      <dt>What it does</dt><dd>The single biggest change in the pack. 20+ unique, service-specialised outposts that grow (or that you can help build or destroy), outpost takeovers and destruction, monster lairs and husk swarms that spread between locations, a biome overhaul with new hazards, integrated Pirates Ahoy! content (pirate missions, vessels, items, outposts, collectible music), and integrated Hungry Europans food/drinks for roleplay.</dd>
+      <dt>How to use</dt><dd>Plan your route &mdash; outposts specialise, so the gear/service you need is location-dependent. You can help grow allied outposts or wipe out rival ones (flood a construction site 50%, or blow a reactor at a full station). With enough faction reputation you can join outpost takeover fights.</dd>
+      <dt>Gotchas (important)</dt><dd>Requires a brand-new campaign and <strong>must never be removed mid-campaign</strong> &mdash; it kills your map. It overrides a lot, so mods adding missions/factions/hireable characters or editing the map/biomes can conflict without a patch; check its compatibility-patch collection. Keep it at the very bottom of the load order.</dd>
+    </dl>
+  </div>
+</details>
+
+<!-- ============ ROLES ============ -->
+<h2 class="sec anchor" id="roles-intro"><span class="num">08</span>How the mods reshape every role</h2>
+<p>Before the per-role playbooks, internalise the four shifts this pack forces on the whole crew:</p>
+<div class="grid2">
+  <div class="box"><h4>Medicine is a profession now</h4><p>Neurotrauma means a hit isn't "lose HP" &mdash; it's organ damage, bleeding, fractures, infection. Wrong drugs make it worse. You need at least one real medic, and everyone should carry basic first aid and know to <em>get to the medic</em>, not self-medicate blindly.</p></div>
+  <div class="box"><h4>The sub is needier</h4><p>Enhanced Reactors + Immersive Repairs mean reactors irradiate and must be powered down to repair; engines need oil; oxygen needs filters; vents need blades; turrets/coils wear out and hull repairs happen <em>outside</em>. Engineering and mechanical roles are now constant jobs, not occasional ones.</p></div>
+  <div class="box"><h4>Combat is lethal and skill-gated</h4><p>Barotraumatic floods the map with monsters and arms station/wreck NPCs; VWO adds recoil that punishes low weapon skill and damage types that compound Neurotrauma injuries. Security matters, and so does buying the right tier of weapon for each shooter.</p></div>
+  <div class="box"><h4>The world is bigger and political</h4><p>DynamicEuropa makes outposts specialised, destructible, and faction-driven, with husk swarms and pirates. Navigation and command decisions (where to go, who to side with) carry real weight and reward planning.</p></div>
+</div>
+<p>The role guides below assume <strong>multiplayer campaign</strong> with the JobsExtended roster. Each card covers the role's job, its first-5-missions focus, a shopping list, and management tips. Buy prices are relative (Barotrauma economy varies by outpost/DLC), so treat amounts as priorities, not exact figures.</p>
+
+<!-- COMMAND -->
+<h3 class="anchor" id="r-command">Command department</h3>
+
+<details class="role" open>
+  <summary><span class="summary-left"><span class="role-cat">Command</span><span>Captain (CO)</span></span><span class="role-tag rt-cmd">1 only</span></summary>
+  <div class="role-body">
+    <p>The decision-maker: sets the route, accepts missions, manages the budget, and gives orders the bot/crew follow. With DynamicEuropa your routing choices (which specialised outpost, which faction) define the whole campaign.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Run the map screen and the wallet. Pick missions the crew can actually survive (start with beacon activations, simple salvage, and short transport hops &mdash; not monster nests).</li>
+      <li>Assign stations out loud before undocking: who's on reactor, who's on helm/sonar, who's on guns, who's medic. Use the command menu to set crew orders.</li>
+      <li>Hold reputation discipline early &mdash; don't antagonise a faction whose outposts you'll need for fuel, ammo, or medical resupply.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Fuel rods (2&ndash;3 spare) &mdash; the campaign-enders are running dry, not combat</li>
+        <li>A stock of oxygen tanks &amp; welding fuel for the crew</li>
+        <li>Crew-wide basics: bandages, a few medical items, ammo for mounted guns</li>
+        <li>One good captain's sidearm (a revolver/pistol you have skill for)</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Keep a cash reserve &mdash; a single Neurotrauma surgery run or fuel emergency can be expensive.</li>
+        <li>Talk constantly. In this pack, silent crews die to husk swarms and floods that one callout would have prevented.</li>
+        <li>Park the helm to a Navigator if you have one and focus on orders + the map.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Command</span><span>Executive Officer (XO)</span></span><span class="role-tag rt-cmd">Command</span></summary>
+  <div class="role-body">
+    <p>Second-in-command &mdash; a Captain built on the Warlord/security tree with +5 vitality. Keeps the crew on task and backs the gunnery deck. Effectively your combat-capable deputy and the natural boarding-party leader.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Be the Captain's enforcer of station assignments &mdash; chase down the player who wandered off the reactor.</li>
+      <li>Lead defensive fire during monster attacks and take point on hostile boardings/raids (DynamicEuropa outpost fights, pirates).</li>
+      <li>Step into command if the Captain dies or is incapacitated &mdash; know the route and finances.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>A solid mid-tier rifle/carbine + ammo (VWO tiers)</li>
+        <li>Body armour you can move in; an exosuit later for heavy weapons</li>
+        <li>Stun baton / sidearm for boarding</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Don't hoard the armoury &mdash; coordinate with the Head of Security.</li>
+        <li>Keep your weapon skill climbing; VWO recoil rewards it heavily.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Command</span><span>Navigator</span></span><span class="role-tag rt-cmd">Command</span></summary>
+  <div class="role-body">
+    <p>Drives the boat &mdash; a Captain with the Frogman tree. Depending on the sub, also leads the dive team, locates minerals, and runs exploration drones. On long DynamicEuropa hauls this is a full-time job.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Master helm + sonar: run active sonar in safe water, passive near threats so you don't ring the dinner bell for monsters.</li>
+      <li>Plan depth and route around level hazards and husk-swarm lairs; keep the sub off the seabed (hull damage = outside repairs).</li>
+      <li>Coordinate dive ops: when the crew salvages a wreck/beacon, position the sub close and hold it steady.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>A good diving suit (you'll lead dives) + spare O2 tanks</li>
+        <li>Diving knife / harpoon (VWO functional melee) for the swim out</li>
+        <li>Hull/periscope upgrades when affordable</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Announce hard turns and dives &mdash; crew working outside or on ladders can be thrown or stranded.</li>
+        <li>Watch your sonar discipline around Barotraumatic spawns; noise pulls swarms.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<!-- SECURITY -->
+<h3 class="anchor" id="r-security">Security department</h3>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Security</span><span>Head of Security (HoS)</span></span><span class="role-tag rt-sec">Security lead</span></summary>
+  <div class="role-body">
+    <p>Runs the armoury &mdash; Security with a Captain-style gunslinger pistol focus. Uniquely also has Medical, Engineering and Mechanical access, so the HoS can reach tox cabinets and custom department cabinets. Your weapons quartermaster and lead shooter.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Inventory and control the armoury; hand out weapons matched to each shooter's skill (VWO basic gear for low-skill, advanced for trained users).</li>
+      <li>Be first responder to hull breaches with monsters inside &mdash; clear them so the mechanic can weld.</li>
+      <li>Manage ammunition flow with the Quartermaster so guns never run dry mid-fight.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Ammo, ammo, ammo (and the parts kits to craft better weapons)</li>
+        <li>A reliable shotgun + your gunslinger pistol</li>
+        <li>Body armour; an exosuit for hand-cannons/heavy rifles</li>
+        <li>Stun batons / handcuffs for boarders &amp; traitor control</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Keep heavy weapons locked until needed &mdash; VWO recoil can injure untrained users.</li>
+        <li>Use your cross-department access responsibly; you're a backup hand for tox/engi/mech, not a replacement.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Security</span><span>Security Officer (SO)</span></span><span class="role-tag rt-sec">Security</span></summary>
+  <div class="role-body">
+    <p>The standard trigger-puller (vanilla role). With Barotraumatic's monster density and VWO's lethal NPCs, you'll fight far more than in vanilla.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Hold the line at breaches and airlocks; don't chase monsters into flooded rooms alone.</li>
+      <li>Use the Frogman/Enforcer talents for harpoon work &mdash; VWO's functional spears/harpoons aim cleanly and synergise with security harpoon talents.</li>
+      <li>Conserve ammo; let the sub's turrets do the heavy lifting on big creatures.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>SMG/carbine + plenty of mags (reloadable by anyone in VWO)</li>
+        <li>Harpoon gun for underwater threats</li>
+        <li>Diving suit so you can fight outside/in floods</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Grind weapon skill early &mdash; recoil/bloom drop fast as it rises.</li>
+        <li>Carry a couple of bandages; Neurotrauma bleeds kill before you reach the medic.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Security</span><span>Prisoner</span></span><span class="role-tag rt-sec">Combat assistant</span></summary>
+  <div class="role-body">
+    <p>A work-release "trustee" &mdash; an Assistant geared for melee and pistol combat (Captain-like pistol talents), but barred from the clown role. No longer spawns cuffed and has a headset. A scrappy extra gun and labour pair for the security/logistics teams.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Back up Security in melee range and help haul/salvage between fights.</li>
+      <li>Earn trust (and karma, if the server uses it) by being useful, not chaotic.</li>
+      <li>Grow into a fuller role over the campaign.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>A pistol you have talent for + a melee weapon</li>
+        <li>Basic armour &amp; a diving mask</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Stick with the group; a low-skill solo prisoner is monster food.</li>
+        <li>Defer to the HoS on weapon hand-outs.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<!-- MEDICAL -->
+<h3 class="anchor" id="r-medical">Medical department</h3>
+
+<details class="role" open>
+  <summary><span class="summary-left"><span class="role-cat">Medical</span><span>Chief Medical Officer (CMO)</span></span><span class="role-tag rt-med">Medical lead</span></summary>
+  <div class="role-body">
+    <p>Runs the infirmary and keeps medical supplied &mdash; the senior medic with mentor talents. With Neurotrauma, this is one of the most demanding roles in the pack: you diagnose organ failure, infection, fractures and radiation, and perform surgery.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Stock and organise the medical bay before undocking; know where every drug is.</li>
+      <li>Learn Neurotrauma diagnosis &mdash; use a health scanner, read symptoms, and <em>don't over-medicate</em> (wrong/excess drugs cause new damage).</li>
+      <li>Set up a surgery spot (bed + analgesic + scalpel). Practise on the official training map first; surgery needs real medical skill or incisions become lacerations.</li>
+      <li>Treat radiation early (activated-carbon for sickness, potassium-iodide for contamination) and screen crew with a Geiger counter after reactor incidents.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Full Neurotrauma drug spread: blood packs, antibiotics, analgesics, anti-bleed, splints/tourniquets</li>
+        <li>Health scanner + surgical tools (scalpel, etc.)</li>
+        <li>Potassium-iodide &amp; activated-carbon tablets (radiation)</li>
+        <li>Restock raw materials so you can fabricate meds mid-voyage</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Bots can't treat in Neurotrauma &mdash; a human medic is mandatory in MP.</li>
+        <li>Keep patients off beds when you need their health menu (known NT/basegame bug).</li>
+        <li>Triage: stop bleeding and restore breathing first, diagnose second.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Medical</span><span>Medical Doctor</span></span><span class="role-tag rt-med">Medical</span></summary>
+  <div class="role-body">
+    <p>The working medic (vanilla role). Same Neurotrauma demands as the CMO at a smaller scale &mdash; on a small crew you may be the <em>only</em> medic.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Carry a mobile med-kit so you can treat at the point of injury, then move serious cases to the bay.</li>
+      <li>Learn the three or four most common Neurotrauma emergencies (bleeding, broken bones, infection, oxygen loss) cold.</li>
+      <li>Coordinate with the CMO on who handles surgery vs. field care.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Portable medical kit + bandages, antibiotics, analgesics</li>
+        <li>A health scanner if the CMO doesn't have a spare</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Grind medical skill before attempting surgery.</li>
+        <li>Remember VWO's bleed/blunt damage types mean more limb injuries to manage.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<!-- ENGINEERING -->
+<h3 class="anchor" id="r-eng">Engineering department</h3>
+
+<details class="role" open>
+  <summary><span class="summary-left"><span class="role-cat">Engineering</span><span>Chief of the Boat (COB)</span></span><span class="role-tag rt-eng">Engineering lead</span></summary>
+  <div class="role-body">
+    <p>Supervises all electrical systems and leads technical staff &mdash; an Engineer with Bosun leadership. With Enhanced Reactors + Immersive Repairs, power and the reactor are now a serious, ongoing responsibility.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Own the reactor: keep it fed and, crucially, <strong>shut it down and wait for the lights to die before any repair</strong> &mdash; repairing it live triggers the critical state and a possible meltdown.</li>
+      <li>Wear a hazmat suit when swapping fuel rods; move rods with tongs/crates; never pocket-stack them.</li>
+      <li>Manage junction boxes/capacitors &mdash; in Immersive Repairs, flooded ones can zap, catch fire, or electrocute the water.</li>
+      <li>Direct the Engineer/COB juniors: assign who watches power while you firefight problems.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Hazmat suit (or materials to craft one) for rod handling</li>
+        <li>Fuel-rod tongs + fuel-rod crates</li>
+        <li>Potassium-iodide for yourself; a Geiger counter</li>
+        <li>Spare wiring + FPGA circuits (multitool upkeep)</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>A radiation leak spreads via walls/distance &mdash; seal the reactor room and treat exposed crew fast.</li>
+        <li>Don't let contaminated corpses sit; they keep irradiating the room.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Engineering</span><span>Engineer</span></span><span class="role-tag rt-eng">Engineering</span></summary>
+  <div class="role-body">
+    <p>The hands-on power tech (vanilla role). On a small crew the Engineer often <em>is</em> the reactor operator and electrician both.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Keep the reactor tuned to load; pre-stage spare fuel rods in crates near the reactor.</li>
+      <li>Repair junction boxes/wiring promptly &mdash; but power down what you can first to avoid Immersive Repairs zaps.</li>
+      <li>Build and maintain the multitool/automatic welders the crew relies on.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Hazmat suit + tongs (shared with COB if solo)</li>
+        <li>Screwdriver/wrench or a multitool; spare FPGA circuits</li>
+        <li>Spare fuel rods</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Wire turret/coil/oil/filter conditions to a display (Immersive Repairs supports it) so you see failures early.</li>
+        <li>Coordinate with the Mechanic: you handle power, they handle hull/oil/vents.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<!-- LOGISTICS / MECHANICAL -->
+<h3 class="anchor" id="r-mech">Logistics &amp; mechanical department</h3>
+
+<details class="role" open>
+  <summary><span class="summary-left"><span class="role-cat">Logistics</span><span>Quartermaster (QM)</span></span><span class="role-tag rt-mech">Mechanical lead</span></summary>
+  <div class="role-body">
+    <p>Head Mechanic and supply chief &mdash; manages materials, keeps every storage cabinet filled, and supplies ammunition for all weapons. With the Custodian's help, also keeps the sub clean and stocked. The logistics backbone of a modded crew.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Set up the fabricator/deconstructor workflow: turn salvage into ammo, oil, filters, vent blades, and medical/engineering consumables.</li>
+      <li>Keep consumable stockpiles topped: oxygen, welding fuel, oil for engines, air filters, vent blades, ammo.</li>
+      <li>Run resupply at outposts &mdash; in DynamicEuropa, buy department-specific gear at the right specialised station.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Bulk raw materials for crafting (the campaign runs on your fabricator)</li>
+        <li>Engine oil, spare air filters, vent blades (Immersive Repairs upkeep)</li>
+        <li>Ammo stock + VWO parts kits for the armoury</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Label/organise cabinets so the crew finds gear in a crisis.</li>
+        <li>Coordinate buys with the Captain's budget and the HoS's ammo needs.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Mechanical</span><span>Mechanic</span></span><span class="role-tag rt-mech">Mechanical</span></summary>
+  <div class="role-body">
+    <p>The hull-and-systems fixer (vanilla role). Immersive Repairs makes this a constant job: outside hull welding, oiled engines, air filters, vent blades, and the right tool for each task.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Keep a diving suit on standby &mdash; hull breaches now require welding from <em>outside</em> with short-range tools.</li>
+      <li>Keep engines oiled (they degrade and explode dry) and oxygen-generator filters clean, especially after flooding.</li>
+      <li>Carry the right tools: welder + mask (avoid Welder's Eye), wrench/screwdriver or multitool, an automatic welder for unreachable leaks, fixfoam sprayer for emergencies.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Diving suit + spare O2 (outside repairs)</li>
+        <li>Welding mask, plasma cutter/jackhammer, multitool</li>
+        <li>Engine oil, spare air filters &amp; vent blades, fixfoam + sprayer</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Don't repair a running engine without an extinguisher buddy.</li>
+        <li>After every fight/flood, sweep vents (crowbar + E reveals loose-vent inventories) and check blades/filters.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Logistics</span><span>Custodian</span></span><span class="role-tag rt-mech">Support</span></summary>
+  <div class="role-body">
+    <p>Assists the Quartermaster &mdash; an Assistant crossed with the engineer + mechanic maintenance trees. The crew's utility hand: cleaning, restocking, and light repairs.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Keep the sub clean and cabinets full so specialists don't waste time hunting for items.</li>
+      <li>Handle low-risk maintenance (refilling, ferrying tools/ammo, basic fixes) to free up the Engineer/Mechanic.</li>
+      <li>Be the runner during emergencies &mdash; bring the medic supplies, bring the mechanic oil/blades.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>A basic toolset + diving mask</li>
+        <li>Whatever consumables the QM asks you to ferry</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>You're force-multiplier glue; ask the QM/COB what's short and fix it.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<!-- CIVILIAN -->
+<h3 class="anchor" id="r-civ">Civilian roles</h3>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Civilian</span><span>Assistant</span></span><span class="role-tag rt-civ">Generalist</span></summary>
+  <div class="role-body">
+    <p>The vanilla jack-of-all-trades. In a modded crew the Assistant is your flex hand &mdash; learn one department's basics and plug holes.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Shadow whichever department is short-staffed and learn its mod systems.</li>
+      <li>Haul, fetch, and hold the line in a pinch; don't try solo heroics with low skills.</li>
+      <li>Use early missions to grind toward a specialty you'll grow into.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Diving mask + basic tools</li>
+        <li>A cheap sidearm and some bandages</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>Pick a lane by mission 3&ndash;4 so your skills start to matter.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<details class="role">
+  <summary><span class="summary-left"><span class="role-cat">Civilian</span><span>Passenger</span></span><span class="role-tag rt-civ">Support / buffs</span></summary>
+  <div class="role-body">
+    <p>A civilian guest travelling with the crew &mdash; low skill, but supports the team with buffs while growing into a role. Think paying passenger, researcher, or thrill-seeker.</p>
+    <h4>First 5 missions &mdash; focus</h4>
+    <ul>
+      <li>Apply your support buffs and stay out of the firing line until your skills develop.</li>
+      <li>Help with safe labour (research artifacts at the bench, organise cargo, ferry items).</li>
+      <li>Use the early voyages to specialise toward a department.</li>
+    </ul>
+    <div class="grid2">
+      <div class="box"><h4>Buy first</h4><ul class="buy-list">
+        <li>Personal safety gear (diving mask, a few meds)</li>
+        <li>Anything that helps the role you're growing into</li>
+      </ul></div>
+      <div class="box"><h4>Manage your role</h4><ul>
+        <li>You're an asset, not ballast &mdash; pair with a specialist and assist.</li>
+      </ul></div>
+    </div>
+  </div>
+</details>
+
+<!-- FIRST 5 -->
+<h2 class="sec anchor" id="first5"><span class="num">09</span>Your first five missions &mdash; a crew arc</h2>
+<p>A staged plan that lets a new modded crew learn the systems before the pack's lethality catches up to them. Keep hops short and bank reputation and money.</p>
+
+<div class="step"><div class="n">1</div><div class="c">
+  <h4>Mission 1 &mdash; Shake-down run (easy beacon or transport)</h4>
+  <p>Pick the safest available job. Goal: confirm everyone's mods work and each station is crewed. Engineer verifies reactor control and rod handling; Mechanic checks oil/filters/vent blades; Medic lays out the bay; Security inventories the armoury. Take a beacon-activation if offered &mdash; the new beacon mods make these varied and forgiving (just watch for ADV Beacon's mines and Even More Beacon's trap station). Bank the pay; buy spare fuel rods and consumables.</p>
+</div></div>
+<div class="step"><div class="n">2</div><div class="c">
+  <h4>Mission 2 &mdash; Salvage a wreck</h4>
+  <p>Shipwrecks Extended / Astra's Wrecks give you fresh wrecks to loot, but Barotraumatic means wrecks now contain monsters. Send a dive team (Navigator + Security + a fixer) with the sub close and steady. Practise Neurotrauma field care on the inevitable bites. Sell salvage; the Quartermaster turns scrap into ammo/oil/filters.</p>
+</div></div>
+<div class="step"><div class="n">3</div><div class="c">
+  <h4>Mission 3 &mdash; First combat mission (monster nest or pirate)</h4>
+  <p>Now use the systems for real. Security/XO lead the fight; let turrets handle big creatures; Medic runs triage on organ/bleed injuries; Engineer keeps power up under stress. Expect a hull breach &mdash; Mechanic welds from outside while Security clears intruders. Debrief: what ran out (ammo? oil? meds?) becomes your next shopping list.</p>
+</div></div>
+<div class="step"><div class="n">4</div><div class="c">
+  <h4>Mission 4 &mdash; Research &amp; reputation</h4>
+  <p>Grab a ruin/artifact run (Artifacts &amp; Ruins Enhanced). Bring alien circuitry and a research bench plan; identify and research an artifact for a tech unlock and better sale value &mdash; military/research merchants pay most. In DynamicEuropa, pick a faction to favour and route to its specialised outposts. Start saving for a sub or weapon upgrade.</p>
+</div></div>
+<div class="step"><div class="n">5</div><div class="c">
+  <h4>Mission 5 &mdash; Step up the difficulty</h4>
+  <p>By now skills have risen (VWO recoil eases, medics can attempt surgery, engineers handle reactor scares calmly). Take a tougher contract &mdash; a defended outpost takeover, a deeper biome, or a high-value salvage. Lock in your roles, upgrade the sub (hull, periscope, reactor) or invest in advanced VWO weapons via parts kits, and you're ready for the real campaign.</p>
+</div></div>
+
+<!-- ECONOMY -->
+<h2 class="sec anchor" id="economy"><span class="num">10</span>Money &amp; buying priorities</h2>
+<p>This pack punishes under-supply more than vanilla. A simple priority ladder for the Captain and Quartermaster every time you dock:</p>
+<ol>
+  <li><strong>Survival consumables first</strong> &mdash; fuel rods, oxygen, welding fuel, engine oil, air filters, vent blades. Running out of these ends runs.</li>
+  <li><strong>Medical</strong> &mdash; restock the Neurotrauma drug spread and raw materials so the medic can fabricate mid-voyage.</li>
+  <li><strong>Ammo &amp; defence</strong> &mdash; keep the armoury and turrets fed; buy VWO parts kits to upgrade weapons over time.</li>
+  <li><strong>Radiation kit</strong> &mdash; potassium-iodide, activated-carbon, a Geiger counter, hazmat materials.</li>
+  <li><strong>Upgrades last</strong> &mdash; sub hull/reactor/periscope and a new submarine only once your reserve is healthy. Keep a cash buffer for emergencies (surgery resupply, fuel, repairs).</li>
+</ol>
+<div class="callout tip"><strong>Reputation is currency too.</strong> In DynamicEuropa, faction standing unlocks better merchants, missions, and the ability to join outpost fights. Don't burn a faction whose specialised outpost you'll depend on for fuel, medicine, or ammo.</div>
+
+<!-- SOURCES -->
+<h2 class="sec anchor" id="sources"><span class="num">11</span>Sources</h2>
+<p>Every mod detail above is drawn from the official Steam Workshop pages you provided; the load-order direction note is informed by the official Barotrauma help discussion.</p>
+<ul style="font-size:14px;">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2559634234">LuaCsForBarotrauma</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2701251094">Performance Fix</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2518816103">Barotraumatic</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2954637344">Vanilla Weapons Overhaul (Draconis)</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2526236489">JobsExtended</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3045796581">Enhanced Reactors</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3114087512">Immersive Repairs</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3218219821">Artifacts and Ruins Enhanced</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2544952900">ADV Beacon Stations</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2389600483">Beacons Extended</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3245057161">Even More Beacon Stations</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3138798239">Facehurt's Beacon Stations</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2095211492">Shipwrecks Extended</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2552778989">Astra's Wrecks</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2968896556">Enhanced Immersion</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3190189044">Neurotrauma</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2532991202">DynamicEuropa</a></li>
+  <li><a href="https://steamcommunity.com/app/602960/discussions/1/3201491842008632084/">Barotrauma Help &mdash; Mod Load Order discussion</a></li>
+</ul>
+
+<div class="footer">
+  Built from the 17 Workshop pages provided. Mod behaviour and the Barotrauma economy change with game/DLC updates &mdash; treat buy amounts as priorities, and re-check each mod's page for the current version and any new compatibility patches. Good luck down there. o7
+</div>
+
+</main>
+</div>
+</body>
+</html>

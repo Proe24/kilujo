@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enhanced Reactors — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>06 / 17 &middot; Reactor &amp; radiation overhaul</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3045796581" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Reactor &amp; Radiation Overhaul</div>
+  <h1>Enhanced Reactors</h1>
+  <p class="lead">Reactors now throw off heat and leak radiation when damaged, fuel rods are dangerous physical objects you carry by hand or with tongs, and a botched repair can melt the core down. Radiation splits into sickness you treat and contamination you scrub off.</p>
+  <div class="badges">
+    <span class="badge xml">XML &mdash; no Lua required</span>
+    <span class="badge">Reactor / Item / Environment</span>
+    <span class="badge">Bot &amp; single-player friendly</span>
+    <span class="badge">Plug &amp; play</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A reactor &amp; radiation overhaul by <em>_]|M|[_</em>. Pure XML; client-side Lua only improves performance.</dd>
+  <dt>Load position</dt><dd><strong>Above</strong> Immersive Repairs, Neurotrauma, Artifacts &amp; Ruins Enhanced, DynamicEuropa, and any mod that edits fuel rods / ores / reactors / radiation.</dd>
+  <dt>Campaign safety</dt><dd>Plug &amp; play &mdash; addable/removable any time, since all its items are craftable/deconstructable. Deconstruct mod-exclusive items before removing to avoid harmless one-time errors.</dd>
+  <dt>Single-player</dt><dd>Bots can swap rods if you give them a hazmat suit and a high-priority "clean up items" order (see below).</dd>
+</dl>
+
+<div class="callout warn"><strong>The one rule that saves your sub:</strong> turn the reactor OFF and wait until its lights go out <em>before</em> repairing it. Repairing a live reactor triggers a ~30-second critical state where it constantly takes damage &mdash; spam the repair button or it explodes.</div>
+
+<h2><span class="ic">&#9762;</span>Core mechanics</h2>
+
+<h3>Reactors</h3>
+<ul>
+  <li>All reactors emit <strong>heat</strong> into the surrounding room and <strong>leak radiation</strong> scaled to how damaged they are.</li>
+  <li><strong>Critical state:</strong> repairing while the reactor is still on/lit triggers ~30 seconds of constant self-damage. Spam-repair (it takes no fail-damage in this state) until condition is recovering; have a crewmate with a fire extinguisher ready.</li>
+  <li><strong>Meltdown size scales with the fuel rod inside</strong> &mdash; volatile fulgurium rods make the biggest blast.</li>
+  <li>Wrecks (including modded ones) can spawn with fuel rods in their reactors, irradiating the wreck interior.</li>
+  <li><span class="unv">On modded subs without reactor light sprites, "off" can be hard to read &mdash; verify output is zero and the reactor is actually toggled off.</span></li>
+</ul>
+
+<h3>Radiation &mdash; two separate things</h3>
+<table>
+<thead><tr><th>Type</th><th>Detection</th><th>Effect</th><th>Cure</th></tr></thead>
+<tbody>
+<tr><td><strong>Radiation Sickness</strong></td><td>Hidden until advanced; the early clue is <strong>burns appearing all over the body</strong>. Does NOT self-heal.</td><td>Damage over time; needs active treatment</td><td><strong>Activated Carbon Tablets</strong> (low amounts)</td></tr>
+<tr><td><strong>Contamination</strong></td><td><strong>Only detectable with a Geiger Counter</strong></td><td>A contaminated person spreads radiation <em>sickness</em> to nearby crew (contamination itself isn't transmissible)</td><td><strong>Potassium Iodide Tablets</strong> (low amounts), or <strong>Deconsol</strong> sprayed on</td></tr>
+</tbody>
+</table>
+<p>You only become contaminated from a radiation source: started fuel rods, leaking reactors, radioactive ores/minerals. <strong>Radiation &amp; heat respect distance, walls and doors</strong> &mdash; more distance and more obstacles = weaker exposure. Close doors and put walls between you and the source.</p>
+
+<h3>Heat</h3>
+<p>Working near a reactor, or near an active/uncontained fuel rod, slowly <strong>overheats</strong> you. Once overheating you randomly pass out and slowly burn.</p>
+
+<h3>Fuel rods</h3>
+<ul>
+  <li><strong>Don't stack</strong> in inventory; can only be held in hand (or moved with tongs / stored in crates).</li>
+  <li>Once started (by a reactor or exosuit) they <strong>glow and irradiate</strong>, are too hot to handle without gear, can <strong>start fires</strong> on the floor, and their radiation damages nearby items.</li>
+  <li>Started rods <strong>passively deplete over time</strong> &mdash; except inside a non-broken reactor (disabled there to preserve mod compatibility and beacon missions).</li>
+  <li><strong>Crafted depleted fuel rods are NOT radioactive.</strong> Each rod type has its own radiation strength/range; <strong>fulgurium is the most dangerous</strong>.</li>
+</ul>
+<p><strong>Radioactive things:</strong> all started fuel rods (not crafted depleted ones); Uranium / Thorium / Fulgurium ores &amp; minerals; and <strong>corpses that died contaminated</strong> (they keep irradiating &mdash; dispose of them).</p>
+
+<h2><span class="ic">&#9874;</span>New equipment (all craftable)</h2>
+<table>
+<caption>From the mod's pinned "Equipment" discussion.</caption>
+<thead><tr><th>Item</th><th>Effect</th><th>How to use / notes</th></tr></thead>
+<tbody>
+<tr><td>Geiger Counter</td><td>Detects radiation; checks if a person is irradiated/contaminated</td><td>Use in the <strong>health interface</strong> on a person, or as a melee weapon. <strong>Recharges like a battery.</strong></td></tr>
+<tr><td>Potassium Iodide Tablets</td><td>Light radiation protection; cures low <strong>contamination</strong></td><td>Take before diving wrecks / approaching a leaking reactor or contaminated crewmate</td></tr>
+<tr><td>Activated Carbon Tablets</td><td>Cures low <strong>poisoning &amp; radiation sickness</strong></td><td>Useless vs contamination. Excessive use is harmful.</td></tr>
+<tr><td>Deconsol</td><td>Decontaminates a person</td><td>Load into a <strong>sprayer</strong> and spray onto the contaminated person</td></tr>
+<tr><td>Hazmat Suit</td><td>Protects from heat &amp; radiation</td><td>Diving-suit slot, <strong>needs an O&#8322; tank</strong> but is NOT a diving suit &mdash; <strong>no pressure protection</strong>. Long exposure can still irradiate through it. Acts as a diving suit for bots so they won't take it off.</td></tr>
+<tr><td>Fuel Rod Tongs</td><td>Hold a fuel rod without burning your hands</td><td>Storable in toolbelts. The mod <strong>forces</strong> tong use when exchanging rods from the reactor.</td></tr>
+<tr><td>Fuel Rod Crate</td><td>Safely stores &amp; shields up to <strong>8</strong> fuel rods</td><td>Open by pressing Use/"E" while it's on the ground. Can be loaded into a <strong>depth-charge loader to dump rods into the ocean</strong>.</td></tr>
+<tr><td>Fuel Rod Crate Shelf</td><td>Holds 2 fuel rod crates</td><td>Stops crates flying around on impacts</td></tr>
+<tr><td>Radioactive Material Crate</td><td>Stores up to 9 stacks of radioactive ores/minerals</td><td>Shielded storage</td></tr>
+<tr><td>Radioactive Material Container</td><td>Stores up to 6 stacks of radioactive minerals</td><td>Shielded storage</td></tr>
+<tr><td>Nuclear Cartridge</td><td>Ammo for the Rapid Fissile Accelerator</td><td>Crafted from any fuel rod; different rods yield different quantities</td></tr>
+<tr><td>Depleted Fuel Rod (crafted)</td><td>Non-radioactive crafted rod</td><td>Deconstruct/craft sink</td></tr>
+</tbody>
+</table>
+
+<h2><span class="ic">&#9654;</span>Dealing with each mechanic, step by step</h2>
+<div class="step"><div class="n">1</div><div class="c"><h4>Repair a reactor safely</h4>Set output to 0 / press off &rarr; wait for the lights to fully go out &rarr; only then repair. If it goes critical, spam-repair until condition recovers. Keep a fire-extinguisher buddy nearby.</div></div>
+<div class="step"><div class="n">2</div><div class="c"><h4>Swap a spent rod</h4>Equip Hazmat Suit &rarr; use Fuel Rod Tongs to pull the rod &rarr; carry to a Fuel Rod Crate (open with E on the ground) &rarr; insert. Never set an active rod on the floor. Dispose by deconstructing or loading the crate into a depth-charge loader.</div></div>
+<div class="step"><div class="n">3</div><div class="c"><h4>Dive a radioactive wreck</h4>Pre-take Potassium Iodide; wear a Hazmat Suit + O&#8322; tank (no pressure protection, so pair with a real diving suit if going deep); carry a Geiger Counter; minimise time and keep walls/doors between you and rods.</div></div>
+<div class="step"><div class="n">4</div><div class="c"><h4>Treat crew</h4>Geiger-check in the health menu &rarr; if contaminated, spray Deconsol and/or give Potassium Iodide &rarr; for radiation sickness give Activated Carbon Tablets (watch the burns as the warning sign). Store/remove contaminated corpses promptly.</div></div>
+
+<h2><span class="ic">&#129302;</span>Bots &amp; single-player</h2>
+<p>Bots can exchange fuel rods, but: equip the reactor operator with a <strong>craftable Hazmat Suit</strong> (they won't equip it themselves), and give them a <strong>"clean up items" order at higher priority than operating the reactor</strong> so they store spent rods in the correct container instead of dropping them on the floor.</p>
+
+<h2><span class="ic">&#9881;</span>Add-ons &amp; compatibility</h2>
+<details>
+<summary>Reactor Management Add-On (id 3354732876)</summary>
+<div class="det-body">
+<p><strong>Not bot-compatible</strong> &mdash; the reactor must be player-managed. Fuel rods give less power (need multiple for full output) but last longer, and every reactor gets a module slot with four craftable modules:</p>
+<ul>
+  <li><strong>Extra Turbine</strong> &mdash; more fuel-rod effectiveness (fewer rods for max output)</li>
+  <li><strong>Extra Shielding</strong> &mdash; fully blocks radiation leaks from a damaged reactor</li>
+  <li><strong>Fail-Safe CPU</strong> &mdash; prevents the critical state after a failed repair (repair while on)</li>
+  <li><strong>Meltdown Preventor</strong> &mdash; fully prevents the explosion, but is destroyed doing so</li>
+</ul>
+<p><span class="unv">Swap modules with the reactor OFF &mdash; there was a bug where swapping on a live outpost reactor caused an explosion (since fixed).</span></p>
+</div>
+</details>
+<p>Other patches: Baroverhaul Compatibility Patch (3262062128), Hazardously Enhanced Reactors bridge (3062069071), Talent Merger Compatibility Patch (3065722159), Better Performance (3306583912, obsolete with client-side Lua).</p>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3045796581" target="_blank">Enhanced Reactors &mdash; Steam Workshop</a></li>
+  <li><a href="https://steamcommunity.com/workshop/filedetails/discussion/3045796581/3880473533200489252/" target="_blank">Enhanced Reactors &mdash; pinned "Equipment" discussion</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3354732876" target="_blank">Reactor Management Add-On</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_05_jobsextended.html"><span class="pn-label">Previous</span><span class="pn-title">JobsExtended</span></a>
+  <a class="pn-next" href="baro_07_immersive_repairs.html"><span class="pn-label">Next</span><span class="pn-title">Immersive Repairs</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. Exact recipes verify in-game.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

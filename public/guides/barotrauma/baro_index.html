@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barotrauma Mod Pack — In-Depth Guide Hub</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <div class="kicker">Europa Field Manual &middot; Index</div>
+  <h1>Barotrauma Mod Pack — In-Depth Guide Hub</h1>
+  <p class="lead">Deep-dive guides for all 17 mods in your multiplayer campaign pack. Each page covers what the mod does, everything it adds (items, afflictions, mechanics enumerated), and exactly how to use the new content. Start with setup and load order, then open any mod.</p>
+  <div class="badges">
+    <span class="badge">17 mod deep-dives</span>
+    <span class="badge">MP / co-op campaign</span>
+    <span class="badge">Verified &amp; source-cited</span>
+  </div>
+</header>
+
+<div class="quickstart">
+  <h3>Quick start</h3>
+  <ol>
+    <li><strong>Install LuaCs</strong> via the launch-option method (<a href="baro_01_luacs.html">guide</a>) — 3 mods depend on it.</li>
+    <li><strong>Set your load order</strong> using the table below — wrong order = broken mechanics.</li>
+    <li><strong>Start a fresh campaign</strong> — DynamicEuropa requires it and can never be removed.</li>
+    <li>Open any mod card below for the full deep-dive on that mod's mechanics and items.</li>
+  </ol>
+</div>
+
+<div class="callout note">
+  <strong>Also see:</strong> the companion <a href="Barotrauma_Modded_Campaign_Guide.html">Campaign &amp; Crew-Role Playbook</a> — the first-5-missions plan, role-by-role advice, and buying priorities.
+</div>
+
+<div class="callout"><strong>How to read these:</strong> details marked with <span class="unv">a purple warning</span> are <em>unverified</em> — drawn from older guides or community reports I couldn't confirm against a current primary source. Everything else is sourced from the mod pages, official wikis, the developers' own discussions, or the mods' GitHub data. Exact crafting recipes and balance numbers change with updates — the in-game fabricator is always the final word.</div>
+
+<h2><span class="ic">&#9776;</span>Setup &amp; load order (read first)</h2>
+<div class="grid2">
+  <div class="box">
+    <h4>Three setup rules that break things if ignored</h4>
+    <ul>
+      <li><strong>Install LuaCs via the launch-option method.</strong> Neurotrauma, Performance Fix and Enhanced Immersion's Lua features need it. See the <a href="baro_01_luacs.html">LuaCs page</a>.</li>
+      <li><strong>DynamicEuropa requires a fresh campaign and must never be removed mid-campaign</strong> — it kills the map. See the <a href="baro_17_dynamiceuropa.html">DynamicEuropa page</a>.</li>
+      <li><strong>Client vs server side.</strong> Everyone subscribes to the same list, runs the LuaCs installer, and the host picks <code>LuaForBarotrauma</code> as the Server Executable.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4>How the list works</h4>
+    <p>Barotrauma's list runs <strong>top &rarr; bottom</strong>. For this pack, follow each author's "place X above Y" notes — the rule that matters is that a mod higher in the list keeps priority over the lower mods it overlaps with. You only need to preserve the relative positions below.</p>
+  </div>
+</div>
+
+<table class="loadtable">
+  <thead><tr><th class="lo-num">#</th><th>Mod</th><th>Type</th><th>Key positioning note</th></tr></thead>
+  <tbody>
+    <tr class="band"><td></td><td colspan="3">Framework &amp; performance (top)</td></tr>
+    <tr><td class="lo-num">1</td><td><a href="baro_01_luacs.html">LuaCsForBarotrauma</a></td><td><span class="tag lua">Library</span></td><td>Top, or installed via launch option (then not in the list)</td></tr>
+    <tr><td class="lo-num">2</td><td><a href="baro_02_performance_fix.html">Performance Fix</a></td><td><span class="tag lua">Lua</span></td><td>Near top; doesn't override content</td></tr>
+    <tr class="band"><td></td><td colspan="3">Major gameplay overhauls</td></tr>
+    <tr><td class="lo-num">3</td><td><a href="baro_03_barotraumatic.html">Barotraumatic</a></td><td><span class="tag">Monsters/Events</span></td><td>High; spawn/event/affliction mods go below it</td></tr>
+    <tr><td class="lo-num">4</td><td><a href="baro_04_vanilla_weapons_overhaul.html">Vanilla Weapons Overhaul</a></td><td><span class="tag">Items/NPC</span></td><td>Above other weapon mods &amp; Baroverhaul</td></tr>
+    <tr><td class="lo-num">5</td><td><a href="baro_05_jobsextended.html">JobsExtended</a></td><td><span class="tag">Total conversion</span></td><td>Overhaul band; no hard conflict</td></tr>
+    <tr><td class="lo-num">6</td><td><a href="baro_06_enhanced_reactors.html">Enhanced Reactors</a></td><td><span class="tag xml">XML</span></td><td>Above Immersive Repairs, NT, A&amp;RE, DE, any reactor mod</td></tr>
+    <tr><td class="lo-num">7</td><td><a href="baro_07_immersive_repairs.html">Immersive Repairs</a></td><td><span class="tag xml">XML</span></td><td>Directly below Enhanced Reactors</td></tr>
+    <tr><td class="lo-num">8</td><td><a href="baro_08_artifacts_ruins_enhanced.html">Artifacts and Ruins Enhanced</a></td><td><span class="tag">Items/Env</span></td><td>Below Enhanced Reactors; above ruin-item mods</td></tr>
+    <tr class="band"><td></td><td colspan="3">Additive content (order flexible)</td></tr>
+    <tr><td class="lo-num">9</td><td><a href="baro_09_adv_beacon_stations.html">ADV Beacon Stations</a></td><td><span class="tag">Beacons</span></td><td>Below Barotraumatic</td></tr>
+    <tr><td class="lo-num">10</td><td><a href="baro_10_beacons_extended.html">Beacons Extended</a></td><td><span class="tag">Beacons</span></td><td>Additive</td></tr>
+    <tr><td class="lo-num">11</td><td><a href="baro_11_even_more_beacon_stations.html">Even More Beacon Stations</a></td><td><span class="tag">Beacons</span></td><td>Additive</td></tr>
+    <tr><td class="lo-num">12</td><td><a href="baro_12_facehurts_beacon_stations.html">Facehurt's Beacon Stations</a></td><td><span class="tag">Beacons</span></td><td>Additive</td></tr>
+    <tr><td class="lo-num">13</td><td><a href="baro_13_shipwrecks_extended.html">Shipwrecks Extended</a></td><td><span class="tag">Wrecks</span></td><td>Additive</td></tr>
+    <tr><td class="lo-num">14</td><td><a href="baro_14_astras_wrecks.html">Astra's Wrecks</a></td><td><span class="tag">Wrecks</span></td><td>Additive</td></tr>
+    <tr class="band"><td></td><td colspan="3">Immersion / world (bottom)</td></tr>
+    <tr><td class="lo-num">15</td><td><a href="baro_15_enhanced_immersion.html">Enhanced Immersion</a></td><td><span class="tag lua">Lua</span></td><td>Below most mods, below Immersive Diving Gear</td></tr>
+    <tr><td class="lo-num">16</td><td><a href="baro_16_neurotrauma.html">Neurotrauma</a></td><td><span class="tag">Medical</span> <span class="tag dep">LuaCs</span></td><td>Low; below Enhanced Reactors &amp; Immersive Repairs</td></tr>
+    <tr><td class="lo-num">17</td><td><a href="baro_17_dynamiceuropa.html">DynamicEuropa</a></td><td><span class="tag">World / TC</span></td><td>Very bottom</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="ic">&#9673;</span>The mods</h2>
+
+<div class="cat-head">Framework &amp; performance</div>
+<div class="navmods">
+  <a class="modcard" data-cat="framework" href="baro_01_luacs.html"><div class="mc-num">01 &middot; LIBRARY</div><div class="mc-title">LuaCsForBarotrauma</div><div class="mc-desc">The Lua/C# scripting framework everything scripted depends on. Install methods, client vs server, test commands.</div></a>
+  <a class="modcard" data-cat="framework" href="baro_02_performance_fix.html"><div class="mc-num">02 &middot; LUA</div><div class="mc-title">Performance Fix</div><div class="mc-desc">Raises FPS by throttling map-entity updates. Config GUI, entity interval, priority list, shadow toggle.</div></a>
+</div>
+
+<div class="cat-head">Major gameplay overhauls</div>
+<div class="navmods">
+  <a class="modcard" data-cat="overhaul" href="baro_03_barotraumatic.html"><div class="mc-num">03 &middot; MONSTERS</div><div class="mc-title">Barotraumatic</div><div class="mc-desc">258+ creatures, populated wrecks/ruins, biome difficulty, and a full radio overhaul with 5 craftable radios.</div></a>
+  <a class="modcard" data-cat="overhaul" href="baro_04_vanilla_weapons_overhaul.html"><div class="mc-num">04 &middot; WEAPONS</div><div class="mc-title">Vanilla Weapons Overhaul</div><div class="mc-desc">Recoil/bloom system, 3 weapon tiers, the parts-kit economy, attachments, armor, bags, and rearmed factions — full catalog.</div></a>
+  <a class="modcard" data-cat="overhaul" href="baro_05_jobsextended.html"><div class="mc-num">05 &middot; JOBS</div><div class="mc-title">JobsExtended</div><div class="mc-desc">14 jobs, each with 3 sub-roles, karma gating, and wear-only uniform pockets. Full roster breakdown.</div></a>
+  <a class="modcard" data-cat="overhaul" href="baro_06_enhanced_reactors.html"><div class="mc-num">06 &middot; REACTOR</div><div class="mc-title">Enhanced Reactors</div><div class="mc-desc">Heat + radiation (sickness vs contamination), fuel-rod handling, meltdowns, and all 12 new items.</div></a>
+  <a class="modcard" data-cat="overhaul" href="baro_07_immersive_repairs.html"><div class="mc-num">07 &middot; REPAIRS</div><div class="mc-title">Immersive Repairs</div><div class="mc-desc">Engine oil, air filters, vent blades, outside welding, the multitool, fixfoam, firefighting gear, Welder's Eye.</div></a>
+  <a class="modcard" data-cat="overhaul" href="baro_08_artifacts_ruins_enhanced.html"><div class="mc-num">08 &middot; RESEARCH</div><div class="mc-title">Artifacts &amp; Ruins Enhanced</div><div class="mc-desc">Artifact identification, the serum/research-data loop, 5+ tech unlocks, artifact types, and antidote names.</div></a>
+</div>
+
+<div class="cat-head">Additive content — beacons &amp; wrecks</div>
+<div class="navmods">
+  <a class="modcard" data-cat="content" href="baro_09_adv_beacon_stations.html"><div class="mc-num">09 &middot; BEACONS</div><div class="mc-title">ADV Beacon Stations</div><div class="mc-desc">~54 beacons (some with shuttles). Mined stations &amp; the station-52 power puzzle.</div></a>
+  <a class="modcard" data-cat="content" href="baro_10_beacons_extended.html"><div class="mc-num">10 &middot; BEACONS</div><div class="mc-title">Beacons Extended</div><div class="mc-desc">56 community beacons, purely additive, no vanilla changes, no new missions.</div></a>
+  <a class="modcard" data-cat="content" href="baro_11_even_more_beacon_stations.html"><div class="mc-num">11 &middot; BEACONS</div><div class="mc-title">Even More Beacon Stations</div><div class="mc-desc">8 stations incl. 3 bandit variants — and one nuclear depth-charge trap.</div></a>
+  <a class="modcard" data-cat="content" href="baro_12_facehurts_beacon_stations.html"><div class="mc-num">12 &middot; BEACONS</div><div class="mc-title">Facehurt's Beacon Stations</div><div class="mc-desc">4 cinematic biodome beacons; auto-fill cabinets can drop starter weapons.</div></a>
+  <a class="modcard" data-cat="content" href="baro_13_shipwrecks_extended.html"><div class="mc-num">13 &middot; WRECKS</div><div class="mc-title">Shipwrecks Extended</div><div class="mc-desc">Many new wrecks — dockable, dangerous, or empty. Compatible with all wreck mods.</div></a>
+  <a class="modcard" data-cat="content" href="baro_14_astras_wrecks.html"><div class="mc-num">14 &middot; WRECKS</div><div class="mc-title">Astra's Wrecks</div><div class="mc-desc">7 wrecks of vanilla ships that lacked them, including Thalamus versions.</div></a>
+</div>
+
+<div class="cat-head">Immersion &amp; world</div>
+<div class="navmods">
+  <a class="modcard" data-cat="world" href="baro_15_enhanced_immersion.html"><div class="mc-num">15 &middot; QoL</div><div class="mc-title">Enhanced Immersion</div><div class="mc-desc">Zoom camera, zDoors, interaction sounds, ambient rebalance, wireable decor. Resolution gotchas explained.</div></a>
+  <a class="modcard" data-cat="world" href="baro_16_neurotrauma.html"><div class="mc-num">16 &middot; MEDICAL</div><div class="mc-title">Neurotrauma</div><div class="mc-desc">The big one: every affliction, drug, tool, surgery, and emergency playbook for the medical overhaul.</div></a>
+  <a class="modcard" data-cat="world" href="baro_17_dynamiceuropa.html"><div class="mc-num">17 &middot; WORLD</div><div class="mc-title">DynamicEuropa</div><div class="mc-desc">Outpost families, takeovers, destruction, lairs/husk swarms, factions, Pirates Ahoy &amp; Hungry Europans.</div></a>
+</div>
+
+<div class="footer">
+  Compiled from the 17 Steam Workshop pages, the DynamicEuropa &amp; Neurotrauma wikis, the mods' GitHub data and developer discussion threads, and well-rated community guides. Mod content shifts with game/DLC updates — re-check each mod's page for the current version. Sources are listed at the bottom of every page. Good luck down there. o7
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

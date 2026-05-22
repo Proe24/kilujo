@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobsExtended — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>05 / 17 &middot; Crew jobs &amp; roles</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2526236489" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Crew Jobs &amp; Roles</div>
+  <h1>JobsExtended</h1>
+  <p class="lead">Expands the crew roster from 5 vanilla jobs to 14 distinct roles &mdash; each with 3 sub-roles &mdash; built for multiplayer roleplay and large crews. Adds department heads with mentor talents, karma-gated role access, and job uniforms with wear-only pockets.</p>
+  <div class="badges">
+    <span class="badge">Total conversion</span>
+    <span class="badge">MP / roleplay focused</span>
+    <span class="badge warn">Modded bots only via DynamicEuropa</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A jobs overhaul by Draconis (with MasonMachineGuns). Languages: EN, CN, PTBR, PL, RU.</dd>
+  <dt>Designed for</dt><dd>Multiplayer / roleplay and crews of 8+. Explicitly <em>not</em> built for single-player &mdash; in SP/editor <strong>all jobs spawn at once</strong> and you remove unwanted ones in the crew manager.</dd>
+  <dt>Skills</dt><dd>Based on vanilla; "lower skills are no longer a thing" except for the deliberate low-skill assistant types (Custodian/Janitor, Passenger, Prisoner).</dd>
+  <dt>Bots</dt><dd>You can only buy the <strong>vanilla 5</strong> as bots &mdash; unless <strong>DynamicEuropa</strong> is installed, which enables buying modded-job bots.</dd>
+</dl>
+
+<div class="callout note"><strong>No published talent list.</strong> The mod doesn't document each job's talent tree; you inspect talents in-game by selecting the job. The "based on" mappings below combine the author's description with vanilla talent-tree names; specifics not stated by the author are marked <span class="unv">unverified</span>.</div>
+
+<h2><span class="ic">&#128100;</span>Uniforms, pockets &amp; karma</h2>
+<div class="grid2">
+  <div class="box">
+    <h4>Job uniforms</h4>
+    <ul>
+      <li>Deconstructable, with <strong>job-specific pockets</strong> and protection (the Pockets For All system).</li>
+      <li>Items inside are <strong>only accessible while the uniform is worn</strong> &mdash; anti-hoarding.</li>
+      <li><strong>2025 change:</strong> uniform pockets <strong>drop their contents</strong> if the uniform is moved to a hotbar slot or removed. You can't use a loaded uniform as a portable container.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4>Karma gating</h4>
+    <p>Admins can use the Karma system to limit who picks high roles. Minimums: CO 95, XO 85, COB 85, HoS 75, CMO 75, NAV 65, QM 55, SO 55, DR 50, ENG 45, MEC 25, Custodian/"JAN" 15, PAS 5, PRIS 0.</p>
+  </div>
+</div>
+<div class="callout"><strong>Structure note:</strong> "Janitor" is <em>not</em> a standalone job &mdash; it's the middle sub-role of <strong>Custodian</strong> (the karma code "JAN" gates the Custodian family). "Convict" = the <strong>Prisoner</strong> job. The old "Diver" job is <strong>deprecated</strong> ("just Security++"; replaced by the in-development Aquatic Arsenal). That leaves 14 active jobs, each with 3 sub-roles. New job ID cards use vanilla ID tags, so vanilla-keyed doors/cabinets work.</div>
+
+<h2><span class="ic">&#9733;</span>The roster &mdash; jobs &amp; sub-roles</h2>
+<p>Department heads (CO, XO, COB, HoS, CMO, QM) have Captain talents woven into their trees to <strong>speed their department's skill growth and act as mentors</strong>.</p>
+
+<details open>
+<summary>Command</summary>
+<div class="det-body">
+<h4>Commanding Officer (Captain) &mdash; max 1, Helm focus</h4>
+<p>Head of the vessel; only one allowed. Spawns with a revolver. Sub-roles: <strong>Veteran</strong> (battle-hardened risk-taker, combat-leaning loadout), <strong>Admiral</strong> (by-the-book Coalition officer; experience aids risky maneuvers), <strong>Pirate Lord</strong> (Renegade tree; bloodlust; unique shotgun).</p>
+<h4>Executive Officer (XO) &mdash; max 1, Weapons focus</h4>
+<p>Second-in-command; Captain base with the <strong>Warlord</strong> tree instead of Politics; tankier than the CO. Sub-roles: <strong>Lieutenant</strong> (carries the biggest guns, leads security; shotgun loadout), <strong>Overseer</strong> (logistics/operations oversight; revolver), <strong>Warden</strong> (discipline/enforcement; carries extra handcuffs).</p>
+<h4>Navigator &mdash; Helm 50&ndash;55 (highest in the mod)</h4>
+<p>Drives the boat; Captain base with the <strong>Frogman</strong> tree. Sub-roles: <strong>Helmsman</strong> (pure pilot), <strong>Dive Coordinator</strong> (directs EVA/dive teams; master of sonar contacts), <strong>Shuttle Captain</strong> (captains an onboard shuttle for away missions).</p>
+</div>
+</details>
+
+<details>
+<summary>Engineering &amp; mechanical</summary>
+<div class="det-body">
+<h4>Chief of the Boat (COB) &mdash; max 1, Electrical lead</h4>
+<p>Supervises electrical systems and technical staff; Engineer base with <strong>Bosun</strong> leadership; advanced wiring/logic. Sub-roles: <strong>Chief Engineer</strong> (advanced installs/automation), <strong>Technical Supervisor</strong> (oversees all tech/custodial staff), <strong>Shipwright</strong> (sub designer; can repair any system).</p>
+<h4>Quartermaster (QM) &mdash; max 1, Mechanical focus</h4>
+<p>Head Mechanic + materials/ammo supply. Sub-roles: <strong>Scrapper</strong> (deconstruct/recycle salvage in bulk), <strong>Fabricator</strong> (one-man factory; keeps every department stocked), <strong>Chemist</strong> (dangerous/explosive chemical reactions in a sealed room).</p>
+<h4>Engineer &mdash; Electrical focus</h4>
+<p>Vanilla-equivalent. Sub-roles: <strong>Technical Watchman</strong> (first responder to electrical failures), <strong>Electrician</strong> (basic installs/fuses), <strong>Nuclear Engineer</strong> (runs the reactor in protective gear; manages voltage).</p>
+<h4>Mechanic &mdash; Mechanical focus</h4>
+<p>Vanilla-equivalent. Sub-roles: <strong>Technical Handyman</strong> (the deliberate low-skill entry role &mdash; "perfect for new crewmates"), <strong>Steelworker</strong> (hull patching in/out under pressure), <strong>Mechanical Engineer</strong> (reactor/engines/airlocks specialist).</p>
+</div>
+</details>
+
+<details>
+<summary>Medical</summary>
+<div class="det-body">
+<h4>Chief Medical Officer (CMO) &mdash; max 1, medical lead</h4>
+<p>Runs the infirmary, stocks supplies, performs skilled procedures, commands medical staff. Sub-roles: <strong>Chief Physician</strong> (orders staff, monitors vitals, mostly stays inside), <strong>Pharmacologist</strong> (high medical skill; mass-produces medicine), <strong>Surgeon</strong> (the dangerous life-saving procedures).</p>
+<h4>Medical Doctor &mdash; vanilla-equivalent</h4>
+<p>Sub-roles: <strong>General Practitioner</strong> (general care, keeps kits stocked, assists CMO), <strong>Paramedic</strong> (primary emergency responder; rapid lifesaving aid), <strong>Corpsman</strong> (combat medic; travels with dive ops; "never leaves crew behind").</p>
+</div>
+</details>
+
+<details>
+<summary>Security</summary>
+<div class="det-body">
+<h4>Head of Security (HoS) &mdash; max 1, Weapons focus</h4>
+<p>Runs security ops and the armoury; Security base with Captain-style <strong>Gunslinger</strong> pistol focus. Uniquely also has <strong>Medical, Engineering &amp; Mechanical access</strong> (tox cabinet + custom department cabinets). Sub-roles: <strong>Detective</strong> (surveillance/investigation, checkpoints), <strong>Defense Director</strong> (defensive planning, stations gunners/enforcers), <strong>Sergeant at Arms</strong> (manages the armoury, contraband searches, issues weapons).</p>
+<h4>Security Officer (SO) &mdash; vanilla-equivalent</h4>
+<p>Sub-roles: <strong>Gunner</strong> (coil/railgun accuracy + maintenance), <strong>Guard</strong> (patrols, arrests, can convert a room into a brig; non-lethal unless authorized), <strong>Enforcer</strong> (combat specialist; ranged/melee; enforces chain of command).</p>
+</div>
+</details>
+
+<details>
+<summary>Civilian / assistant types</summary>
+<div class="det-body">
+<h4>Custodian &mdash; Assistant + maintenance trees (low skill)</h4>
+<p>Cleans and stocks the sub; assists the QM. Sub-roles: <strong>Porter</strong> (trash/scrap removal), <strong>Janitor</strong> (cleans blood/ethanol/corpse messes), <strong>Supply Clerk</strong> (the QM's right hand; restocks supply lines).</p>
+<h4>Passenger &mdash; low-skill civilian (buff support)</h4>
+<p>A guest aboard for a price/experience; supports the crew with buffs while growing into a role. Sub-roles: <strong>Musician</strong> (morale; <span class="unv">can't go in water</span>), <strong>Scientist</strong> (xenology/data gathering), <strong>Clown</strong> (the vanilla joke role).</p>
+<h4>Prisoner &mdash; melee/pistol assistant</h4>
+<p>Assistant-like, geared for melee + pistol with Captain-like pistol talents; can't be a Clown ("failed the background check"). No longer spawns cuffed; reframed as a trustee/work-release inmate. Sub-roles: <strong>Bandit</strong>, <strong>Terrorist</strong>, <strong>Cultist</strong> <span class="unv">(themed mechanics; e.g. the Cultist reportedly gets husk eggs each mission &mdash; unverified)</span>.</p>
+</div>
+</details>
+
+<h2><span class="ic">&#9888;</span>Gotchas</h2>
+<ul>
+  <li>Single-player floods you with all jobs &mdash; trim them in the crew manager (no built-in count slider).</li>
+  <li>Uniform pockets dump contents if hotbarred/removed.</li>
+  <li>Modded jobs aren't buyable as bots unless DynamicEuropa is installed.</li>
+  <li>Custom subs using non-vanilla ID tags may not grant door/cabinet access; update them to vanilla tags or use an ID editor.</li>
+</ul>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2526236489" target="_blank">JobsExtended &mdash; Steam Workshop</a></li>
+  <li><a href="https://github.com/AreuaWitchOfLightning/JobsExtended" target="_blank">JobsExtended &mdash; GitHub (authoritative job/sub-role list &amp; Jobs.xml)</a></li>
+  <li><a href="https://steamcommunity.com/workshop/filedetails/discussion/2526236489/521962714990407768/" target="_blank">JobsExtended &mdash; "talents for the new jobs?" discussion</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_04_vanilla_weapons_overhaul.html"><span class="pn-label">Previous</span><span class="pn-title">Vanilla Weapons Overhaul</span></a>
+  <a class="pn-next" href="baro_06_enhanced_reactors.html"><span class="pn-label">Next</span><span class="pn-title">Enhanced Reactors</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a> &middot; For role-by-role campaign play, see the <a href="Barotrauma_Modded_Campaign_Guide.html">Campaign &amp; Crew-Role Playbook</a>.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

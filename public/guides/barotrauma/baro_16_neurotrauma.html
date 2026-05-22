@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neurotrauma — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>16 / 17 &middot; Medical overhaul</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3190189044" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Medical Overhaul</div>
+  <h1>Neurotrauma</h1>
+  <p class="lead">Replaces Barotrauma's simple health bar with organ-by-organ physiology: bleeding, fractures, infection, combustion, drug interactions, and surgery up to organ transplants. Conditions must be diagnosed and treated correctly &mdash; the wrong drug, or too much of the right one, kills the patient.</p>
+  <div class="badges">
+    <span class="badge dep">Requires LuaCsForBarotrauma</span>
+    <span class="badge">Medical</span>
+    <span class="badge warn">Bots can't treat</span>
+    <span class="badge">Fork (actively maintained)</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A total overhaul of human health. The actively-maintained fork (by "guns" &amp; "Lukako"); original concept by Mannatu.</dd>
+  <dt>Dependency</dt><dd><strong>LuaCsForBarotrauma required.</strong> In MP it runs server-side; client-side LuaCs is needed for single-player/sub editor. Many players also run <em>BetterHealthUI</em> for a usable health panel.</dd>
+  <dt>Load position</dt><dd>Low in the list, below Enhanced Reactors &amp; Immersive Repairs. Incompatible with any non-patch mod that overwrites <code>Human.xml</code> or vanilla medicine.</dd>
+  <dt>Configure</dt><dd>ESC menu &rarr; "Neurotrauma". There's an official training map (Mercy Hospital) and a community Trello "fork guide" to practise with.</dd>
+  <dt>Big caveat</dt><dd>Bots will not treat injuries. A human medic is mandatory in MP. You also can't open the health menu of someone lying on a bed (known base-game interaction).</dd>
+</dl>
+
+<div class="callout warn"><strong>Numbers caveat:</strong> exact drug strengths, skill thresholds and crafting recipes below come from community guides/wiki and may lag the current build. Use them as direction; the in-game medical fabricator and ESC config are authoritative. Anything I couldn't confirm is marked <span class="unv">like this</span>.</div>
+
+<h2><span class="ic">&#10070;</span>The core survival model (read this first)</h2>
+<p>Neurotrauma feels overwhelming until you understand that almost nothing kills directly. Two things do the actual killing, and everything else is either a symptom or an easy fix:</p>
+<ul>
+  <li><strong>"Neurotrauma" (the affliction)</strong> is the central kill-switch. It deals <em>direct vitality damage</em> and <strong>instantly kills at 200%</strong>. It's one of the only afflictions that does direct damage, so it is <em>always</em> fixed first. Treat with <strong>Mannitol</strong> + time, and fix its cause.</li>
+  <li><strong>Hypoxemia</strong> (low blood oxygen) is the most common <em>driver</em> of neurotrauma and is easy to fix. Fix the oxygen problem and neurotrauma stops climbing.</li>
+</ul>
+<div class="box">
+  <h4>The death spiral to recognise</h4>
+  <p>Low blood / low blood pressure / low O&#8322; &rarr; <strong>hypoxemia</strong> &rarr; <strong>cardiac arrest</strong> + unconsciousness &rarr; cardiac arrest worsens hypoxemia &rarr; neurotrauma climbs &rarr; death at 200%. <strong>CPR or an Autopulse</strong> breaks the cardiac-arrest end of the loop while you fix the underlying cause (oxygen + blood volume).</p>
+</div>
+<p><strong>Blood pressure</strong> targets ~100%. Below ~80% is <em>Hypotension</em>; above ~150% is <em>Hypertension</em>. Read it with the health scanner or hematology analyzer. Don't panic &mdash; delay is what turns a survivable wound into total organ failure. A single gunshot is usually ~30 seconds of surgery.</p>
+
+<h2><span class="ic">&#9678;</span>Diagnosis workflow &amp; avoiding over-medication</h2>
+<div class="step"><div class="n">1</div><div class="c"><h4>Stabilise</h4>Bag a critical patient (Stasis Bag), get them to a surgery table, tourniquet any limb artery bleeds.</div></div>
+<div class="step"><div class="n">2</div><div class="c"><h4>Scan</h4>Use the <strong>Health Scanner</strong> for afflictions, organ damage and blood pressure. If symptoms appear with no visible cause, it's usually a blood issue &rarr; use the <strong>Hematology Analyzer</strong> (acidosis / alkalosis / sepsis / blood type).</div></div>
+<div class="step"><div class="n">3</div><div class="c"><h4>Prioritise</h4>Neurotrauma/hypoxemia first &rarr; stop bleeding &rarr; restore blood volume &rarr; restart heart/breathing &rarr; then chase organ damage and symptoms.</div></div>
+<div class="step"><div class="n">4</div><div class="c"><h4>Don't over-medicate</h4>Antibiotics, mannitol and liquid oxygenite all <strong>damage organs</strong>; stimulants add neurotrauma/psychosis/addiction; opiates add overdose + addiction; mannitol does nothing below 70% blood pressure. Use the minimum effective dose, pair organ-damaging drugs with <strong>Thiamine</strong>, match blood type before transfusing, and <strong>remove the Autopulse once stable</strong> (it causes hypertension if left on).</div></div>
+
+<h2><span class="ic">&#9888;</span>Afflictions reference</h2>
+<p>Format: cause &rarr; how you detect it &rarr; how you treat it. "Open-and-close surgery" means the generic sequence Painkiller &rarr; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; (work) &rarr; Suture.</p>
+
+<h3>Brain &amp; neurological</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Cause</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td><strong>Neurotrauma</strong></td><td>Stroke, liver/kidney damage, sepsis, skull fracture, hypoxemia, a tourniquet on the head, toxins (lead, meth). <strong>Death at 200%.</strong></td><td><strong>Mannitol</strong> + time; fix the cause (usually hypoxemia). Mannitol has no effect below 70% BP and overuse damages organs. <span class="unv">NT Surgery Plus adds "Mannitol Plus" that heals neurotrauma directly.</span></td></tr>
+<tr><td>Brain Damage</td><td>Sepsis, organ damage, stroke, traumatic shock, meth/hyperzine, cyanide, head tourniquet</td><td>Mannitol (mind the BP floor and organ-damage risk)</td></tr>
+<tr><td>Stroke</td><td>Circulatory failure</td><td>Surgery: Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; Suture <span class="unv">(community-sourced sequence)</span></td></tr>
+<tr><td>Concussion</td><td>Head impact (wear a helmet)</td><td>Cannot be cured normally; rest in bed / monitor. <span class="unv">Combat Stimulant reportedly clears it.</span></td></tr>
+<tr><td>Coma</td><td>Cardiac arrest (a failed Naloxone dose can induce it)</td><td>Above ~40% it causes cardiac arrest &mdash; keep an Autopulse on and wait; otherwise monitor</td></tr>
+<tr><td>Psychosis</td><td>Alien blood, meth/steroids/hyperzine, anaparalyzant, hallucinogens</td><td><strong>Haloperidol</strong></td></tr>
+</tbody>
+</table>
+
+<h3>Blood &amp; circulatory</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Cause / detection</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td><strong>Bloodloss / Hypovolemia</strong></td><td>Open wounds, artery/internal bleeds</td><td>Stop the leak first (sutures/tourniquet/surgery), then restore volume: <strong>Blood Pack</strong> (best) &gt; Saline &gt; Ringer's. Rule of thumb: ~30% bloodloss per blood pack; under 30% loss is survivable. Deusizine &amp; Combat Stimulant also cure some.</td></tr>
+<tr><td>Hypotension (low BP)</td><td>Below ~80%. Hyperventilation, hypoxemia, headache, pale skin, confusion, rising heart rate</td><td>Ringer's / Saline / Blood Pack to raise volume; <strong>Adrenaline</strong> slows cardiac-arrest onset; Deusizine. A climbing heart rate is the warning that arrest is coming.</td></tr>
+<tr><td>Hypertension (high BP)</td><td>Above ~150%. Often from over-transfusing or leaving the Autopulse on</td><td>Usually self-resolves &mdash; <strong>remove the Autopulse</strong>. For extreme cases: Sodium Nitroprusside or Nitroglycerin; or draw blood.</td></tr>
+<tr><td><strong>Artery Bleeding</strong></td><td>Fast, lethal blood loss</td><td><strong>Tourniquet</strong> (limbs only, never head/torso) &rarr; Morphine &rarr; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; Suture. Move fast.</td></tr>
+<tr><td>Internal Bleeding</td><td>Trauma, liver failure</td><td>Often auto-fixed by open-and-close surgery. Deusizine treats "internal damage".</td></tr>
+<tr><td>Aortic Rupture</td><td>Unconsciousness, irregular heartbeat, cyanosis, vomiting blood, respiratory arrest</td><td>Scalpel &rarr; <strong>Endovascular Balloon</strong> &rarr; <strong>Medical Stent</strong> &rarr; Suture (or plain open/close, slower)</td></tr>
+<tr><td>Hemotransfusion Shock</td><td>Giving an <strong>incompatible blood type</strong> (wrong plasma type = half-strength version)</td><td><strong>Streptokinase</strong> heals it; Thiamine for the organ damage. Read blood type with the hematology analyzer first (O&#8722; universal red-cell donor, AB universal plasma donor).</td></tr>
+<tr><td>Heart Attack</td><td>Causes heart damage</td><td>Streptokinase + Nitroglycerin (50%)</td></tr>
+</tbody>
+</table>
+
+<h3>Cardiac rhythm</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Increased Heart Rate</td><td>Harmless symptom unless it escalates; usually means low blood pressure</td></tr>
+<tr><td>Irregular Heartbeat (Fibrillation)</td><td>Defibrillator / Autopulse / CPR. Often caused by acidosis (e.g. post-surgery)</td></tr>
+<tr><td><strong>Cardiac Arrest / Asystole</strong></td><td>Defibrillator / Autopulse / CPR, plus Adrenaline (slows onset) and <strong>Nitroglycerin</strong> (cures arrest)</td></tr>
+<tr><td>Cardiac Tamponade</td><td>Open-and-close surgery auto-fixes it. <span class="unv">Some players add Drainage during the procedure.</span></td></tr>
+</tbody>
+</table>
+
+<h3>Thoracic &amp; respiratory</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Pneumothorax</td><td>From fractured ribs. Morphine &rarr; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; <strong>Drainage</strong> &rarr; Suture</td></tr>
+<tr><td>Respiratory Arrest</td><td><strong>Ambu Bag</strong> (with an oxygen / Liquid Oxygenite source), or place the patient on/near a <strong>surgery table</strong> (provides artificial respiration)</td></tr>
+<tr><td><strong>Hypoxemia</strong></td><td>Restore circulation/oxygen (CPR/Autopulse + breathing); <strong>Deusizine</strong> or <strong>Liquid Oxygenite</strong> cure it directly (Liquid Oxygenite also damages organs and removes the need to breathe &mdash; a stopgap when the heart is at 100% damage)</td></tr>
+<tr><td>Hyperventilation / Hypoventilation</td><td>Symptoms. Hypoventilation (from analgesia / neck fracture) leads to acidosis &mdash; reduce analgesia with Naloxone</td></tr>
+</tbody>
+</table>
+
+<h3>Acid&ndash;base</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Acidosis</td><td>Common after surgery; causes fibrillation. Ignorable at low severity. Transfuse <strong>neutral blood</strong>, or induce alkalosis (Adrenaline causes hyperventilation, or Raptor Bane Extract makes them vomit)</td></tr>
+<tr><td>Alkalosis</td><td>Uncommon; shows as "palpitations" on the hematology analyzer. Cancelled by acidosis / neutral blood</td></tr>
+</tbody>
+</table>
+
+<h3>Organ damage &amp; failure</h3>
+<p>Organs accumulate <strong>damage</strong>; at <strong>100% the organ fails</strong>. Damage is mostly survivable; failure of a vital organ is lethal and needs a <strong>transplant</strong>. <strong>Thiamine</strong> speeds passive organ healing with no downside &mdash; it's the standard organ-damage drug. Note that the very drugs that save lives (antibiotics, mannitol, liquid oxygenite) and conditions (sepsis, hypoxemia, radiation, hemotransfusion shock) <em>cause</em> organ damage &mdash; this is the "don't over-medicate" mechanic.</p>
+<table>
+<thead><tr><th>Organ</th><th>Effects / warning signs</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Heart</td><td>Not lethal below 100%; at failure the heart stops</td><td>Thiamine; <strong>Liquid Oxygenite</strong> as a stopgap, then transplant</td></tr>
+<tr><td>Lungs</td><td>Needed to breathe away from a surgery table; damaged by an Ambu Bag run with a welding/fuel/paint source</td><td>Thiamine; transplant at failure</td></tr>
+<tr><td>Liver</td><td>Leg swelling, hypertension, brain damage, bloating; <strong>jaundice (turning yellow) = liver dying</strong>; failure causes internal bleeding &amp; is fatal</td><td>Thiamine; transplant at failure</td></tr>
+<tr><td>Kidneys</td><td>Leg swelling, acidosis, hypertension, nausea/vomiting, bone &amp; brain damage; least urgent</td><td>Thiamine; transplant (can wait until stable)</td></tr>
+<tr><td>Brain</td><td>Neurotrauma etc.</td><td>Mannitol</td></tr>
+</tbody>
+</table>
+<p><strong>Bone Death</strong> (100% bone damage, from neglected kidney failure, radiation or sepsis): surgery + <strong>Osteosynthesis Implants</strong> on <em>every</em> limb (incl. head/torso) until the "Enhanced Growth" condition shows.</p>
+
+<h3>Bones &amp; fractures</h3>
+<table>
+<thead><tr><th>Injury</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Dislocation</td><td><strong>Wrench</strong></td></tr>
+<tr><td>Arm/Leg Fracture</td><td><strong>Bandage &rarr; Gypsum</strong> (cast). Don't waste osteosynthesis implants on extremity fractures.</td></tr>
+<tr><td>Skull / Neck / Rib Fracture</td><td>Surgery: Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; <strong>Surgical Drill</strong> &rarr; <strong>Osteosynthesis Implants</strong> &rarr; Suture. Bandages temporarily suppress the effects (neurotrauma from skull, pneumothorax from ribs) but surgery is the real fix.</td></tr>
+<tr><td>Spinal Injury</td><td>Causes analgesia 200% (drops the patient) &rarr; acidosis. Surgery on the fractured neck &rarr; Surgical Drill &rarr; <strong>Spinal Cord Implants</strong></td></tr>
+</tbody>
+</table>
+
+<h3>Infection &amp; sepsis</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Inflammation</td><td>From foreign bodies (also causes artery bleeding + sepsis) or infected wounds. Antibiotic spray/ointment for inflammation; surgery + <strong>Tweezers</strong> to remove foreign bodies (yanking them through an open wound causes traumatic shock)</td></tr>
+<tr><td><strong>Sepsis</strong></td><td>From festering infected wounds (or unsterilized surgery if the NT Sepsis addon is installed). Fever, fast heart rate, abdominal pain; does "everything bad". <strong>One dose Broad-Spectrum Antibiotics</strong> + Thiamine for the organ damage. Confirm on the blood scanner if unsure.</td></tr>
+<tr><td>Gangrene</td><td>From untreated traumatic amputation or sepsis. <strong>At 15% it's irreversible &mdash; amputate the limb</strong> or it kills the body.</td></tr>
+<tr><td>Husk Infection</td><td><strong>Calyxanide</strong> (pill ingredient cures 50%); Broad-Spectrum Antibiotics slow it. The Calyxanide + Antibiotics pill combo ("Antihusk") gives &minus;70 husk infection + 500 resistance.</td></tr>
+</tbody>
+</table>
+
+<h3>Drug, chemical &amp; radiation</h3>
+<table>
+<thead><tr><th>Affliction</th><th>Treatment</th></tr></thead>
+<tbody>
+<tr><td>Opiate Overdose</td><td>From too much opium/morphine/fentanyl (each dose = analgesia + overdose + addiction). <strong>Naloxone</strong> cures analgesia, overdose, withdrawal.</td></tr>
+<tr><td>Withdrawal (opiate / chemical / alcohol)</td><td>Cured respectively by opiates, stimulants/Combat Stimulant, and Haloperidol</td></tr>
+<tr><td>Mass Analgesia + Hypoventilation</td><td>From a "fent trip" or neck fracture &rarr; acidosis. Naloxone, then fix acidosis.</td></tr>
+<tr><td>Radiation Sickness</td><td><strong>Antirad</strong> &rarr; Thiamine for the organ damage</td></tr>
+<tr><td>Poisons</td><td>Matching <strong>Antidote</strong> (50%), or broad-spectrum Stabilozine (15% all) / Carbon (7% all)</td></tr>
+<tr><td>Allergic reaction</td><td><span class="unv">Not confirmed as a distinct NT affliction in the sources reviewed &mdash; may be vanilla/addon only.</span></td></tr>
+</tbody>
+</table>
+
+<h3>Burns / combustion</h3>
+<ul>
+  <li><strong>First-degree:</strong> Antibiotic Ointment.</li>
+  <li><strong>Second-degree:</strong> Antibiotic Ointment &times;2.</li>
+  <li><strong>Third-degree:</strong> surgery &mdash; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; <strong>Plastiseal</strong> &rarr; Suture.</li>
+</ul>
+
+<h2><span class="ic">&#9874;</span>Medical equipment &amp; items</h2>
+
+<h3>Diagnosis tools</h3>
+<table>
+<thead><tr><th>Item</th><th>What it does / when to use</th></tr></thead>
+<tbody>
+<tr><td>Health Scanner</td><td>Reads most afflictions, organ damage, blood pressure. Scan every patient first.</td></tr>
+<tr><td>Hematology / Blood Analyzer</td><td>Reads blood pressure, <strong>blood type</strong>, acidosis/alkalosis/sepsis. Use for "symptoms with no visible cause" and before transfusing.</td></tr>
+<tr><td>Pill Analyzer</td><td>Identifies a pill's composition. Niche.</td></tr>
+</tbody>
+</table>
+
+<h3>Resuscitation &amp; circulation</h3>
+<table>
+<thead><tr><th>Item</th><th>What it does / when to use</th></tr></thead>
+<tbody>
+<tr><td>Defibrillator</td><td>Restarts heart / corrects fibrillation &amp; cardiac arrest</td></tr>
+<tr><td>Autopulse</td><td>Mechanical CPR; restarts heart and slowly clears hypoxemia (if lungs work). <strong>Remove once stable</strong> (causes hypertension).</td></tr>
+<tr><td>CPR (health-menu button)</td><td>Manual compressions; works underwater/at pressure. Non-medics fracture the patient's ribs &mdash; pre-bandage.</td></tr>
+<tr><td>Ambu Bag (manual resuscitator)</td><td>Manual ventilation; needs a gas source. With a Liquid Oxygenite tank it oxygenates; with welding/fuel/paint it <strong>damages lungs</strong>.</td></tr>
+<tr><td>Surgery Table</td><td>Provides artificial respiration, reduces traumatic shock, and is the <strong>required location for surgery</strong>.</td></tr>
+<tr><td>Stasis Bag</td><td>Halts deterioration / prevents death. Stabilise a critical patient while you prep. You cannot operate on a bagged patient.</td></tr>
+</tbody>
+</table>
+
+<h3>Surgical tools &amp; consumables</h3>
+<table>
+<thead><tr><th>Tool</th><th>Role in surgery</th></tr></thead>
+<tbody>
+<tr><td>Scalpel</td><td>Make the incision (start of nearly every surgery)</td></tr>
+<tr><td>Hemostat</td><td>Clamp / control bleeding after the incision</td></tr>
+<tr><td>Skin Retractors</td><td>Hold the incision open for access</td></tr>
+<tr><td>Tweezers</td><td>Remove foreign bodies (bullets, shrapnel)</td></tr>
+<tr><td>Surgical Saw</td><td>Amputation / limb reattachment</td></tr>
+<tr><td>Surgical Drill</td><td>Bone surgery (skull/neck/rib, implants)</td></tr>
+<tr><td>Organ Procurement / Multipurpose Scalpel</td><td>Remove a failed organ for transplant</td></tr>
+<tr><td>Drainage</td><td>Relieve pneumothorax during chest surgery</td></tr>
+<tr><td>Endovascular Balloon + Medical Stent</td><td>Repair aortic rupture</td></tr>
+<tr><td>Suture</td><td>Close the incision (end of nearly every surgery; restores some vitality)</td></tr>
+<tr><td>Osteosynthesis / Spinal Cord Implants</td><td>Fix fractures, bone death, spinal injury</td></tr>
+<tr><td>Plastiseal</td><td>Third-degree burns</td></tr>
+<tr><td>Replacement organs</td><td>Heart / lungs / liver / kidney for transplant</td></tr>
+</tbody>
+</table>
+<p>Plus: <strong>Tourniquet</strong> (limb arteries only), <strong>Splint/Gypsum</strong> (cast fractures), <strong>Bandages</strong> (stop bleeding / temporarily suppress fracture effects), <strong>Wrench</strong> (dislocations), <strong>Antibiotic Spray/Ointment</strong> (inflammation/burns).</p>
+
+<h3>Drugs &amp; pills</h3>
+<p>Drugs are crafted at the <strong>ChemMaster 2000</strong> <span class="unv">(craftable from 1 FPGA circuit + 1 plastic + 1 steel + 1 aluminium + 1 titanium-aluminium alloy)</span>. A pill = a <strong>base</strong> (sets capacity) + a <strong>binder</strong> + up to two <strong>fillers</strong> + active ingredients + optional dye; a failed craft gives weaker effects. <span class="unv">Bases: Alien Blood (cap 3, +psychosis, skill 60), Saline/Ringer's (cap 1, skill 10), Blood Pack (cap 2, skill 40). Binders: Ethanol (skill 20), Mannitol. Fillers: Sodium (+potency, explodes with Saline/Ringer), Silicon (2&times; yield), Magnesium (2&times; potency).</span></p>
+<table>
+<caption>Skill values are <span class="unv">community-sourced and may be dated</span>.</caption>
+<thead><tr><th>Drug</th><th>Effect</th><th>Risk / note</th></tr></thead>
+<tbody>
+<tr><td>Opium / Morphine / Fentanyl</td><td>Analgesia for surgery; cures opiate withdrawal</td><td>Each dose adds overdose + addiction</td></tr>
+<tr><td>Naloxone</td><td>Cures analgesia, opiate overdose, withdrawal</td><td>A failed dose can cause coma</td></tr>
+<tr><td>Broad-Spectrum Antibiotics</td><td>Cures sepsis; husk resistance</td><td><strong>Damages kidneys, liver, heart, lungs</strong> &mdash; pair with Thiamine</td></tr>
+<tr><td>Thiamine</td><td><strong>Accelerates organ healing</strong></td><td>No downside &mdash; the standard organ-damage drug</td></tr>
+<tr><td>Adrenaline</td><td>Slows cardiac-arrest onset, counters slows</td><td>&mdash;</td></tr>
+<tr><td>Liquid Oxygenite</td><td>Cures hypoxemia; removes need to breathe (stopgap)</td><td>Damages all four organs</td></tr>
+<tr><td>Deusizine</td><td>Cures bloodloss, internal damage, organ damage, hypoxemia</td><td>Causes burns</td></tr>
+<tr><td>Streptokinase</td><td>Heals heart attacks &amp; hemotransfusion shock</td><td>&mdash;</td></tr>
+<tr><td>Nitroglycerin</td><td>Cures cardiac arrest; heals heart attack 50%</td><td>&mdash;</td></tr>
+<tr><td>Azathioprine</td><td>Immunosuppressant so transplants aren't rejected</td><td>Failure can cause sepsis; take before transplants</td></tr>
+<tr><td>Mannitol</td><td>Reduces brain damage / neurotrauma</td><td>No effect below 70% BP; overuse damages organs</td></tr>
+<tr><td>Calyxanide</td><td>Cures 50% husk infection</td><td>&mdash;</td></tr>
+<tr><td>Haloperidol</td><td>Cures psychosis &amp; alcohol withdrawal</td><td>&mdash;</td></tr>
+<tr><td>Propofol</td><td>Anesthesia (knock-out for surgery)</td><td>&mdash;</td></tr>
+<tr><td>Combat Stimulant</td><td>Slowly heals internal damage, bleeding, burns, bloodloss, withdrawal</td><td>Chemical addiction</td></tr>
+<tr><td>Stabilozine / Carbon</td><td>Heal all poisons 15% / 7%</td><td>&mdash;</td></tr>
+<tr><td>Meth / Anabolic Steroids / Hyperzine</td><td>Haste/vigor buffs</td><td>Inflict organ damage, neurotrauma, psychosis, addiction</td></tr>
+<tr><td>Sodium Nitroprusside</td><td>Lowers extreme blood pressure</td><td>Severe hypertension only</td></tr>
+<tr><td>Antirad</td><td>Treats radiation sickness</td><td>Follow with Thiamine</td></tr>
+</tbody>
+</table>
+<p><strong>Fluids:</strong> Blood Pack (best volume restoration), Saline (weaker, often enough), Ringer's Solution (raises blood pressure, prevents collapse).</p>
+
+<h2><span class="ic">&#9986;</span>Surgery, step by step</h2>
+<div class="callout"><strong>Prerequisites:</strong> enough Medicine skill (low skill turns the scalpel into a "Nasty laceration" &mdash; a failed skill check, confirmed by the dev), the patient anesthetized or unconscious (Morphine analgesia or Propofol), and you at/near a <strong>surgery table</strong>. With the NT Sepsis addon you must also sterilise tools (Autoclave) and dress the patient in surgical drapes.</div>
+<ul>
+  <li><strong>Generic open-and-close:</strong> Morphine &rarr; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; (work) &rarr; Suture. Many internal problems (internal bleeding, cardiac tamponade) are auto-fixed just by opening and closing.</li>
+  <li><strong>Organ transplant</strong> (heart/lungs/liver/kidney, all the same): Azathioprine &rarr; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; Organ-Procurement Scalpel (remove failed organ) &rarr; insert replacement &rarr; Suture &rarr; restart circulation (CPR/Autopulse/Defib). Give Liquid Oxygenite first if the heart is failing. <span class="unv">Known dev-acknowledged bug: transplants sometimes fail to register the new organ.</span></li>
+  <li><strong>Amputation:</strong> Morphine &rarr; Antibiotic Ointment &rarr; Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; Surgical Saw &rarr; Suture. Amputate any limb at gangrene &ge;15%; watch bloodloss after.</li>
+  <li><strong>Bone surgery:</strong> Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; Surgical Drill &rarr; Osteosynthesis Implants &rarr; Suture (Spinal Cord Implants for spine).</li>
+  <li><strong>Foreign body:</strong> Scalpel &rarr; Hemostat &rarr; Skin Retractors &rarr; Tweezers &rarr; Suture.</li>
+  <li><strong>Aortic rupture:</strong> Scalpel &rarr; Endovascular Balloon &rarr; Medical Stent &rarr; Suture.</li>
+</ul>
+
+<h2><span class="ic">&#9873;</span>Emergency playbooks</h2>
+<div class="grid2">
+  <div class="box"><h4>Shot / heavily bleeding</h4>Stasis bag &rarr; surgery table &rarr; tourniquet limb arteries &rarr; suture wounds &rarr; open/close for internal bleed/tamponade/pneumothorax (Drainage for pneumo; Balloon+Stent for aortic) &rarr; restore volume with type-matched Blood Packs &rarr; restart heart/breathing &rarr; watch neurotrauma.</div>
+  <div class="box"><h4>Cardiac arrest</h4>Autopulse or Defibrillator (CPR underwater) + Adrenaline/Nitroglycerin &rarr; fix the underlying hypoxemia/BP cause &rarr; remove the Autopulse once stable.</div>
+  <div class="box"><h4>Infection / sepsis</h4>Fever or blood-scanner confirm &rarr; one dose Broad-Spectrum Antibiotics + Thiamine &rarr; remove foreign bodies (surgery + tweezers), treat inflammation (antibiotic spray) &rarr; amputate any limb at &ge;15% gangrene.</div>
+  <div class="box"><h4>Hypoxia / drowning</h4>Restore oxygen (Ambu Bag with O&#8322;/Liquid Oxygenite, or surgery-table respiration) &rarr; Autopulse/Defib for arrest &rarr; Liquid Oxygenite/Deusizine to clear hypoxemia &rarr; Mannitol for resulting neurotrauma.</div>
+  <div class="box"><h4>Broken limb</h4>Bandage &rarr; Gypsum cast. Dislocation &rarr; Wrench. No implants on limbs.</div>
+  <div class="box"><h4>Opiate OD</h4>Naloxone (watch for the rare coma from a failed dose); manage resulting analgesia / hypoventilation / acidosis.</div>
+</div>
+
+<h2><span class="ic">&#9733;</span>Medic talents &amp; addons</h2>
+<p>The fork lists "rework of medic talents to work properly with the mod" as a completed item, so vanilla Medical Doctor talents are adjusted to interact with the new system. <span class="unv">There is no published, itemised list of exactly which talents NT changes &mdash; inspect them in-game.</span> A separate community mod, "Medic Talent Rework," tweaks vanilla medic talents but is <em>not</em> part of NT.</p>
+<p>Neurotrauma has a family of addons that change behaviour &mdash; know which content is base vs addon: <strong>NT Sepsis/Infections</strong> (adds sterilisation/autoclave requirements), <strong>NT Surgery Plus</strong> (Mannitol Plus), <strong>NT Cybernetics</strong> (cybernetic organs/limbs), plus NT Pharmacy, NT Metabolism, NT Symbiote, NT Grafting, and the Mercy Hospital training map.</p>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3190189044" target="_blank">Neurotrauma &mdash; Steam Workshop (description, requirements, surgery-skill confirmation, transplant bug)</a></li>
+  <li><a href="https://github.com/OlegBSTU/Neurotrauma" target="_blank">GitHub &mdash; OlegBSTU/Neurotrauma (fork structure, addons)</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3568724923" target="_blank">Steam Guide &mdash; "How to Neurotrauma" (per-affliction treatment sequences)</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2612293315" target="_blank">Steam Guide &mdash; "A Mostly Exhaustive Neurotrauma Guide" (survival model, diagnosis)</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2804202895" target="_blank">Steam Guide &mdash; "Neurotrauma Pharmacy guide" (drug effects, ChemMaster, pill crafting)</a></li>
+  <li><a href="https://barotrauma-nt.fandom.com/wiki/Organ_Damage" target="_blank">Neurotrauma Wiki (Fandom) &mdash; Organ Damage, Blood Pressure, Hemotransfusion Shock, etc.</a></li>
+  <li><a href="https://trello.com/b/lA0BSokX" target="_blank">Community "Neurotrauma fork guide" Trello (canonical; JS-heavy &mdash; open in a browser)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_15_enhanced_immersion.html"><span class="pn-label">Previous</span><span class="pn-title">Enhanced Immersion</span></a>
+  <a class="pn-next" href="baro_17_dynamiceuropa.html"><span class="pn-label">Next</span><span class="pn-title">DynamicEuropa</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. Drug numbers and recipes change with updates &mdash; verify exact values in-game.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

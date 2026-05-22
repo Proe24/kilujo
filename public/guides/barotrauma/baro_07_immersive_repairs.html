@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immersive Repairs — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>07 / 17 &middot; Repairs overhaul</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3114087512" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Repairs Overhaul</div>
+  <h1>Immersive Repairs</h1>
+  <p class="lead">Keeping the sub alive becomes a real job. Engines burn oil, oxygen generators need filters, vents need blades, hull breaches are welded from outside, turrets wear out, and a failed repair can blow up an engine in your face. Adds a deep toolset, firefighting gear, and new afflictions.</p>
+  <div class="badges">
+    <span class="badge xml">XML &mdash; no Lua required</span>
+    <span class="badge">Item / maintenance</span>
+    <span class="badge">Mostly bot-friendly</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A repairs overhaul by <em>_]|M|[_</em>. Repairs take more time and crew coordination. "Not for people with low patience and a need for speedy campaigns."</dd>
+  <dt>Load position</dt><dd>Enhanced Reactors / Hazardous Reactors (if used) &rarr; <strong>Immersive Repairs</strong> &rarr; DynamicEuropa &rarr; Neurotrauma. Place its feature-revert patches <em>above</em> it.</dd>
+  <dt>Bots</dt><dd>Mostly bot-friendly (auto-refill oil, no failed-skill explosions). Known quirk: bots try to repair external turrets, grab a diving suit, then get stuck.</dd>
+</dl>
+
+<div class="callout warn"><strong>Don't repair a running engine or live reactor</strong> without an extinguisher buddy. After every fight or flood, sweep vents and check vent blades, air filters and engine oil &mdash; water damages all of them.</div>
+
+<h2><span class="ic">&#9874;</span>Core mechanics</h2>
+<ul>
+  <li><strong>Right tool for the job:</strong> jackhammer for mining, plasma cutter for tearing down structures, etc.</li>
+  <li><strong>Outside repairs:</strong> turrets and discharge coils slowly wear from use and must be repaired or they fail in combat (they expose a <strong>condition output pin</strong> you can wire to a display). Hull damage is welded <strong>from outside in a diving suit</strong> &mdash; welders now have shorter range, need precision, and can't weld through multiple walls.</li>
+  <li><strong>New repair failures:</strong> engines can <strong>explode on a failed repair</strong> (worse the faster they were running, damaging walls and you); failing on a junction box / supercapacitor / battery can zap/electrocute you.</li>
+  <li><strong>Flooding/fire effects:</strong> oxygen generators drain O&#8322; from all rooms when on fire; flooded junction boxes / supercapacitors / batteries randomly zap, start fires, or electrocute the water (capacitors &amp; batteries have a Disable_Output input; <strong>junction boxes have no disable pin</strong> &mdash; a known pain point).</li>
+  <li><strong>Sensible Reactors:</strong> the same critical-state repair failure as Enhanced Reactors but without radiation &mdash; turn the reactor off before repairing.</li>
+</ul>
+
+<h2><span class="ic">&#9881;</span>The new maintenance systems</h2>
+<div class="step"><div class="n">1</div><div class="c"><h4>Oiled engines</h4>Engines need <strong>oil</strong>; run dry, they degrade fast and explode when they break. Refill with an <strong>Engine Oil</strong> (or <strong>Premium Engine Oil</strong>) canister; Hungry Europans' cooking oil works briefly. Engines start smoking at &le;50% condition. Bots auto-refill oil. Premium Oil is unlocked by the <strong>"Oiled Machinery"</strong> talent.</div></div>
+<div class="step"><div class="n">2</div><div class="c"><h4>Air filters (oxygen generators)</h4>Oxygen generators need a working <strong>Air Filter</strong>. Maintain it by <strong>cleaning with ethanol</strong> (especially after a flood); replace only if it breaks. Filters have a <strong>quality</strong> stat (more quality = longer life, more reaction time). A generator won't refill O&#8322; tanks without a working filter. <span class="unv">Caution: turning the generator off to clean the filter has burned subs when forgotten.</span></div></div>
+<div class="step"><div class="n">3</div><div class="c"><h4>Vent blades (vents)</h4>All vents need <strong>Vent Blades</strong> to function. Blades take water damage (break down over ~14 minutes submerged) &mdash; check after flooding. They can be <strong>thrown</strong> at intruders (damages blade and target). Bots can't replace them &mdash; you do.</div></div>
+<div class="step"><div class="n">4</div><div class="c"><h4>Hidden loose-vent inventories</h4>You can't tell a loose vent from a fixed one by sight. Open a vent with the Action key ("E") <strong>while holding a crowbar</strong> to reveal its hidden inventory.</div></div>
+<div class="step"><div class="n">5</div><div class="c"><h4>Outside hull / turret welding</h4>Diving suit on, go outside, use the shorter-range welder. Weld hull from outside; repair turrets/discharge coils periodically.</div></div>
+<div class="step"><div class="n">6</div><div class="c"><h4>Emergency seals</h4>Place an <strong>Automatic Welder</strong> near an unreachable leak (auto-welds ~400 HP of wall when water flows; has a manual button too). Or spray <strong>Fixfoam</strong> from a sprayer + Fixfoam Tank for an instant temporary seal &mdash; then weld over it within ~3&ndash;4 minutes before it degrades.</div></div>
+
+<h2><span class="ic">&#9776;</span>New items &amp; tools</h2>
+<table>
+<thead><tr><th>Item</th><th>Effect / role</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><strong>Multitool</strong></td><td>Replaces the repair pack; fastest handheld repairs; also a combined screwdriver + wrench</td><td>Handheld mode is fastest but leaves the object un-protected (re-degrades immediately). Degrades fast; fix with an <strong>FPGA circuit</strong>.</td></tr>
+<tr><td>Welding Torch / Welding Tool</td><td>Shorter-range welders for hull/structure</td><td>Bots revert the Welding Tool to vanilla behaviour</td></tr>
+<tr><td>Concentrated Welding Fuel Tank</td><td>Lets the torch <strong>weld underwater</strong> and triples range; also Flamer fuel</td><td>Highly explosive, used fast; refuel with a buy-only Concentrated Welding Fuel Canister at a Fuel Refill Station</td></tr>
+<tr><td>Fuel Refill Station (placeable)</td><td>Refills welding-fuel tanks &amp; fire extinguishers</td><td>Craftable</td></tr>
+<tr><td>Welding Mask</td><td>Prevents Welder's Eye</td><td>Variants: Diving Welding Mask, Advanced Welding Mask (status/electrical readouts), Clown Welding Mask</td></tr>
+<tr><td>Welder's Eye Drops</td><td>Treats Welder's Eye</td><td>Medical-merchant only; recommended ~55 medical skill</td></tr>
+<tr><td>Automatic Welder (placeable)</td><td>Auto-welds unreachable leaks (~400 HP)</td><td>Craftable + sold; you spawn with some by difficulty (Easy 8 / Normal 6 / Hard 4)</td></tr>
+<tr><td>Fixfoam Tank</td><td>Loads into a sprayer for a temporary leak seal</td><td>Weld over within 3&ndash;4 min</td></tr>
+<tr><td>Air Filter</td><td>Required by oxygen generators</td><td>Clean with ethanol; quality tiers; replace if broken</td></tr>
+<tr><td>Vent Blade</td><td>Required by vents; throwable</td><td>Replace when water-worn</td></tr>
+<tr><td>Engine Oil / Premium Engine Oil</td><td>Engine fuel/lubricant</td><td>Engine Oil vendor-sold; Premium via "Oiled Machinery" talent</td></tr>
+<tr><td>Jackhammer / Plasma Cutter</td><td>Mining / structure-tearing tools</td><td>Right-tool-for-job</td></tr>
+<tr><td>Industrial Flashlight</td><td>Toggleable powerful flashlight</td><td>High battery use</td></tr>
+<tr><td>Halligan-Tool / Fire Axe</td><td>Open/break doors fast; blunt + laceration/bleeding</td><td>Firefighter recipes</td></tr>
+<tr><td>CO&#8322; Grenade</td><td>Instantly kills fires by depleting room oxygen</td><td>Firefighter recipe; works in detonators</td></tr>
+<tr><td>Firefighter Suit / Helmet / Cabinet</td><td>High fire protection + firefighting storage</td><td>Firefighter recipes; cabinet auto-refills O&#8322;/batteries</td></tr>
+<tr><td><span class="unv">Safe Cracker / Holdable ladder / Stairs</span></td><td>Utility items praised by the community</td><td>Exact behaviour not documented on the page</td></tr>
+</tbody>
+</table>
+<p><strong>Talents added:</strong> <strong>Firefighter</strong> (Mechanic &mdash; carry characters at full speed; unlocks firefighting recipes) and <strong>Oiled Machinery</strong> (unlocks Premium Engine Oil). The vanilla "Hull Fixer" talent is modified.</p>
+
+<h2><span class="ic">&#9888;</span>New afflictions</h2>
+<table>
+<thead><tr><th>Affliction</th><th>Cause</th><th>Cure</th></tr></thead>
+<tbody>
+<tr><td><strong>Welder's Eye</strong></td><td>Welding without a mask (Plasma Cutter &amp; Welding Tool apply it). Impairs vision/navigation.</td><td>Self-heals very slowly; or Welder's Eye Drops; or outpost doctors (expensive). With Hungry Europans, sleeping in a bed drastically speeds healing.</td></tr>
+<tr><td>Oil / slip</td><td>Failing an engine repair, or being hit by a thrown oil canister, spills oil &rarr; you slip and fall</td><td>Get sprayed with a sprayer containing ethanol</td></tr>
+<tr><td>Electric shock</td><td>Zapped by a flooded/failed junction box, battery, supercapacitor, or discharge coil</td><td>Vanilla electric-shock state</td></tr>
+</tbody>
+</table>
+
+<h2><span class="ic">&#9881;</span>Compatibility &amp; patches</h2>
+<ul>
+  <li><strong>Vanilla Oxygen Patch</strong> (3239152683) &mdash; removes Air Filter &amp; Vent Blade requirements.</li>
+  <li><strong>Vanilla Welding Patch</strong> (3120380654) &mdash; reverts welding (removes Welding Torch/Mask/Automatic Welder/Fixfoam etc.).</li>
+  <li><strong>No Turret Repairs Patch</strong> (3120381149) &mdash; turrets/coils stop wearing from firing.</li>
+  <li>NT Cybernetics Patch (3153498101); Robotrauma Patch (3165372921); Russian/German/Chinese translations.</li>
+</ul>
+<p>Place any of the feature-revert patches <em>above</em> Immersive Repairs in the list.</p>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3114087512" target="_blank">Immersive Repairs &mdash; Steam Workshop</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/changelog/3114087512" target="_blank">Immersive Repairs &mdash; Change Notes (revealed many added items)</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3120380654" target="_blank">Vanilla Welding Patch (item list)</a> &middot; <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3239152683" target="_blank">Vanilla Oxygen Patch</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_06_enhanced_reactors.html"><span class="pn-label">Previous</span><span class="pn-title">Enhanced Reactors</span></a>
+  <a class="pn-next" href="baro_08_artifacts_ruins_enhanced.html"><span class="pn-label">Next</span><span class="pn-title">Artifacts & Ruins Enhanced</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. Exact recipes verify in-game.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

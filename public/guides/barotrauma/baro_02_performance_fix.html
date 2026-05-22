@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Fix — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>02 / 17 &middot; Performance utility</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2701251094" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Performance Utility</div>
+  <h1>Performance Fix</h1>
+  <p class="lead">A Lua mod that raises FPS by reducing how often map entities update &mdash; invaluable for heavy modded servers, big subs, and DynamicEuropa's crowded cities. Tunable, with an item-priority system to keep important objects behaving normally.</p>
+  <div class="badges">
+    <span class="badge dep">Requires LuaCsForBarotrauma</span>
+    <span class="badge lua">Lua</span>
+    <span class="badge">Doesn't override content</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A performance mod by Evil Factory. Works on any vanilla or modded server you join, whether or not the server has it.</dd>
+  <dt>How it works</dt><dd>Lowers the map-entity update rate (a "divider", e.g. 2 / 4 / 8). The author saw roughly double FPS at divider 4.</dd>
+  <dt>Sides</dt><dd>Server-only perf needs just server-side LuaCs; for client-side FPS gains install client-side LuaCs (<code>install_cl_lua</code>) too.</dd>
+  <dt>Caveat</dt><dd>The author notes it's old and gains vary on modern builds &mdash; but players still find it essential with this kind of modpack.</dd>
+</dl>
+
+<h2><span class="ic">&#9881;</span>Using &amp; configuring it</h2>
+<ul>
+  <li>Open the config GUI with the console command <code>performancefix</code> (run <code>cl_reloadlua</code> first if you're at the main menu).</li>
+  <li><code>showperf</code> &mdash; diagnoses what's causing performance issues.</li>
+  <li><code>reloadlua</code> &mdash; reloads the server-side script to apply new config.</li>
+  <li>Start with a <strong>Client Entity Interval of 1&ndash;2</strong> for a good balance; raise it on very heavy servers.</li>
+  <li>Optionally <strong>disable shadow-casting lights globally</strong> if your GPU struggles with lighting.</li>
+</ul>
+
+<h2><span class="ic">&#9888;</span>Side effects &amp; the priority list</h2>
+<ul>
+  <li>At higher dividers, some items can behave oddly (because they update less often). Add an item's ID to the <strong>priority list</strong> to keep it updating normally.</li>
+  <li>Sub-builders can tag a component <code>performancefix</code> (to output the update interval) or <code>highpriority</code> (auto-added to the priority list).</li>
+  <li><span class="unv">Known bug: hallucination "fake water" can flicker while docked.</span></li>
+</ul>
+
+<div class="callout tip"><strong>Where it matters most:</strong> DynamicEuropa cities and Barotraumatic husk-swarm biomes &mdash; the two heaviest situations in this pack. Many players run it specifically for those.</div>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2701251094" target="_blank">Performance Fix &mdash; Steam Workshop (commands, settings, results)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_01_luacs.html"><span class="pn-label">Previous</span><span class="pn-title">LuaCsForBarotrauma</span></a>
+  <a class="pn-next" href="baro_03_barotraumatic.html"><span class="pn-label">Next</span><span class="pn-title">Barotraumatic</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

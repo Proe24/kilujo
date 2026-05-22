@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanilla Weapons Overhaul (Draconis) — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>04 / 17 &middot; Weapons / armor / NPC overhaul</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2954637344" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Weapons, Armor &amp; NPC Overhaul</div>
+  <h1>Vanilla Weapons Overhaul (Draconis)</h1>
+  <p class="lead">Tweaks every vanilla weapon and adds a tiered arsenal on top, with a skill-driven recoil/bloom system, a parts-kit crafting economy, weapon attachments, reworked bags, and fully rearmed factions. Built to stay close to vanilla feel while giving every role a progression path.</p>
+  <div class="badges">
+    <span class="badge">Items / NPC / factions</span>
+    <span class="badge warn">No other weapon mods</span>
+    <span class="badge">Above Baroverhaul</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>A comprehensive weapon/armor/ammo/NPC overhaul by Draconis (based on SCP-966-1's original, merged with SydWad's Laser Pointer).</dd>
+  <dt>Load position</dt><dd>Above any other weapon mod and above Baroverhaul (to keep its weapon changes); above DynamicEuropa. Compatible with Barotraumatic anywhere.</dd>
+  <dt>Do NOT run with</dt><dd>Other weapon overhauls: EHA, CoL, THG, Animated Arms, GunsEnhanced &mdash; they edit the same weapons incompatibly.</dd>
+  <dt>Neurotrauma</dt><dd>Compatible &mdash; the mod's extra damage types (frag/blunt/bleed) deliberately worsen NT injuries and cause more limb incapacitation.</dd>
+</dl>
+
+<div class="callout note"><strong>On the tables below:</strong> Draconis doesn't publish a strict tier table, so the <em>Tier</em> column is best-effort inference from the description + changelogs. Weapon names, governing skill and how-to-obtain are well supported; tier guesses are marked <span class="unv">when uncertain</span>.</div>
+
+<h2><span class="ic">&#9881;</span>How the systems work</h2>
+
+<h3>Recoil, bloom &amp; skill</h3>
+<p>Every projectile gun has dynamic recoil and a blooming reticle (cone-of-fire) during sustained fire &mdash; you must pace your shots rather than hold the trigger. Higher <strong>Weapons skill</strong> tightens bloom and cuts recoil. Single aimed shots from light rifles/SMGs are accurate; full bursts are not. <strong>Heavy weapons (hand cannons, big rifles) have enough recoil to stun or injure low-skill users</strong> unless they wear an <strong>Exosuit / Exoskeleton</strong>, which negates the recoil stun.</p>
+
+<h3>Tiers &amp; the parts-kit economy</h3>
+<ul>
+  <li><strong>Basic</strong> &mdash; cheap, easily crafted (basic pistols, carbines). Good for arming large or low-skill crews; still deadly in trained hands or at high craftsmanship quality.</li>
+  <li><strong>Intermediate</strong> &mdash; needs talent gear or rarer materials; offers alternate performance (Shotgun Revolver, Aftermarket Carbine). A few (Jovian Shotgun) are cheap bought/found alternatives.</li>
+  <li><strong>Advanced</strong> &mdash; needs an <strong>Advanced Parts Kit</strong> to craft, or is bought from a reputation vendor; upgrade with a regular <strong>Parts Kit</strong> for higher quality. Also appears as wreck loot.</li>
+</ul>
+<p>Weapons are gated behind <strong>faction crafting blueprints</strong>, e.g. Coalition Small Arms &rarr; Light Pistol; Separatist Advanced Arms &rarr; Heavy Pistol; Scav &rarr; Scav Pistol/Heavy SMG; Husk Cult &rarr; Cult Carbine/Revelator; Protoexo Rifle &rarr; Warbringer Carbine. Several weapons use <strong>alternate skills</strong> (most notably the <strong>Laser Rifle requires Medical</strong>, not Weapons) &mdash; a progression path for non-security roles.</p>
+
+<h2><span class="ic">&#128299;</span>New &amp; variant weapons</h2>
+
+<details open>
+<summary>Pistols &amp; sidearms</summary>
+<div class="det-body">
+<table>
+<thead><tr><th>Weapon</th><th>Tier</th><th>Skill</th><th>How obtained</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Machine Pistol</td><td><span class="tag t-basic">Basic</span></td><td>Weapons</td><td>Craft</td><td>Now craftable; dmg ~1.15 (between SMG 1.3 and vanilla 0.9)</td></tr>
+<tr><td>Light Pistol</td><td><span class="tag t-basic">Basic</span></td><td>Weapons</td><td>Craft (Coalition Small Arms)</td><td>Cheap basic sidearm</td></tr>
+<tr><td>Heavy Pistol</td><td><span class="tag t-int">Int</span> <span class="unv"></span></td><td>Weapons</td><td>Craft (Separatist Advanced Arms)</td><td>Uses heavy pistol round</td></tr>
+<tr><td>Scav Pistol</td><td><span class="tag t-basic">Basic</span></td><td>Weapons</td><td>Craft (Scav)</td><td>.45-cal; disposable clips it auto-ejects (break on floor); ~10 rounds</td></tr>
+<tr><td>Hand Cannon</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Craft (Captain tree) / loot</td><td>Massive recoil &mdash; stuns low-skill users without an Exosuit</td></tr>
+<tr><td>Warbringer Carbine</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Craft (Protoexo Rifle blueprint)</td><td>Ti-alloy Hand Cannon variant; longer reload at low skill</td></tr>
+<tr><td>Laser Pistol</td><td><span class="tag t-adv">Adv</span></td><td>Weapons (energy)</td><td>Craft (blueprint + Advanced Parts Kit)</td><td>Charge packs; mounts flashlight/laser; husk-killer</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Revolvers, SMGs &amp; carbines</summary>
+<div class="det-body">
+<table>
+<thead><tr><th>Weapon</th><th>Tier</th><th>Skill</th><th>How obtained</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Revolver (reworked)</td><td><span class="tag t-basic">Basic</span></td><td>Weapons</td><td>Vanilla</td><td>More bleed + gunshot dmg; revolver rounds have +headshot dmg</td></tr>
+<tr><td>Shotgun Revolver</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft / talent gear</td><td>Loads single shots &rarr; explosive "opener" slug</td></tr>
+<tr><td>Aftermarket / Revolver Carbine</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft / talent gear</td><td>Popular Captain weapon; "Captain's big gun" talent applies</td></tr>
+<tr><td>SMG (reworked)</td><td><span class="tag t-basic">Basic</span></td><td>Weapons</td><td>Vanilla</td><td>Mags reloadable by anyone (not craftable)</td></tr>
+<tr><td>Advanced SMG</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft</td><td>Small/compact</td></tr>
+<tr><td>Jovian SMG</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Buy / loot (cheap)</td><td>Low-tier alternative</td></tr>
+<tr><td>Scav Heavy SMG</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft (Scav)</td><td>Crude slow SMG; loads two Scav clips at once</td></tr>
+<tr><td>Coalition Defense Carbine</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft</td><td>Standard Coalition carbine</td></tr>
+<tr><td>Repeating Carbine</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft / loot (rare)</td><td>7.62&times;39 mags; slow fire, less carry space</td></tr>
+<tr><td>Gauss Flechette Carbine</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Craft (own blueprint)</td><td>Darts pierce multiple targets, stopped by walls; good armor-pen</td></tr>
+<tr><td>Cult Carbine</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft (Husk Cult)</td><td>Husk-cult themed</td></tr>
+<tr><td>Laser Carbine</td><td><span class="tag t-adv">Adv</span></td><td>Weapons (energy)</td><td>Loot (Regulator "Hanging Judge" leaders)</td><td>Energy carbine</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Rifles &amp; battle rifles</summary>
+<div class="det-body">
+<table>
+<thead><tr><th>Weapon</th><th>Tier</th><th>Skill</th><th>How obtained</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Assault Rifle (reworked)</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Vanilla</td><td>Now a precision automatic; can't go in hotbar; stock holds a bandage/tourniquet</td></tr>
+<tr><td>Militia Rifle</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Loot (rare) / surplus</td><td>Deployable bayonet for melee; stock holds bandage/tourniquet</td></tr>
+<tr><td>Operator Rifle</td><td><span class="tag t-adv">Adv</span> <span class="unv"></span></td><td>Weapons</td><td>Loot (Rogue Coalition operators)</td><td>Top-tier rifle</td></tr>
+<tr><td>Automatic Rifle</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Craft / loot</td><td>Full-auto; 30-round mag needs core + advanced core</td></tr>
+<tr><td>Scav Automatic Rifle</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Loot (pirates)</td><td>Cheap 7.62&times;39 mags; high recoil, worse accuracy</td></tr>
+<tr><td>Repeating Rifle (lever-action)</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Loot / craft</td><td>Separatist frontier weapon</td></tr>
+<tr><td>Cult Revelator</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Craft (Husk Cult)</td><td>Extreme "obrez" hand-cannon on battle-rifle mags; slow manual fire</td></tr>
+<tr><td>Anti-Materiel Rifle</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Craft (Advanced Parts Kit) / loot</td><td>Big-caliber; huge recoil &mdash; needs an Exosuit at low skill</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Shotguns, heavy &amp; squad weapons</summary>
+<div class="det-body">
+<table>
+<thead><tr><th>Weapon</th><th>Tier</th><th>Skill</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Shotgun (reworked)</td><td><span class="tag t-basic">Basic</span></td><td>Weapons</td><td>Baseline</td></tr>
+<tr><td>Jovian Shotgun</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Cheap buy/loot alternative</td></tr>
+<tr><td>Tactical Combat Shotgun</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Loads single shots &rarr; explosive-slug crowd clearer</td></tr>
+<tr><td>Antique Shotgun</td><td><span class="tag t-int">Int</span></td><td>Weapons</td><td>Loot (Husk Cult / bandits); loading-gate 7+1</td></tr>
+<tr><td>Impulse Light Machine Gun</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Base LMG</td></tr>
+<tr><td>Impulse Squad Automatic</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Heavier-caliber LMG; 30-round mag (wear a bandolier)</td></tr>
+<tr><td>General Purpose Machine Gun</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>High firepower</td></tr>
+<tr><td>Rapid Fissile Accelerator</td><td><span class="tag t-adv">Adv</span></td><td>Weapons</td><td>Fed by Nuclear Cartridges (from Enhanced Reactors)</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Energy / laser &amp; exotic weapons</summary>
+<div class="det-body">
+<table>
+<thead><tr><th>Weapon</th><th>Skill</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><strong>Laser Rifle</strong></td><td><span class="tag skill">Medical</span></td><td><strong>Requires Medical skill, not Weapons</strong> &mdash; alt progression for medics; burn/explosion, anti-husk</td></tr>
+<tr><td>Vintage Laser Rifle</td><td>Weapons (energy)</td><td>60 shots/charge pack, higher penetration</td></tr>
+<tr><td>Solid-State Laser (SSL) Rifle</td><td>Weapons (energy)</td><td>Heavy-creature killer; dismemberment + bleed (ignored by robots/husks)</td></tr>
+<tr><td>Laser Cannon</td><td>Weapons (energy)</td><td>Small chemical-pulse laser</td></tr>
+<tr><td>Ion Pulser</td><td><span class="tag skill">Electrical</span> <span class="unv"></span></td><td>Dedicated ammo; bounce/spark, EMP-ish</td></tr>
+<tr><td>Pulse Maser</td><td>Electrical / energy</td><td>Explosion ignores cover; EMPs nearby items; clears ballast flora</td></tr>
+<tr><td>Maser Pistol (microwave)</td><td><span class="tag skill">Electrical</span></td><td>Stun weapon used by station security</td></tr>
+<tr><td>Laser Volleygun</td><td>Weapons (energy)</td><td>Two bursts of two laser-pistol shots; inaccurate</td></tr>
+<tr><td>Protoexo Rifle</td><td>Weapons</td><td>Unique loot; its blueprint unlocks the Warbringer Carbine</td></tr>
+<tr><td><span class="unv">Project Calliope (clown energy weapon)</span></td><td>&mdash;</td><td>Planned/WIP &mdash; not yet in game</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+
+<details>
+<summary>Melee, harpoons &amp; specialty</summary>
+<div class="det-body">
+<table>
+<thead><tr><th>Weapon</th><th>Skill</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Functional Spear / Harpoon (melee)</td><td>Weapons / Frogman</td><td>Melee aiming without the overhand swing; works with Security <strong>Frogman harpoon talents</strong></td></tr>
+<tr><td>Harpoon Auto-Launcher</td><td>Weapons / Frogman</td><td>Vanilla-derived</td></tr>
+<tr><td>Machete</td><td>Weapons</td><td>Heavier dive knife; strong chop, slower (slower still at low skill)</td></tr>
+<tr><td>Ripper Gun / Ripper Assault Gun</td><td>Weapons</td><td>Big-creature dismemberment + heavy bleed (Assault variant slower/more accurate)</td></tr>
+<tr><td><span class="unv">Syringe Gun</span></td><td>Medical</td><td>NPC weapon (Separatist rogue physicians, husk cultists)</td></tr>
+<tr><td>Weld Nailer</td><td>Mechanical</td><td>Welding-fuel repair tool with a large hull-repair area</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+
+<h3>Ammunition &amp; rounds</h3>
+<ul>
+  <li><strong>Pistol / heavy pistol rounds</strong> re-identified with a <code>vwo</code> prefix for compatibility.</li>
+  <li><strong>7.62&times;39 magazines</strong> &mdash; cheap, widely sold; used by Repeating Carbine, Scav Automatic Rifle, Impulse Squad Automatic.</li>
+  <li><strong>Explosive Shotgun Slugs</strong> &mdash; recipe changed from rare Incendium to <strong>2 Potassium</strong> (cheaper opener/crowd-clear).</li>
+  <li><strong>40mm grenades</strong>: Flechette (knockback), Acid, HE.</li>
+  <li><strong>Acid / chem grenade</strong> reworked into a sustained area-denial cloud (~25&ndash;40% more DoT than vanilla; ignitable).</li>
+  <li>Ion pulser ammo, laser charge packs, Laser Rifle fuel cells, Scav pistol clips, battle-rifle (7.62&times;51) mags.</li>
+</ul>
+
+<h2><span class="ic">&#128737;</span>Armor</h2>
+<p>Armor is mostly <strong>sidegrades</strong>, not strict upgrades &mdash; basic ballistic helmet + body armor stay the default "good" set (now with pauldrons protecting the upper arms; mudraptor shell also covers upper arms).</p>
+<table>
+<thead><tr><th>Armor</th><th>Key features</th></tr></thead>
+<tbody>
+<tr><td>Improvised Combined Armor</td><td>Heavy, very good all-round; polyethylene plating gives <strong>radiation</strong> protection; weak raw gunshot</td></tr>
+<tr><td>Tactical Duty Armor</td><td>Coalition riot armor; very good blunt + bleed, decent explosion/gunshot; weak vs bite/slash; 60 Coalition rep</td></tr>
+<tr><td>Exoskeleton / Exosuit</td><td>Speed + melee + very good blunt; <strong>negates heavy-weapon recoil stun</strong>; Exosuit is a hardsuit</td></tr>
+<tr><td>Jovian Environmental Suit</td><td>Burn/acid/radiation protection; auto-injects pressure stabilizer near death</td></tr>
+<tr><td>Chitin Armor</td><td>Good lacerate/bite; <strong>very high chance to prevent husk infection</strong></td></tr>
+<tr><td>Blockade Armor (Coalition/Separatist)</td><td>Composite plate, superior gunshot protection (can deflect), big speed penalty</td></tr>
+<tr><td>Heavy Boarding Armor (Bandit/Pirate)</td><td>Titanium plate "diving-suit" build; turret helm doubles as an unpressurized dive mask</td></tr>
+</tbody>
+</table>
+
+<h2><span class="ic">&#128268;</span>Attachments &amp; bags</h2>
+<ul>
+  <li><strong>Attachments</strong> &mdash; every weapon accepts a <strong>Flashlight</strong>, the new <strong>Stab Light</strong> (narrow blue spotlight that doesn't wash out a thin red laser), or a <strong>Red Laser Aim Module</strong>. Stab Light + laser = light and sighting at the cost of battery. <span class="unv">Scopes for rifles/carbines/LMGs are described as "coming" &mdash; verify if live.</span></li>
+  <li><strong>Bags/packs</strong> are built off talent gear (Backpack + Bandolier combos) with <strong>restricted slots</strong> &mdash; only certain item types fit, but more total items. The <strong>toolbelt</strong> now has 2 dedicated tool slots. Riot shields are one-handed. Higher-tier stocked weapons hold a bandage/plastiseal/Neurotrauma tourniquet in their stock.</li>
+</ul>
+
+<h2><span class="ic">&#9876;</span>Rearmed factions</h2>
+<p>NPCs now run player-style talent loadouts (leaders up to ~8 talents) and are a real threat. Each faction has a flavour: Coalition (riot enforcers with rubber-then-live ammo, LMG marines), Separatists (cheap gear, rogue physicians with syringe guns), Rogue Coalition (well-geared operators), Regulators (experimental lasers, Hanging Judge leaders with Laser Carbines), Pirates/Bandits (melee drudges + heavy operators, Heavy Boarding Armor), Scavengers (random junk gear), Clowns (fast tanky melee), and Husk Cultists (weaponized syringes, bleed-resistant).</p>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2954637344" target="_blank">Vanilla Weapons Overhaul (Draconis) &mdash; Steam Workshop</a></li>
+  <li><a href="https://steamcommunity.com/workshop/filedetails/discussion/2954637344/689747399827082468/" target="_blank">VWO &mdash; F.A.Q. &amp; equipment/factions discussion</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/changelog/2954637344" target="_blank">VWO &mdash; Change Notes (weapon/ammo details)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_03_barotraumatic.html"><span class="pn-label">Previous</span><span class="pn-title">Barotraumatic</span></a>
+  <a class="pn-next" href="baro_05_jobsextended.html"><span class="pn-label">Next</span><span class="pn-title">JobsExtended</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>. Tier inferences and "coming" features should be checked in-game.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>

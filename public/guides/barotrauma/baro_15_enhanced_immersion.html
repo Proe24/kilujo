@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enhanced Immersion — In-Depth Guide</title>
+<link rel="stylesheet" href="baro_styles.css">
+</head>
+<body>
+<div class="page">
+
+<div class="backbar">
+  <a href="baro_index.html">&#8592; Guide hub</a>
+  <span>15 / 17 &middot; Immersion / QoL</span>
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2968896556" target="_blank">Workshop page &#8599;</a>
+</div>
+
+<header class="hero">
+  <div class="kicker">Immersion &amp; Quality of Life</div>
+  <h1>Enhanced Immersion</h1>
+  <p class="lead">Polishes the feel of the sub: interaction sounds, a calmer ambient mix, ID-scanner door textures, wireable decor, a zoomed-in camera, and "zDoors" that open hidden background rooms. The audio/visual layer works for everyone; the camera and zDoors need client-side Lua.</p>
+  <div class="badges">
+    <span class="badge dep">Requires LuaCsForBarotrauma</span>
+    <span class="badge">Item / Environment</span>
+    <span class="badge warn">Zoom: 1080p or lower only</span>
+  </div>
+</header>
+
+<dl class="quickfacts">
+  <dt>What it is</dt><dd>An immersion/QoL mod by <em>_]|M|[_</em> (Lua code largely by Evil Factory; camera by zomgtehderpy; config menu by jia).</dd>
+  <dt>Dependency</dt><dd><strong>Client-side LuaCs</strong> for the [Lua] zoom camera + zDoors. Every non-Lua feature works without it.</dd>
+  <dt>Load position</dt><dd>Below other mods (Any mod &rarr; <strong>Enhanced Immersion</strong> &rarr; New Wrecks). <strong>Below Immersive Diving Gear</strong> if you run both.</dd>
+  <dt>Lighter option</dt><dd>"Enhanced Immersion (lua only)" (id 3123289876) gives just the camera/zDoors/cursor, omitting the sound/texture/stat overrides.</dd>
+</dl>
+
+<h2><span class="ic">&#9835;</span>Feature breakdown</h2>
+<table>
+<thead><tr><th>Feature</th><th>Lua?</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>Item interactions + sound</td><td>No</td><td>Junction boxes, capacitors, batteries, lockers, cabinets etc. play visual interactions and sounds (lost if another mod overrides the item)</td></tr>
+<tr><td>Impact sound replacements</td><td>No</td><td>Item impact sounds fit their type better</td></tr>
+<tr><td>Ambient audio rebalance</td><td>No</td><td>Water background noise drastically reduced so you can hear threats</td></tr>
+<tr><td>Reduced item sound range</td><td>No</td><td>e.g. you no longer hear the reactor across the whole sub</td></tr>
+<tr><td>Door ID-scanner texture</td><td>No</td><td>Door buttons become an ID scanner on the door (fixes the "floating button" look)</td></tr>
+<tr><td>Wireable decor</td><td>No</td><td>Neon signs, medical lights, etc. can be wired to toggle on/off</td></tr>
+<tr><td>Custom cursor</td><td>No</td><td>Part of the non-Lua set</td></tr>
+<tr><td>Combat diving-suit stat changes</td><td>No</td><td>WalkingSpeed/SwimmingSpeed/PropulsionSpeed differ from vanilla (see gotchas)</td></tr>
+<tr><td><strong>Zoomed-in camera</strong></td><td>Yes</td><td>See below</td></tr>
+<tr><td><strong>zDoors</strong></td><td>Yes</td><td>See below</td></tr>
+</tbody>
+</table>
+
+<h2><span class="ic">&#128247;</span>The zoom camera</h2>
+<ul>
+  <li>Default: the camera is zoomed in much further than vanilla, for a more connected feel.</li>
+  <li><strong>Aiming a weapon zooms back out</strong> so you're not restricted in combat (some players dislike this auto-zoom-out).</li>
+  <li>Periscope view gets only a tiny default increase &mdash; <strong>buy periscope upgrades</strong> to improve it.</li>
+  <li>Adjust via the in-game config menu. <span class="unv">Exact per-option names aren't published.</span></li>
+</ul>
+<div class="callout warn"><strong>Known issue:</strong> the zoom only works correctly at <strong>1920&times;1080 or lower</strong> &mdash; at 1440p/4K it misbehaves. This is the cause of nearly all "zoom doesn't work" reports.</div>
+
+<h2><span class="ic">&#128682;</span>zDoors</h2>
+<p>zDoors let you "enter doors in the background." In reality they <strong>teleport you to a separate enclosed room placed elsewhere on the sub</strong> (an illusion of a layered room), or act as shortcuts between existing rooms. <strong>NPCs/bots can't use them.</strong></p>
+<ul>
+  <li>To build your own: place a destination room, <strong>wire two zDoors together</strong>, and hide the wires for the illusion.</li>
+  <li>EI includes 2 zDoor modules that only spawn with DynamicEuropa.</li>
+  <li><span class="unv">zDoors were broken for a long time (teleported you "into the door like a seat"); a fix shipped Jan 2025 &mdash; update the mod if they misbehave.</span></li>
+</ul>
+
+<h2><span class="ic">&#9888;</span>Gotchas</h2>
+<ul>
+  <li>Zoom is resolution-locked to &le;1080p.</li>
+  <li>Combat diving-suit / exosuit changes make suits feel slow; <span class="unv">a reported bug stops Mantis Genes' walk-speed buff applying while wearing an exosuit.</span> The "lua only" version avoids all stat/sound/texture overrides.</li>
+  <li>Sounds/interactions are lost on items overridden by other mods.</li>
+  <li>The door ID-scanner texture isn't individually toggleable &mdash; use the "lua only" version to skip it.</li>
+  <li>Load below Immersive Diving Gear to keep both.</li>
+</ul>
+
+<h2><span class="ic">&#9636;</span>Sources</h2>
+<ul class="srclist">
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2968896556" target="_blank">Enhanced Immersion &mdash; Steam Workshop</a></li>
+  <li><a href="https://steamcommunity.com/workshop/filedetails/discussion/2968896556/6957562508421765706/" target="_blank">EI &mdash; "what are zDoors?" dev Q&amp;A</a></li>
+  <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3123289876" target="_blank">Enhanced Immersion (lua only)</a></li>
+</ul>
+
+<div class="prev-next">
+  <a class="pn-prev" href="baro_14_astras_wrecks.html"><span class="pn-label">Previous</span><span class="pn-title">Astra's Wrecks</span></a>
+  <a class="pn-next" href="baro_16_neurotrauma.html"><span class="pn-label">Next</span><span class="pn-title">Neurotrauma</span></a>
+</div>
+
+<div class="footer">
+  Part of the Barotrauma mod-pack guide set &middot; <a href="baro_index.html">Back to hub</a>.
+</div>
+
+</div>
+<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+<script>
+(function(){var b=document.querySelector('.back-top');window.addEventListener('scroll',function(){b.classList.toggle('visible',window.scrollY>400)},{passive:true})})();
+</script>
+</body>
+</html>
