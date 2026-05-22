@@ -5,6 +5,12 @@ const postSchema = z.object({
   date: z.coerce.date(),
   description: z.string().optional(),
   draft: z.boolean().default(false),
+  author: z.string().optional(),
+});
+
+const journalSchema = postSchema.extend({
+  // Free-form tags. The journal index filters by ?tag=coffee, etc.
+  tags: z.array(z.string()).optional(),
 });
 
 const vlogSchema = postSchema.extend({
@@ -17,7 +23,7 @@ const gameSchema = postSchema.extend({
 });
 
 export const collections = {
-  journal: defineCollection({ type: 'content', schema: postSchema }),
+  journal: defineCollection({ type: 'content', schema: journalSchema }),
   vlogs: defineCollection({ type: 'content', schema: vlogSchema }),
   gaming: defineCollection({ type: 'content', schema: gameSchema }),
 };

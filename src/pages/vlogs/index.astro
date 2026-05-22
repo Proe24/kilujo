@@ -8,7 +8,7 @@ const posts = (await getCollection('vlogs', ({ data }) => !data.draft))
 const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-<Layout title="Vlogs — A Quiet Corner">
+<Layout title="Vlogs — Kilujo">
   <section class="intro">
     <h1>Vlogs</h1>
     <p>Little video diaries. Nothing fancy.</p>
@@ -21,7 +21,11 @@ const formatDate = (d: Date) =>
       {posts.map((post) => (
         <li>
           <a href={`/vlogs/${post.slug}`}>{post.data.title}</a>
-          <span class="post-meta">{formatDate(post.data.date)}{post.data.description ? ` — ${post.data.description}` : ''}</span>
+          <span class="post-meta">
+            {formatDate(post.data.date)}
+            {post.data.author ? ` · ${post.data.author}` : ''}
+            {post.data.description ? ` — ${post.data.description}` : ''}
+          </span>
         </li>
       ))}
     </ul>

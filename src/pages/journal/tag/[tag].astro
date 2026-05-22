@@ -1,0 +1,63 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('journal', ({ data }) => !data.draft);
+  const tagMap = new Map<string, typeof posts>();
+  for (const post of posts) {
+    for (const tag of post.data.tags ?? []) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(post);
+    }
+  }
+  return Array.from(tagMap.entries()).map(([tag, postsForTag]) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: postsForTag.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+interface Post {
+  slug: string;
+  data: {
+    title: string;
+    date: Date;
+    author?: string;
+    description?: string;
+    tags?: string[];
+  };
+}
+interface Props {
+  tag: string;
+  posts: Post[];
+}
+
+const { tag, posts } = Astro.props;
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Layout title={`#${tag} — Journal`}>
+  <a href="/journal" class="back-link">← Back to Journal</a>
+  <section class="intro">
+    <h1>#{tag}</h1>
+    <p>
+      {posts.length} entr{posts.length === 1 ? 'y' : 'ies'} tagged <strong>{tag}</strong>.
+    </p>
+  </section>
+
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`/journal/${post.slug}`}>{post.data.title}</a>
+        <span class="post-meta">
+          {formatDate(post.data.date)}
+          {post.data.author ? ` · ${post.data.author}` : ''}
+          {post.data.description ? ` — ${post.data.description}` : ''}
+        </span>
+      </li>
+    ))}
+  </ul>
+</Layout>

@@ -5,14 +5,27 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('journal', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+const allTags = Array.from(
+  new Set(posts.flatMap((p) => p.data.tags ?? []))
+).sort();
+
 const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-<Layout title="Journal — A Quiet Corner">
+<Layout title="Journal — Kilujo">
   <section class="intro">
     <h1>Journal</h1>
     <p>Short notes and longer thoughts.</p>
   </section>
+
+  {allTags.length > 0 && (
+    <div class="tag-row tag-row--filter">
+      <span class="tag-row__label">Browse by tag:</span>
+      {allTags.map((t) => (
+        <a class="tag" href={`/journal/tag/${t}`}>#{t}</a>
+      ))}
+    </div>
+  )}
 
   {posts.length === 0 ? (
     <div class="empty">No entries yet. Add one in <code>src/content/journal/</code>.</div>
@@ -21,7 +34,18 @@ const formatDate = (d: Date) =>
       {posts.map((post) => (
         <li>
           <a href={`/journal/${post.slug}`}>{post.data.title}</a>
-          <span class="post-meta">{formatDate(post.data.date)}{post.data.description ? ` — ${post.data.description}` : ''}</span>
+          <span class="post-meta">
+            {formatDate(post.data.date)}
+            {post.data.author ? ` · ${post.data.author}` : ''}
+            {post.data.description ? ` — ${post.data.description}` : ''}
+          </span>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="tag-row tag-row--inline">
+              {post.data.tags.map((t) => (
+                <a class="tag" href={`/journal/tag/${t}`}>#{t}</a>
+              ))}
+            </div>
+          )}
         </li>
       ))}
     </ul>

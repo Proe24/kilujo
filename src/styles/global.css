@@ -286,6 +286,75 @@ article.prose pre code {
   padding: 0;
 }
 
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.tag-row--inline {
+  margin: 0.4rem 0 0;
+}
+
+.tag-row--filter {
+  margin: -1rem 0 2rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+}
+
+.tag-row__label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-right: 0.25rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tag:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem 0 2rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow);
+}
+
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.signature {
+  margin-top: 2.5rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 2rem 0;

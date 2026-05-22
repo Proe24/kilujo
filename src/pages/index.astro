@@ -9,16 +9,17 @@ const journal = (await getCollection('journal', ({ data }) => !data.draft))
 const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
-<Layout title="Home — A Quiet Corner">
+<Layout title="Home — Kilujo">
   <section class="intro">
-    <h1>Hi, I'm here with my wife.</h1>
+    <h1>Hi, we're Gianna &amp; Stephen.</h1>
     <p>
-      This is a small corner of the internet where we keep track of things we love —
-      slow weekends, photos from our walks, the games we play together, and the
-      occasional thought worth writing down.
+      Mid-West meets East Asia — and two dogs, Kilo and Kujo, along for the ride.
+      This is a small corner of the internet where we keep track of things we love:
+      slow weekends, coffee shops we wander into, photos from our walks, and the
+      games we play together.
     </p>
     <p>
-      Pull up a chair and have a look around.
+      Pull up a chair and have a look around. There's more on the <a href="/about">about page</a>.
     </p>
   </section>
 
