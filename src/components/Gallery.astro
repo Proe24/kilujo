@@ -3,8 +3,10 @@ type Item = string | { src: string; alt?: string };
 interface Props {
   items?: Item[];
   heading?: string;
+  /* Group ID used by the lightbox so prev/next cycles within this gallery only. */
+  group?: string;
 }
-const { items, heading } = Astro.props;
+const { items, heading, group = 'gallery' } = Astro.props;
 
 function normalize(it: Item) {
   return typeof it === 'string' ? { src: it, alt: '' } : { src: it.src, alt: it.alt ?? '' };
@@ -14,12 +16,57 @@ const normalized = (items ?? []).map(normalize);
 {normalized.length > 0 && (
   <section class="gallery">
     {heading && <h2 class="gallery__heading">{heading}</h2>}
-    <div class="gallery__grid">
+    <div class="gallery__masonry">
       {normalized.map((img) => (
-        <a href={img.src} class="gallery__item" target="_blank" rel="noopener noreferrer">
+        <a
+          href={img.src}
+          class="gallery__item"
+          data-lightbox
+          data-lightbox-group={group}
+          data-src={img.src}
+          data-alt={img.alt}
+          aria-label={img.alt || 'Open image'}
+        >
           <img src={img.src} alt={img.alt} loading="lazy" />
         </a>
       ))}
     </div>
   </section>
 )}
+
+<style>
+  .gallery__masonry {
+    column-count: 3;
+    column-gap: 10px;
+  }
+  @media (max-width: 900px) {
+    .gallery__masonry { column-count: 2; }
+  }
+  @media (max-width: 520px) {
+    .gallery__masonry { column-count: 1; }
+  }
+  .gallery__item {
+    display: block;
+    margin: 0 0 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    cursor: zoom-in;
+    /* prevent column-break inside a single tile */
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .gallery__item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft);
+  }
+  .gallery__item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+</style>

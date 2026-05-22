@@ -1,6 +1,7 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import Lightbox from '../components/Lightbox.astro';
 import '../styles/global.css';
 // Self-hosted Newsreader (no external CDN).
 import '@fontsource/newsreader/400.css';
@@ -30,5 +31,6 @@ const { title = 'Kilujo', description = 'A small notebook from Gianna, Stephen, 
       <slot />
     </main>
     <Footer />
+    <Lightbox />
   </body>
 </html>

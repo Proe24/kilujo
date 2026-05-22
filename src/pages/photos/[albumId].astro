@@ -40,13 +40,16 @@ const { album, photos } = Astro.props;
       ) : (
         <div class="card-grid">
           {photos.map((photo) => (
-            <a class="card" href={photo.pageUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              class="card"
+              href={photo.largeUrl}
+              data-lightbox
+              data-lightbox-group={`album-${album.id}`}
+              data-src={photo.largeUrl}
+              data-alt={photo.title}
+              aria-label={photo.title}
+            >
               <img class="card__image" src={photo.thumbUrl} alt={photo.title} loading="lazy" />
-              {photo.title && photo.title !== 'Untitled' && (
-                <div class="card__body">
-                  <p class="card__meta">{photo.title}</p>
-                </div>
-              )}
             </a>
           ))}
         </div>
