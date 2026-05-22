@@ -277,19 +277,19 @@ content:
         type: text
 
       - name: latelyLabel
-        label: "Latest entries" label
+        label: Latest-entries eyebrow
         description: 'Eyebrow above the recent posts (e.g. "From the journal · Lately").'
         type: string
 
       - name: nowMonth
-        label: "Now" month label (optional)
+        label: Now-card month (optional)
         description: >-
           Override the "Now · …" eyebrow on the status card. Leave blank to use the
           current month automatically (e.g. "May 2026").
         type: string
 
       - name: nowBody
-        label: "Now" status update
+        label: Now-card status update
         description: >-
           A short paragraph shown at the bottom of the home page. Leave blank to
           hide the status card entirely.
