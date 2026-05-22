@@ -290,7 +290,8 @@ a.tag:hover, button.tag:hover {
   border-color: var(--accent-soft);
   color: var(--text);
 }
-.tag.active {
+.tag.active,
+.tag.active:hover {
   background: var(--text);
   color: var(--bg);
   border-color: var(--text);

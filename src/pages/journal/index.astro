@@ -1,9 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 const posts = (await getCollection('journal', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Pick a thumbnail: explicit cover, else first gallery image, else nothing.
+// Lets video posts (which often skip cover) still show a poster in the list.
+function postThumb(post: CollectionEntry<'journal'>): string | undefined {
+  if (post.data.cover) return post.data.cover;
+  const g = post.data.gallery?.[0];
+  if (!g) return undefined;
+  return typeof g === 'string' ? g : g.src;
+}
 
 const allTags = Array.from(new Set(posts.flatMap((p) => p.data.tags ?? []))).sort();
 const allKinds = Array.from(new Set(posts.map((p) => p.data.kind)));
@@ -53,7 +62,7 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
             </div>
           )}
 
-          <button type="button" class="filter-clear" data-filter-clear hidden>Clear filters</button>
+          <button type="button" class="filter-clear" data-filter-clear style="display: none">Clear filters</button>
         </div>
       )}
 
@@ -64,6 +73,7 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
           {posts.map((post) => {
             const k = kindLabel[post.data.kind];
             const tagAttr = (post.data.tags ?? []).join('|');
+            const thumb = postThumb(post);
             return (
               <a
                 href={`/journal/${post.slug}`}
@@ -73,7 +83,7 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
                 data-tags={tagAttr}
               >
                 <div class="thumb">
-                  {post.data.cover && <img src={post.data.cover} alt="" loading="lazy" />}
+                  {thumb && <img src={thumb} alt="" loading="lazy" />}
                   {post.data.kind === 'video' && <div class="thumb-play" aria-hidden="true">▶</div>}
                 </div>
                 <div>
@@ -102,7 +112,7 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
               </a>
             );
           })}
-          <p class="empty" data-empty-state hidden>No entries match these filters.</p>
+          <p class="empty" data-empty-state style="display: none">No entries match these filters.</p>
         </div>
       )}
     </div>
@@ -163,7 +173,9 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
         c.classList.toggle('active', state[f] === v);
       });
 
-      // Filter entries
+      // Filter entries. We use inline style.display rather than the [hidden]
+      // attribute because .entry-row has `display: grid` in the stylesheet,
+      // which wins over [hidden]'s default display: none.
       let shown = 0;
       entries.forEach((el) => {
         const kind = el.getAttribute('data-kind') || '';
@@ -171,12 +183,12 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
         const kindOk = !state.kind || state.kind === kind;
         const tagOk  = !state.tag  || tags.includes(state.tag);
         const match = kindOk && tagOk;
-        el.hidden = !match;
+        el.style.display = match ? '' : 'none';
         if (match) shown++;
       });
 
-      if (empty) empty.hidden = shown !== 0;
-      if (clearBtn) clearBtn.hidden = !state.kind && !state.tag;
+      if (empty) empty.style.display = shown === 0 ? '' : 'none';
+      if (clearBtn) clearBtn.style.display = (state.kind || state.tag) ? '' : 'none';
     }
 
     chips.forEach((c) => {

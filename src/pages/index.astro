@@ -1,11 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import DogAvatar from '../components/DogAvatars.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 const recent = (await getCollection('journal', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
+
+// Pick a thumbnail: explicit cover, else first gallery image, else nothing.
+// Mirrors the helper in src/pages/journal/index.astro.
+function postThumb(post: CollectionEntry<'journal'>): string | undefined {
+  if (post.data.cover) return post.data.cover;
+  const g = post.data.gallery?.[0];
+  if (!g) return undefined;
+  return typeof g === 'string' ? g : g.src;
+}
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -90,10 +99,11 @@ const greetingHtml = (h.greeting ?? '')
         ) : (
           recent.map((post) => {
             const k = kindLabel[post.data.kind];
+            const thumb = postThumb(post);
             return (
               <a href={`/journal/${post.slug}`} class="entry-row">
                 <div class="thumb">
-                  {post.data.cover && <img src={post.data.cover} alt="" loading="lazy" />}
+                  {thumb && <img src={thumb} alt="" loading="lazy" />}
                   {post.data.kind === 'video' && <div class="thumb-play" aria-hidden="true">▶</div>}
                 </div>
                 <div>
