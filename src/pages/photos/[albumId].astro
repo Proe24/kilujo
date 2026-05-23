@@ -38,43 +38,108 @@ const { album, photos } = Astro.props;
       {photos.length === 0 ? (
         <div class="empty">No photos in this album.</div>
       ) : (
-        <div class="photo-masonry">
-          {photos.map((photo) => (
-            <a
-              class="photo-masonry__item"
-              href={photo.largeUrl}
-              data-lightbox
-              data-lightbox-group={`album-${album.id}`}
-              data-src={photo.largeUrl}
-              data-alt={photo.title}
-              aria-label={photo.title}
-            >
-              <img
-                src={photo.thumbUrl}
-                alt={photo.title}
-                width={photo.width}
-                height={photo.height}
-                loading="lazy"
-              />
-            </a>
-          ))}
-        </div>
+        <>
+          <div class="photo-toolbar">
+            <div class="photo-cols-chips" role="tablist" aria-label="Columns">
+              <button type="button" class="photo-cols-chip" data-cols-pick="1" aria-label="Single column">
+                <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+                  <rect x="2" y="2" width="10" height="10" rx=".8" fill="currentColor"/>
+                </svg><span>1</span>
+              </button>
+              <button type="button" class="photo-cols-chip" data-cols-pick="2" aria-label="Two columns">
+                <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+                  <rect x="2" y="2" width="4.5" height="10" rx=".6" fill="currentColor"/>
+                  <rect x="7.5" y="2" width="4.5" height="10" rx=".6" fill="currentColor"/>
+                </svg><span>2</span>
+              </button>
+              <button type="button" class="photo-cols-chip" data-cols-pick="3" aria-label="Three columns">
+                <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+                  <rect x="2" y="2" width="2.8" height="10" rx=".5" fill="currentColor"/>
+                  <rect x="5.6" y="2" width="2.8" height="10" rx=".5" fill="currentColor"/>
+                  <rect x="9.2" y="2" width="2.8" height="10" rx=".5" fill="currentColor"/>
+                </svg><span>3</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="photo-masonry" data-photo-masonry>
+            {photos.map((photo) => (
+              <a
+                class="photo-masonry__item"
+                href={photo.largeUrl}
+                data-lightbox
+                data-lightbox-group={`album-${album.id}`}
+                data-src={photo.largeUrl}
+                data-alt={photo.title}
+                aria-label={photo.title}
+              >
+                <img
+                  src={photo.thumbUrl}
+                  alt={photo.title}
+                  width={photo.width}
+                  height={photo.height}
+                  loading="lazy"
+                />
+              </a>
+            ))}
+          </div>
+        </>
       )}
     </div>
   </div>
 </Layout>
 
 <style>
+  .photo-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 20px;
+  }
+  .photo-cols-chips {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px;
+    background: var(--bg-alt);
+  }
+  .photo-cols-chip {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .15s ease;
+  }
+  .photo-cols-chip:hover { color: var(--text); }
+  .photo-cols-chip.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(47, 42, 38, .08);
+  }
+
+  /* Default: responsive 3/2/1. A user pick overrides via [data-cols]. */
   .photo-masonry {
     column-count: 3;
     column-gap: 16px;
   }
   @media (max-width: 960px) {
-    .photo-masonry { column-count: 2; }
+    .photo-masonry:not([data-cols]) { column-count: 2; }
   }
   @media (max-width: 560px) {
-    .photo-masonry { column-count: 1; }
+    .photo-masonry:not([data-cols]) { column-count: 1; }
   }
+  .photo-masonry[data-cols="1"] { column-count: 1; }
+  .photo-masonry[data-cols="2"] { column-count: 2; }
+  .photo-masonry[data-cols="3"] { column-count: 3; }
+
   .photo-masonry__item {
     display: block;
     break-inside: avoid;
@@ -95,3 +160,54 @@ const { album, photos } = Astro.props;
     height: auto;
   }
 </style>
+
+<script is:inline>
+  /* Photo album column switcher. State persists to localStorage and
+     mirrors to URL (?cols=1|2|3). With no pick, responsive default
+     (3 desktop / 2 tablet / 1 mobile) applies via CSS media queries. */
+  (() => {
+    const masonry = document.querySelector('[data-photo-masonry]');
+    if (!masonry) return;
+    const chips = document.querySelectorAll('[data-cols-pick]');
+    const STORAGE_KEY = 'kilujo.photos.cols';
+
+    function effectiveCols() {
+      const explicit = masonry.getAttribute('data-cols');
+      if (explicit) return explicit;
+      const cs = getComputedStyle(masonry).columnCount;
+      return cs && cs !== 'auto' ? cs : '3';
+    }
+    function refreshActive() {
+      const current = effectiveCols();
+      chips.forEach((c) => c.classList.toggle('active', c.getAttribute('data-cols-pick') === current));
+    }
+    function setCols(n) {
+      if (!['1','2','3'].includes(n)) return;
+      masonry.setAttribute('data-cols', n);
+      try { localStorage.setItem(STORAGE_KEY, n); } catch (e) {}
+      const p = new URLSearchParams(window.location.search);
+      p.set('cols', n);
+      window.history.replaceState(null, '', window.location.pathname + '?' + p.toString() + window.location.hash);
+      refreshActive();
+    }
+
+    chips.forEach((c) => {
+      c.addEventListener('click', () => setCols(c.getAttribute('data-cols-pick')));
+    });
+
+    /* Initial state: URL > localStorage > responsive default. */
+    const fromUrl = new URLSearchParams(window.location.search).get('cols');
+    const fromStore = (() => { try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; } })();
+    const initial = fromUrl || fromStore;
+    if (initial && ['1','2','3'].includes(initial)) {
+      masonry.setAttribute('data-cols', initial);
+    }
+    refreshActive();
+
+    /* Keep the active chip in sync with the responsive default
+       when no user pick is active and the viewport crosses a breakpoint. */
+    window.addEventListener('resize', () => {
+      if (!masonry.getAttribute('data-cols')) refreshActive();
+    });
+  })();
+</script>
