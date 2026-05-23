@@ -38,10 +38,10 @@ const { album, photos } = Astro.props;
       {photos.length === 0 ? (
         <div class="empty">No photos in this album.</div>
       ) : (
-        <div class="card-grid">
+        <div class="photo-masonry">
           {photos.map((photo) => (
             <a
-              class="card"
+              class="photo-masonry__item"
               href={photo.largeUrl}
               data-lightbox
               data-lightbox-group={`album-${album.id}`}
@@ -49,7 +49,13 @@ const { album, photos } = Astro.props;
               data-alt={photo.title}
               aria-label={photo.title}
             >
-              <img class="card__image" src={photo.thumbUrl} alt={photo.title} loading="lazy" />
+              <img
+                src={photo.thumbUrl}
+                alt={photo.title}
+                width={photo.width}
+                height={photo.height}
+                loading="lazy"
+              />
             </a>
           ))}
         </div>
@@ -57,3 +63,35 @@ const { album, photos } = Astro.props;
     </div>
   </div>
 </Layout>
+
+<style>
+  .photo-masonry {
+    column-count: 3;
+    column-gap: 16px;
+  }
+  @media (max-width: 960px) {
+    .photo-masonry { column-count: 2; }
+  }
+  @media (max-width: 560px) {
+    .photo-masonry { column-count: 1; }
+  }
+  .photo-masonry__item {
+    display: block;
+    break-inside: avoid;
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-alt);
+    box-shadow: var(--shadow-soft);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .photo-masonry__item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+  }
+  .photo-masonry__item img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
