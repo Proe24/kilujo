@@ -174,6 +174,35 @@ content:
           media: journal
           multiple: true
 
+      - name: flickrPhotos
+        label: Flickr photos
+        description: >-
+          Full-quality photos pulled from Flickr at build time — use these for
+          camera shots that are too big for the CMS upload limit. Paste the
+          numeric photo ID from the Flickr URL (e.g. for
+          flickr.com/photos/you/54321 the ID is 54321). See
+          docs/adding-photos.md for the full walkthrough.
+        type: object
+        list: true
+        fields:
+          - name: id
+            label: Flickr photo ID
+            type: string
+            required: true
+          - name: caption
+            label: Caption
+            description: Optional. Overrides the title from Flickr for display.
+            type: string
+          - name: size
+            label: Display size
+            description: '"Large" is ~1024px on the longest side (good for most posts). "Large 1600" is ~1600px — heavier, use sparingly.'
+            type: select
+            default: large
+            options:
+              values:
+                - { name: large,     label: "Large (~1024px)" }
+                - { name: large1600, label: "Large 1600 (~1600px)" }
+
       - name: body
         label: Body
         description: 'The post itself. Supports headings (## ###), paragraphs, and blockquotes (> ...).'

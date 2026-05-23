@@ -1,10 +1,19 @@
-// Build-time Flickr fetcher. Used by /photos and /photos/[albumId].
+// Build-time Flickr fetcher. Used by /photos and /photos/[albumId], plus the
+// <FlickrPhoto> embed component used inside journal posts.
 //
 // Auth: API key is enough for public photos. We never call from the browser —
 // these helpers are only invoked from Astro frontmatter at build time, so the
 // key stays in the build environment.
+//
+// Per-photo lookups (getPhotoInfo) are cached to
+// node_modules/.cache/kilujo-flickr.json so repeated builds don't re-fetch.
+// Cache invalidation: delete that file, or `rm -rf node_modules/.cache`.
+
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 const ENDPOINT = 'https://api.flickr.com/services/rest/';
+const CACHE_PATH = 'node_modules/.cache/kilujo-flickr.json';
 
 const API_KEY = import.meta.env.FLICKR_API_KEY ?? process.env.FLICKR_API_KEY ?? '';
 const USER_ID = import.meta.env.FLICKR_USER_ID ?? process.env.FLICKR_USER_ID ?? '';
@@ -24,6 +33,21 @@ export interface FlickrPhoto {
   thumbUrl: string;
   largeUrl: string;
   pageUrl: string;
+  width?: number;
+  height?: number;
+}
+
+export interface FlickrPhotoInfo {
+  id: string;
+  title: string;
+  description: string;
+  pageUrl: string;
+  /** Display URL — Flickr "Large 1024" (longest side ~1024px). */
+  largeUrl: string;
+  /** Larger variant — Flickr "Large 1600" (longest side ~1600px). May be absent on small originals. */
+  large1600Url?: string;
+  /** Original-size URL — only present if the photo's owner allows it; usually undefined. */
+  originalUrl?: string;
   width?: number;
   height?: number;
 }
@@ -109,6 +133,125 @@ export async function getAlbums(): Promise<FlickrAlbum[]> {
   } catch (err) {
     console.warn('[flickr] getAlbums failed:', err);
     return [];
+  }
+}
+
+// ─── Per-photo info (for <FlickrPhoto> embeds in journal posts) ──────────
+//
+// Two API calls per photo (getInfo + getSizes), then we cache the merged
+// result. Cache lives in node_modules/.cache so it's outside the repo and
+// dies with `node_modules`.
+
+interface PhotoInfoResponse {
+  stat: string;
+  photo?: {
+    id: string;
+    title: { _content: string };
+    description: { _content: string };
+    owner: { nsid: string };
+    urls?: { url: Array<{ type: string; _content: string }> };
+  };
+  message?: string;
+}
+
+interface PhotoSizesResponse {
+  stat: string;
+  sizes?: { size: Array<{ label: string; source: string; width: number; height: number }> };
+  message?: string;
+}
+
+type Cache = Record<string, FlickrPhotoInfo | null>;
+let cacheMemo: Cache | null = null;
+
+async function loadCache(): Promise<Cache> {
+  if (cacheMemo) return cacheMemo;
+  try {
+    const raw = await readFile(CACHE_PATH, 'utf8');
+    cacheMemo = JSON.parse(raw) as Cache;
+  } catch {
+    cacheMemo = {};
+  }
+  return cacheMemo;
+}
+
+async function saveCache(cache: Cache): Promise<void> {
+  try {
+    await mkdir(dirname(CACHE_PATH), { recursive: true });
+    await writeFile(CACHE_PATH, JSON.stringify(cache, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('[flickr] could not write cache:', err);
+  }
+}
+
+/**
+ * Look up a single Flickr photo by ID. Returns null if the photo can't be
+ * fetched (missing env vars, network error, deleted photo, private photo).
+ * Build-time only — never call from the browser.
+ *
+ * Results are cached in node_modules/.cache/kilujo-flickr.json so subsequent
+ * builds don't re-hit the API. Delete that file to refresh.
+ */
+export async function getPhotoInfo(id: string): Promise<FlickrPhotoInfo | null> {
+  if (!id) return null;
+  const cache = await loadCache();
+  if (Object.prototype.hasOwnProperty.call(cache, id)) return cache[id];
+
+  if (!API_KEY || !USER_ID) {
+    console.warn(`[flickr] cannot fetch photo ${id}: FLICKR_API_KEY or FLICKR_USER_ID not set`);
+    return null;
+  }
+
+  try {
+    const [info, sizes] = await Promise.all([
+      callFlickr<PhotoInfoResponse>('flickr.photos.getInfo', { photo_id: id }),
+      callFlickr<PhotoSizesResponse>('flickr.photos.getSizes', { photo_id: id }),
+    ]);
+
+    if (info.stat !== 'ok' || !info.photo) {
+      console.warn(`[flickr] photo ${id} info non-ok:`, info.message ?? info.stat);
+      cache[id] = null;
+      await saveCache(cache);
+      return null;
+    }
+    if (sizes.stat !== 'ok' || !sizes.sizes) {
+      console.warn(`[flickr] photo ${id} sizes non-ok:`, sizes.message ?? sizes.stat);
+      cache[id] = null;
+      await saveCache(cache);
+      return null;
+    }
+
+    const sizeBy = (label: string) => sizes.sizes!.size.find((s) => s.label === label);
+    const large = sizeBy('Large') ?? sizeBy('Medium 800') ?? sizeBy('Medium');
+    const large1600 = sizeBy('Large 1600');
+    const original = sizeBy('Original');
+    const pageUrl = info.photo.urls?.url?.find((u) => u.type === 'photopage')?._content
+      ?? `https://www.flickr.com/photos/${info.photo.owner.nsid}/${id}/`;
+
+    if (!large) {
+      console.warn(`[flickr] photo ${id} has no usable size`);
+      cache[id] = null;
+      await saveCache(cache);
+      return null;
+    }
+
+    const out: FlickrPhotoInfo = {
+      id,
+      title: info.photo.title._content || 'Untitled',
+      description: info.photo.description._content || '',
+      pageUrl,
+      largeUrl: large.source,
+      large1600Url: large1600?.source,
+      originalUrl: original?.source,
+      width: large.width,
+      height: large.height,
+    };
+
+    cache[id] = out;
+    await saveCache(cache);
+    return out;
+  } catch (err) {
+    console.warn(`[flickr] getPhotoInfo(${id}) failed:`, err);
+    return null;
   }
 }
 

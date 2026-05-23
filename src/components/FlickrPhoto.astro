@@ -1,0 +1,100 @@
+---
+/**
+ * <FlickrPhoto id="54321" caption="..." size="large" />
+ *
+ * Renders a single Flickr photo at build time. Title comes from Flickr; the
+ * caption prop overrides it for display. If the lookup fails (deleted photo,
+ * missing env vars, network error), the build still succeeds — we render a
+ * small placeholder note instead so it's visible in review but doesn't break.
+ */
+import { getPhotoInfo } from '../lib/flickr';
+
+interface Props {
+  id: string;
+  caption?: string;
+  /** Which Flickr size to render. Defaults to 'large' (~1024px longest side). */
+  size?: 'large' | 'large1600';
+}
+
+const { id, caption, size = 'large' } = Astro.props;
+const info = await getPhotoInfo(id);
+
+const src = info
+  ? (size === 'large1600' && info.large1600Url ? info.large1600Url : info.largeUrl)
+  : null;
+const alt = caption ?? info?.title ?? '';
+---
+{info && src ? (
+  <figure class="flickr-photo">
+    <a href={info.pageUrl} target="_blank" rel="noopener" aria-label={`View ${info.title} on Flickr`}>
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        width={info.width}
+        height={info.height}
+      />
+    </a>
+    {(caption || info.title) && (
+      <figcaption>
+        <span class="flickr-photo__caption">{caption ?? info.title}</span>
+        <a class="flickr-photo__credit" href={info.pageUrl} target="_blank" rel="noopener">
+          View on Flickr →
+        </a>
+      </figcaption>
+    )}
+  </figure>
+) : (
+  <div class="flickr-photo flickr-photo--missing" role="status">
+    <em>(Flickr photo {id} unavailable)</em>
+  </div>
+)}
+
+<style>
+  .flickr-photo {
+    margin: 32px 0;
+    padding: 0;
+  }
+  .flickr-photo a { display: block; }
+  .flickr-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius);
+    background: var(--bg-alt);
+    box-shadow: var(--shadow-soft);
+  }
+  .flickr-photo figcaption {
+    margin-top: 10px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    line-height: 1.45;
+  }
+  .flickr-photo__caption {
+    font-family: var(--serif-body);
+    font-size: 15px;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .flickr-photo__credit {
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .flickr-photo__credit:hover { color: var(--text); }
+
+  .flickr-photo--missing {
+    padding: 20px 18px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-alt);
+    color: var(--muted);
+    text-align: center;
+    font-size: 14px;
+  }
+</style>

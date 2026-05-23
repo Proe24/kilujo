@@ -24,6 +24,21 @@ const baseFields = z.object({
       ])
     )
     .optional(),
+  /**
+   * Flickr photos embedded in the post. Rendered as full-width figures
+   * between the body and the upload gallery. Use these for full-quality
+   * camera shots that shouldn't be committed to the repo. See
+   * docs/adding-photos.md.
+   */
+  flickrPhotos: z
+    .array(
+      z.object({
+        id: z.string(),
+        caption: z.string().optional(),
+        size: z.enum(['large', 'large1600']).optional(),
+      })
+    )
+    .optional(),
   draft: z.boolean().default(false),
 });
 

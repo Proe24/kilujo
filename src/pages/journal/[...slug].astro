@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Gallery from '../../components/Gallery.astro';
+import FlickrPhoto from '../../components/FlickrPhoto.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -123,6 +124,14 @@ const coverFigureStyle = coverIsNatural
 
         <Content />
 
+        {post.data.flickrPhotos && post.data.flickrPhotos.length > 0 && (
+          <section class="flickr-photos">
+            {post.data.flickrPhotos.map((p) => (
+              <FlickrPhoto id={p.id} caption={p.caption} size={p.size} />
+            ))}
+          </section>
+        )}
+
         <Gallery
           items={post.data.gallery}
           heading={post.data.kind === 'video' ? 'Stills from the trip' : 'More photos'}
@@ -155,4 +164,10 @@ const coverFigureStyle = coverIsNatural
   }
   .rating-pip { color: var(--accent); font-size: 16px; line-height: 1; }
   .rating-pip--off { color: var(--border); }
+
+  .flickr-photos {
+    margin: 8px 0 24px;
+  }
+  .flickr-photos > :first-child { margin-top: 0; }
+  .flickr-photos > :last-child { margin-bottom: 0; }
 </style>

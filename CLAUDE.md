@@ -54,17 +54,21 @@ npm run preview    # serve the build locally
 ├── .pages.yml                  # Pages CMS configuration
 ├── astro.config.mjs
 ├── package.json                # deps: astro, @fontsource/newsreader
+├── docs/
+│   └── adding-photos.md        # plain-English guide for Gianna on the two photo paths
 ├── public/
 │   ├── favicon.svg
 │   ├── guides/
 │   │   └── barotrauma/         # self-contained dark-theme guide (see below)
+│   ├── tools/
+│   │   └── shrink-photo.html   # client-side photo resizer for Path A uploads
 │   └── uploads/                # self-hosted media
 │       ├── about/
 │       ├── journal/<post-slug>/
 │       ├── posts/               # flat — CMS doesn't support per-entry subfolders
 │       └── projects/<project-slug>/
 └── src/
-    ├── components/             # Nav, Footer, Gallery, DogAvatars
+    ├── components/             # Nav, Footer, Gallery, DogAvatars, FlickrPhoto
     ├── content/
     │   ├── config.ts           # zod schemas (journal/posts/projects/pages)
     │   ├── journal/            # unified feed
@@ -95,7 +99,8 @@ Unified feed of **writing / video / gaming**. The `kind` field discriminates whi
 | Field | Notes |
 | --- | --- |
 | `title`, `date`, `author`, `kind` | Required. `author` is `"Gianna Yim"` or `"Stephen Underwood"`. |
-| `excerpt`, `cover`, `coverAlt`, `tags`, `gallery` | Optional, all kinds. |
+| `excerpt`, `cover`, `coverAlt`, `tags`, `gallery`, `flickrPhotos` | Optional, all kinds. |
+| `flickrPhotos` | Array of `{ id, caption?, size? }`. Full-quality photos fetched from Flickr at build time. See [Adding photos](#adding-photos-to-journal-posts) below. |
 | `youtubeId` | Only when `kind: video`. Just the ID (e.g. `wpQQxUeekks`), not the URL. |
 | `game`, `rating` (1–5), `platform`, `hours` | Only when `kind: gaming`. |
 
@@ -162,6 +167,26 @@ Albums are pulled from **Flickr at build time** via `src/lib/flickr.ts` and rend
 
 ---
 
+## Adding photos to journal posts
+
+Two paths, designed to coexist in a single post:
+
+**Path A — Upload (for casual phone snaps).** Run the photo through `public/tools/shrink-photo.html` first (resizes to 2000px long side, JPEG q=0.85, strips EXIF), then drag the result into the CMS **Gallery** field. The 4.5 MB Vercel request-body limit makes pre-shrinking mandatory for full-resolution phone photos. HEIC isn't handled by the tool — falls back to documenting [Squoosh.app](https://squoosh.app).
+
+**Path B — Flickr embed (for full-quality camera shots).** Upload to Flickr, copy the numeric photo ID from the URL, paste it into the **Flickr photos** list field on a journal post. The site fetches title/dimensions/URLs at build time via `getPhotoInfo()` in `src/lib/flickr.ts` and renders each one as a full-width figure with caption via `src/components/FlickrPhoto.astro`.
+
+**Cache.** Flickr per-photo metadata is cached to `node_modules/.cache/kilujo-flickr.json` so repeated builds don't re-hit the API. To force a refresh (e.g. after editing a photo's Flickr title), delete that file. The cache is outside the repo — `node_modules` lifecycle handles cleanup.
+
+**Missing photos.** If a Flickr photo is deleted, made private, or the API call fails, the build still succeeds. The component renders a small "(Flickr photo {id} unavailable)" placeholder in the post and logs a `[flickr]` warning. Build never breaks on a single bad ID.
+
+**Where they render in the layout.** In `src/pages/journal/[...slug].astro` the order is: header → cover → (video embed if applicable) → gaming meta → body `<Content />` → Flickr embeds (big) → Gallery (small thumbs).
+
+**Scope note.** Currently journal-only. The `/posts` short-form feed still uses uploaded `images` since its instagram-style UI is built around a fixed image array; extending Flickr support there is a larger UX change.
+
+Long-form workflow doc for Gianna lives at [docs/adding-photos.md](docs/adding-photos.md) — keep that in sync if you change anything about the workflow.
+
+---
+
 ## Design system
 
 The site uses the warm **"kilujo"** design (Claude Design handoff, May 2026):
@@ -191,7 +216,7 @@ Config: **`.pages.yml`** at repo root. Four editable surfaces (Journal, Projects
 
 | Variable | Purpose |
 | --- | --- |
-| `FLICKR_API_KEY` | Build-time Flickr fetch for the Photos page. |
+| `FLICKR_API_KEY` | Build-time Flickr fetch for the Photos page **and** inline `<FlickrPhoto>` embeds in journal posts. |
 | `FLICKR_USER_ID` | Flickr NSID (e.g. `57829806@N07`). |
 
 Local `.env` mirrors these for `npm run dev`/`build`. Gitignored.
@@ -213,7 +238,7 @@ A self-contained static site living under `public/guides/`. **Treat as a sealed 
 | Embed | Where | Notes |
 | --- | --- | --- |
 | **YouTube (youtube-nocookie.com)** | `/journal/<slug>` when `kind: video` | Lowest-tracking variant. Approved. |
-| **Flickr static URLs** | `/photos` | Owner's own account; images served directly from `live.staticflickr.com`. |
+| **Flickr static URLs** | `/photos` and inline `<FlickrPhoto>` embeds in journal posts | Owner's own account; images served directly from `live.staticflickr.com`. |
 
 Nothing else. No analytics, no fonts CDN, no widgets.
 
