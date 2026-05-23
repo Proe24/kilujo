@@ -67,7 +67,6 @@ content:
         label: Date
         type: date
         required: true
-        default: now
 
       - name: author
         label: Author
@@ -238,10 +237,14 @@ content:
 
       - name: date
         label: Date
-        description: When this post was written. Drives the timestamp shown on the card and the feed sort order.
-        type: date-time
+        description: >-
+          When this post was written. Drives the timestamp shown on the card
+          and the feed sort order. Pre-fills to the current local time when
+          you create a new post.
+        type: date
         required: true
-        default: now
+        options:
+          time: true
 
       - name: kind
         label: Kind
