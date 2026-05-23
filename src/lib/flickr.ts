@@ -30,11 +30,15 @@ export interface FlickrAlbum {
 export interface FlickrPhoto {
   id: string;
   title: string;
+  /** Default display URL (medium ~640px). Used as <img src> fallback. */
   thumbUrl: string;
+  /** Largest URL available (for lightbox / full-size view). */
   largeUrl: string;
   pageUrl: string;
   width?: number;
   height?: number;
+  /** Ascending ladder of size variants for srcset. */
+  srcset: Array<{ url: string; width: number }>;
 }
 
 export interface FlickrPhotoInfo {
@@ -76,8 +80,24 @@ interface RawPhoto {
   server: string;
   secret: string;
   farm: number;
+  url_m?: string;
   width_m?: string | number;
   height_m?: string | number;
+  url_z?: string;
+  width_z?: string | number;
+  height_z?: string | number;
+  url_c?: string;
+  width_c?: string | number;
+  height_c?: string | number;
+  url_b?: string;
+  width_b?: string | number;
+  height_b?: string | number;
+  url_h?: string;
+  width_h?: string | number;
+  height_h?: string | number;
+  url_k?: string;
+  width_k?: string | number;
+  height_k?: string | number;
 }
 
 interface PhotosResponse {
@@ -255,27 +275,49 @@ export async function getPhotoInfo(id: string): Promise<FlickrPhotoInfo | null> 
   }
 }
 
+// Size-code ladder for srcset. Ordered ascending. Each label requests
+// `url_<label>` + `width_<label>` + `height_<label>` via extras. Larger
+// sizes (h/1600, k/2048) are only returned by Flickr when the original
+// upload was big enough; missing entries are skipped silently.
+const SRCSET_LABELS = ['m', 'z', 'c', 'b', 'h', 'k'] as const;
+
+function buildSrcset(p: RawPhoto): Array<{ url: string; width: number }> {
+  const out: Array<{ url: string; width: number }> = [];
+  for (const label of SRCSET_LABELS) {
+    const url = p[`url_${label}` as `url_${typeof label}`];
+    const w = p[`width_${label}` as `width_${typeof label}`];
+    if (url && w) out.push({ url, width: Number(w) });
+  }
+  return out;
+}
+
 export async function getAlbumPhotos(albumId: string): Promise<FlickrPhoto[]> {
   try {
     const data = await callFlickr<PhotosResponse>('flickr.photosets.getPhotos', {
       user_id: USER_ID,
       photoset_id: albumId,
-      extras: 'url_m,url_z,url_b',
+      extras: SRCSET_LABELS.map((l) => `url_${l}`).join(','),
       per_page: '500',
     });
     if (data.stat !== 'ok' || !data.photoset) {
       console.warn('[flickr] getPhotos non-ok:', data.message ?? data.stat);
       return [];
     }
-    return data.photoset.photo.map((p) => ({
-      id: p.id,
-      title: p.title || 'Untitled',
-      thumbUrl: staticUrl(p, 'z'),
-      largeUrl: staticUrl(p, 'b'),
-      pageUrl: pageUrl(p.id, albumId),
-      width: p.width_m ? Number(p.width_m) : undefined,
-      height: p.height_m ? Number(p.height_m) : undefined,
-    }));
+    return data.photoset.photo.map((p) => {
+      const srcset = buildSrcset(p);
+      const thumb = srcset.find((s) => s.width >= 640) ?? srcset[srcset.length - 1];
+      const largest = srcset[srcset.length - 1];
+      return {
+        id: p.id,
+        title: p.title || 'Untitled',
+        thumbUrl: thumb?.url ?? staticUrl(p, 'z'),
+        largeUrl: largest?.url ?? staticUrl(p, 'b'),
+        pageUrl: pageUrl(p.id, albumId),
+        width: p.width_m ? Number(p.width_m) : undefined,
+        height: p.height_m ? Number(p.height_m) : undefined,
+        srcset,
+      };
+    });
   } catch (err) {
     console.warn('[flickr] getAlbumPhotos failed:', err);
     return [];

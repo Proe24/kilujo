@@ -75,6 +75,8 @@ const { album, photos } = Astro.props;
               >
                 <img
                   src={photo.thumbUrl}
+                  srcset={photo.srcset.map((s) => `${s.url} ${s.width}w`).join(', ')}
+                  sizes="(max-width: 1100px) 100vw, 1080px"
                   alt={photo.title}
                   width={photo.width}
                   height={photo.height}
