@@ -31,9 +31,16 @@ interface Props {
   relTime: string;
   /** Lightbox group name. When set, photo slides become clickable lightbox triggers. */
   group?: string;
+  /**
+   * Force the photo container to a specific aspect ratio (CSS "W / H").
+   * Used for multi-image carousels so every slide matches the first photo
+   * via object-fit:cover. Leave undefined to use natural aspect.
+   */
+  aspectRatio?: string;
 }
 
-const { post, natural = false, relTime, group } = Astro.props;
+const { post, natural = false, relTime, group, aspectRatio } = Astro.props;
+const cropped = !!aspectRatio;
 
 function normalizeImage(entry: ImageEntry): { src: string; alt: string } {
   if (typeof entry === 'string') return { src: entry, alt: '' };
@@ -71,8 +78,8 @@ const author = AUTHORS[post.author];
     <span class="posts-card-time">{relTime}</span>
   </header>
 
-  <div class="posts-card-media" data-carousel data-multi={total > 1 ? '1' : '0'} data-natural={natural ? '1' : '0'}>
-    <div class="posts-card-photo">
+  <div class="posts-card-media" data-carousel data-multi={total > 1 ? '1' : '0'} data-natural={natural ? '1' : '0'} data-cropped={cropped ? '1' : '0'}>
+    <div class="posts-card-photo" style={cropped ? `aspect-ratio: ${aspectRatio}` : undefined}>
       <div class="posts-card-track" data-track style="transform: translateX(0)">
         {images.map((im) => (
           group && post.kind === 'photo' ? (

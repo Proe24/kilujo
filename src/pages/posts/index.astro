@@ -3,10 +3,41 @@ import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/PostCard.astro';
 import PostAvatar, { AUTHORS, type AuthorHandle } from '../../components/PostAvatar.astro';
 import { getCollection } from 'astro:content';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { imageSize } from 'image-size';
 
 // ── data ────────────────────────────────────────────────────────────────
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+/**
+ * For multi-photo carousels, every slide should match the first photo's
+ * aspect ratio (cropped via object-fit:cover). This keeps the carousel
+ * a single visual height instead of letting the tallest slide leave
+ * whitespace on shorter ones. Single-photo posts stay natural.
+ *
+ * Built once at page-build time. Returns the ratio as a CSS-ready
+ * "W / H" string, or null when the post shouldn't be cropped.
+ */
+async function firstImageAspect(post: typeof posts[number]): Promise<string | null> {
+  if (post.data.kind !== 'photo' || post.data.images.length < 2) return null;
+  const first = post.data.images[0];
+  const src = typeof first === 'string' ? first : first.src;
+  const fsPath = join('public', src.replace(/^\//, ''));
+  try {
+    const buf = await readFile(fsPath);
+    const dim = imageSize(buf);
+    if (!dim?.width || !dim?.height) return '1 / 1';
+    return `${dim.width} / ${dim.height}`;
+  } catch (err) {
+    console.warn(`[posts] could not read first-image dimensions for ${post.slug}:`, err);
+    return '1 / 1';
+  }
+}
+
+const aspectBySlug = new Map<string, string | null>();
+for (const p of posts) aspectBySlug.set(p.slug, await firstImageAspect(p));
 
 const NOW = new Date();
 
@@ -143,10 +174,10 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
               return (
                 <div class="posts-item" data-author={p.data.author} data-tags={(p.data.tags ?? []).map((t) => t.replace(/^#/, '')).join('|')}>
                   <div class="posts-item-feed">
-                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`feed-${p.slug}`} />
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`feed-${p.slug}`} aspectRatio={aspectBySlug.get(p.slug) ?? undefined} />
                   </div>
                   <div class="posts-item-masonry">
-                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`masonry-${p.slug}`} />
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`masonry-${p.slug}`} aspectRatio={aspectBySlug.get(p.slug) ?? undefined} />
                   </div>
                   <a class="posts-item-grid" href={`#post-${p.slug}`} data-grid-tile>
                     <img src={thumbOf(p).src} alt={thumbOf(p).alt} loading="lazy" />

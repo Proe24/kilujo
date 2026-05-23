@@ -406,6 +406,23 @@
   height: auto;
   aspect-ratio: auto;
 }
+/* Cropped mode (multi-image carousels): photo container gets an explicit
+   aspect-ratio via inline style, and every slide image fills it with
+   object-fit: cover. Overrides the natural-mode rule above. */
+.posts-card-media[data-cropped="1"] .posts-card-slide img {
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+
+/* Subtle hover-zoom on clickable (lightbox-wired) photo slides. Hint that
+   the photo is clickable; no aspect change so the feed doesn't reflow. */
+a.posts-card-slide img {
+  transition: transform .45s ease;
+}
+a.posts-card-slide:hover img {
+  transform: scale(1.035);
+}
 
 .posts-card-arrow {
   position: absolute;
