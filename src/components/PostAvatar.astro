@@ -1,0 +1,49 @@
+---
+// PostAvatar — chooses the right avatar SVG for a post author.
+// Kilo & Kujo delegate to the existing DogAvatars component.
+// Gianna & Stephen get a small italic monogram (matching the design system).
+
+import DogAvatars from './DogAvatars.astro';
+
+export type AuthorHandle = 'gianna' | 'stephen' | 'kilo' | 'kujo';
+
+export const AUTHORS = {
+  gianna:  { handle: 'gianna'  as const, name: 'Gianna Yim',        short: 'Gianna',  kind: 'person' as const, swatch: '#e9c8b6' },
+  stephen: { handle: 'stephen' as const, name: 'Stephen Underwood', short: 'Stephen', kind: 'person' as const, swatch: '#cdbba8' },
+  kilo:    { handle: 'kilo'    as const, name: 'Kilo',              short: 'Kilo',    kind: 'dog'    as const, swatch: 'transparent' },
+  kujo:    { handle: 'kujo'    as const, name: 'Kujo',              short: 'Kujo',    kind: 'dog'    as const, swatch: 'transparent' },
+};
+
+interface Props {
+  handle: AuthorHandle;
+  size?: number;
+}
+
+const { handle, size = 36 } = Astro.props;
+const meta = AUTHORS[handle];
+const initial = meta.short.slice(0, 1).toLowerCase();
+const fontSize = Math.round(size * 0.45);
+---
+{meta.kind === 'dog' ? (
+  <DogAvatars dog={handle as 'kilo' | 'kujo'} size={size} />
+) : (
+  <span
+    class="post-monogram"
+    style={`width: ${size}px; height: ${size}px; background: ${meta.swatch}; font-size: ${fontSize}px;`}
+    aria-hidden="true"
+  >{initial}</span>
+)}
+
+<style>
+  .post-monogram {
+    display: inline-grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--text);
+    font-family: var(--serif-display);
+    font-style: italic;
+    border: 1px solid var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+</style>

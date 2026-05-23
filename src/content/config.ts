@@ -95,8 +95,58 @@ const pagesSchema = z.object({
   nowBody: z.string().optional(),
 });
 
+/**
+ * Posts — short-form, instagram-style feed.
+ *
+ * Four "accounts": gianna, stephen, kilo, kujo. The dogs are first-class
+ * authors with their own avatars (see PostAvatar.astro). All four share one
+ * unified feed; the page filters by author client-side.
+ *
+ * Discriminated on `kind` so video posts can demand a YouTube id and photo
+ * posts can demand at least one image. Pages CMS sends everything as
+ * optional; the Zod union enforces shape at build time.
+ */
+const postImage = z.union([
+  z.string(),
+  z.object({ src: z.string(), alt: z.string().optional() }),
+]);
+
+const postBase = z.object({
+  /** Author handle — drives the avatar, byline, and filter chip. */
+  author: z.enum(['gianna', 'stephen', 'kilo', 'kujo']),
+  /** Post date — used for relative time display + sort order. */
+  date: z.coerce.date(),
+  /** The post body. Short — instagram-caption length. Markdown ok. */
+  caption: z.string(),
+  /** Optional location pin. Free text — "Uruma, Okinawa", "Couch", whatever. */
+  location: z.string().optional(),
+  /** Optional hashtag list. Authors can write them with or without the leading #. */
+  tags: z.array(z.string()).optional(),
+  /** Hide from the public feed. */
+  draft: z.boolean().default(false),
+});
+
+const photoPost = postBase.extend({
+  kind: z.literal('photo'),
+  /** At least one image. Carousel kicks in automatically for length > 1. */
+  images: z.array(postImage).min(1),
+});
+
+const videoFeedPost = postBase.extend({
+  kind: z.literal('video'),
+  /** Poster image (single — used as the still frame in feed + grid). */
+  images: z.array(postImage).min(1).max(1),
+  /** YouTube id (no URL, just the id — e.g. `wpQQxUeekks`). */
+  youtubeId: z.string().optional(),
+  /** Display label like "0:36". Purely cosmetic. */
+  duration: z.string().optional(),
+});
+
+const postsSchema = z.discriminatedUnion('kind', [photoPost, videoFeedPost]);
+
 export const collections = {
   journal:  defineCollection({ type: 'content', schema: journalSchema }),
   projects: defineCollection({ type: 'content', schema: projectsSchema }),
   pages:    defineCollection({ type: 'content', schema: pagesSchema }),
+  posts:    defineCollection({ type: 'content', schema: postsSchema }),
 };

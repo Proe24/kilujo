@@ -1,0 +1,298 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import PostAvatar, { AUTHORS, type AuthorHandle } from '../../components/PostAvatar.astro';
+import { getCollection } from 'astro:content';
+
+// ── data ────────────────────────────────────────────────────────────────
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const NOW = new Date();
+
+/** Relative time string. Recent → m/h/d/w. Older → "Apr 14" (or with year). */
+function relTime(d: Date): string {
+  const diffMs = NOW.getTime() - d.getTime();
+  const min = Math.floor(diffMs / 60000);
+  const hr  = Math.floor(diffMs / 3_600_000);
+  const day = Math.floor(diffMs / 86_400_000);
+  const wk  = Math.floor(day / 7);
+  if (min < 60) return `${Math.max(1, min)} m`;
+  if (hr  < 24) return `${hr} h`;
+  if (day <  7) return `${day} d`;
+  if (wk  <  4) return `${wk} w`;
+  const sameYear = d.getFullYear() === NOW.getFullYear();
+  return d.toLocaleDateString('en-US',
+    sameYear
+      ? { month: 'short', day: 'numeric' }
+      : { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const totalPosts = posts.length;
+const voices = (Object.keys(AUTHORS) as AuthorHandle[]);
+const perAuthor: Record<AuthorHandle, number> = {
+  gianna: 0, stephen: 0, kilo: 0, kujo: 0,
+};
+posts.forEach((p) => { perAuthor[p.data.author as AuthorHandle]++; });
+
+function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
+  const first = post.data.images[0];
+  if (typeof first === 'string') return { src: first, alt: '' };
+  return { src: first.src, alt: first.alt ?? '' };
+}
+---
+<Layout title="Posts — Kilujo" description="Short updates from Gianna, Stephen, Kilo and Kujo. A small notebook, mostly Okinawa.">
+  <div class="page posts-page" data-layout="feed">
+    <div class="wrap-wide">
+
+      <!-- ── Profile header ─────────────────────────────────────── -->
+      <header class="posts-header">
+        <div class="posts-header-stack">
+          <div class="posts-header-mark">
+            <span class="posts-header-at">@</span><span class="posts-header-name">kilujo</span>
+          </div>
+          <p class="posts-header-bio">
+            A small notebook by Gianna, Stephen, Kilo &amp; Kujo. Mostly Okinawa,
+            mostly coffee, occasionally a dog with a stick.
+          </p>
+          <div class="posts-header-meta">
+            <div class="posts-stat">
+              <div class="posts-stat-num">{totalPosts}</div>
+              <div class="posts-stat-lbl">posts</div>
+            </div>
+            <div class="posts-stat">
+              <div class="posts-stat-num">{voices.length}</div>
+              <div class="posts-stat-lbl">voices</div>
+            </div>
+            <div class="posts-stat">
+              <div class="posts-stat-num">Okinawa</div>
+              <div class="posts-stat-lbl">based in</div>
+            </div>
+            <div class="posts-stat">
+              <div class="posts-stat-num">2024</div>
+              <div class="posts-stat-lbl">since</div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="posts-header-roster" aria-label="Authors">
+          {voices.map((h) => (
+            <li class="posts-roster-item" data-roster={h}>
+              <span class="posts-roster-avatar"><PostAvatar handle={h} size={44} /></span>
+              <div class="posts-roster-text">
+                <div class="posts-roster-name">{AUTHORS[h].short}</div>
+                <div class="posts-roster-handle">@{h}</div>
+                <div class="posts-roster-count">{perAuthor[h]} {perAuthor[h] === 1 ? 'post' : 'posts'}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </header>
+
+      <!-- ── Toolbar: author filter + layout switch ──────────────── -->
+      <div class="posts-toolbar">
+        <div class="posts-filter" role="tablist" aria-label="Filter by author">
+          <button type="button" class="posts-filter-chip active" data-author="all">
+            <span class="posts-filter-dot"></span>Everyone
+          </button>
+          {voices.map((h) => (
+            <button type="button" class="posts-filter-chip" data-author={h}>
+              <span class="posts-filter-av"><PostAvatar handle={h} size={20} /></span>@{h}
+            </button>
+          ))}
+        </div>
+
+        <div class="posts-layout-chips" role="tablist" aria-label="Layout">
+          <button type="button" class="posts-layout-chip active" data-layout-pick="feed">
+            <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+              <rect x="2" y="2" width="10" height="3" rx=".6" fill="currentColor"/>
+              <rect x="2" y="6" width="10" height="3" rx=".6" fill="currentColor"/>
+              <rect x="2" y="10" width="10" height="2" rx=".4" fill="currentColor" opacity=".55"/>
+            </svg><span>Feed</span>
+          </button>
+          <button type="button" class="posts-layout-chip" data-layout-pick="grid">
+            <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+              {[0,1,2].flatMap((r) => [0,1,2].map((c) => (
+                <rect x={2 + c*4} y={2 + r*4} width="3" height="3" rx=".5" fill="currentColor"/>
+              )))}
+            </svg><span>Grid</span>
+          </button>
+          <button type="button" class="posts-layout-chip" data-layout-pick="masonry">
+            <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
+              <rect x="2" y="2" width="3" height="6" rx=".5" fill="currentColor"/>
+              <rect x="2" y="9" width="3" height="3" rx=".5" fill="currentColor"/>
+              <rect x="6" y="2" width="3" height="3" rx=".5" fill="currentColor"/>
+              <rect x="6" y="6" width="3" height="6" rx=".5" fill="currentColor"/>
+              <rect x="10" y="2" width="2" height="5" rx=".4" fill="currentColor"/>
+              <rect x="10" y="8" width="2" height="4" rx=".4" fill="currentColor"/>
+            </svg><span>Masonry</span>
+          </button>
+        </div>
+      </div>
+
+      {posts.length === 0 ? (
+        <p class="posts-empty"><em>Nothing posted yet. Drop a markdown file into <code>src/content/posts/</code> or use Pages CMS.</em></p>
+      ) : (
+        <>
+          <!-- Feed/Masonry view: full PostCard for each entry. CSS layout
+               handles the column vs masonry difference. Cards are tagged
+               with data-author so the JS filter can hide non-matching ones. -->
+          <div class="posts-list" data-posts-list>
+            {posts.map((p) => {
+              const total = p.data.images.length;
+              return (
+                <div class="posts-item" data-author={p.data.author} data-tags={(p.data.tags ?? []).map((t) => t.replace(/^#/, '')).join('|')}>
+                  <div class="posts-item-feed">
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} />
+                  </div>
+                  <div class="posts-item-masonry">
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} />
+                  </div>
+                  <a class="posts-item-grid" href={`#post-${p.slug}`} data-grid-tile>
+                    <img src={thumbOf(p).src} alt={thumbOf(p).alt} loading="lazy" />
+                    {total > 1 && p.data.kind === 'photo' && (
+                      <span class="posts-grid-badge">
+                        <svg viewBox="0 0 14 14" width="11" height="11" aria-hidden="true">
+                          <rect x="3" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                          <rect x="1.5" y="1.5" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/>
+                        </svg>
+                        <em>{total}</em>
+                      </span>
+                    )}
+                    {p.data.kind === 'video' && (
+                      <span class="posts-grid-badge">
+                        <svg viewBox="0 0 14 14" width="11" height="11" aria-hidden="true" fill="currentColor"><path d="M4 3 L11 7 L4 11 Z"/></svg>
+                        {p.data.kind === 'video' && p.data.duration && <em>{p.data.duration}</em>}
+                      </span>
+                    )}
+                    <span class="posts-grid-hover">
+                      <span class="posts-grid-hover-author">
+                        <PostAvatar handle={p.data.author} size={18} />@{p.data.author}
+                      </span>
+                      <span class="posts-grid-hover-time">{relTime(p.data.date)}</span>
+                    </span>
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          <p class="posts-empty" data-empty hidden><em>No posts from that account yet.</em></p>
+        </>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<script is:inline>
+  /* posts page — vanilla JS island
+   * Wires up: author filter, layout switch, carousel.
+   * State is mirrored to URL (?author=…&layout=…) and localStorage. */
+  (() => {
+    const page = document.querySelector('.posts-page');
+    if (!page) return;
+
+    /* ── Layout switch ─────────────────────────────────────────────── */
+    const layoutChips = page.querySelectorAll('[data-layout-pick]');
+    function setLayout(name) {
+      if (!['feed','grid','masonry'].includes(name)) name = 'feed';
+      page.setAttribute('data-layout', name);
+      layoutChips.forEach((c) => {
+        c.classList.toggle('active', c.getAttribute('data-layout-pick') === name);
+      });
+      try { localStorage.setItem('kilujo.posts.layout', name); } catch (e) {}
+      writeUrl();
+    }
+    layoutChips.forEach((c) => {
+      c.addEventListener('click', () => setLayout(c.getAttribute('data-layout-pick')));
+    });
+
+    /* ── Author filter ─────────────────────────────────────────────── */
+    const filterChips = page.querySelectorAll('[data-author]');
+    const items = page.querySelectorAll('.posts-item');
+    const empty = page.querySelector('[data-empty]');
+    let currentAuthor = 'all';
+    let currentTag = '';
+
+    function applyFilter() {
+      let shown = 0;
+      items.forEach((el) => {
+        const author = el.getAttribute('data-author');
+        const tags = (el.getAttribute('data-tags') || '').split('|').filter(Boolean);
+        const authorOk = currentAuthor === 'all' || author === currentAuthor;
+        const tagOk    = !currentTag || tags.includes(currentTag);
+        const match = authorOk && tagOk;
+        el.style.display = match ? '' : 'none';
+        if (match) shown++;
+      });
+      filterChips.forEach((c) => {
+        c.classList.toggle('active', c.getAttribute('data-author') === currentAuthor);
+      });
+      if (empty) empty.hidden = shown !== 0;
+    }
+    filterChips.forEach((c) => {
+      c.addEventListener('click', () => {
+        currentAuthor = c.getAttribute('data-author') || 'all';
+        writeUrl();
+        applyFilter();
+      });
+    });
+
+    /* ── URL <-> state ─────────────────────────────────────────────── */
+    function writeUrl() {
+      const p = new URLSearchParams(window.location.search);
+      currentAuthor === 'all' ? p.delete('author') : p.set('author', currentAuthor);
+      currentTag                ? p.set('tag', currentTag)  : p.delete('tag');
+      const layout = page.getAttribute('data-layout') || 'feed';
+      layout === 'feed' ? p.delete('layout') : p.set('layout', layout);
+      const qs = p.toString();
+      const url = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+      window.history.replaceState(null, '', url);
+    }
+    function readUrl() {
+      const p = new URLSearchParams(window.location.search);
+      const a = p.get('author');
+      const t = p.get('tag');
+      const l = p.get('layout');
+      if (a) currentAuthor = a;
+      if (t) currentTag = t;
+      const initialLayout = l || (() => { try { return localStorage.getItem('kilujo.posts.layout'); } catch (e) { return null; } })();
+      setLayout(initialLayout || 'feed');
+    }
+
+    /* ── Carousel ──────────────────────────────────────────────────── */
+    page.querySelectorAll('[data-carousel][data-multi="1"]').forEach((media) => {
+      const track   = media.querySelector('[data-track]');
+      const counter = media.querySelector('[data-counter]');
+      const dots    = media.querySelectorAll('[data-dot]');
+      const prev    = media.querySelector('[data-arrow="prev"]');
+      const next    = media.querySelector('[data-arrow="next"]');
+      const total   = dots.length;
+      let i = 0;
+
+      function go(n) {
+        i = Math.max(0, Math.min(total - 1, n));
+        if (track) track.style.transform = `translateX(${-i * 100}%)`;
+        if (counter) counter.textContent = `${i + 1} / ${total}`;
+        dots.forEach((d, j) => d.classList.toggle('on', j === i));
+        if (prev) prev.hidden = i === 0;
+        if (next) next.hidden = i === total - 1;
+      }
+      if (prev) prev.addEventListener('click', () => go(i - 1));
+      if (next) next.addEventListener('click', () => go(i + 1));
+
+      /* touch swipe */
+      let sx = null;
+      media.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; }, { passive: true });
+      media.addEventListener('touchend', (e) => {
+        if (sx === null) return;
+        const dx = e.changedTouches[0].clientX - sx;
+        if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+        sx = null;
+      });
+    });
+
+    readUrl();
+    applyFilter();
+  })();
+</script>

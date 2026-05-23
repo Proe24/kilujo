@@ -1,0 +1,120 @@
+---
+// PostCard — one post in the feed view. The grid view uses a simpler tile
+// rendered inline in posts/index.astro; this card is feed-only (single
+// column + masonry).
+//
+// Carousel + relative-time + tag/location chips all live here. No client JS
+// in this file — the page's bottom-of-file script wires up the carousel for
+// every PostCard on the page in one pass.
+
+import PostAvatar, { AUTHORS, type AuthorHandle } from './PostAvatar.astro';
+
+type ImageEntry = string | { src: string; alt?: string };
+
+interface PostData {
+  author: AuthorHandle;
+  date: Date;
+  caption: string;
+  images: ImageEntry[];
+  kind: 'photo' | 'video';
+  location?: string;
+  tags?: string[];
+  duration?: string;
+  youtubeId?: string;
+}
+
+interface Props {
+  post: PostData;
+  /** Treat the photo as natural aspect (used by masonry). Default false = 1:1. */
+  natural?: boolean;
+  /** Computed at build time. Page passes this in to avoid drift. */
+  relTime: string;
+}
+
+const { post, natural = false, relTime } = Astro.props;
+
+function normalizeImage(entry: ImageEntry): { src: string; alt: string } {
+  if (typeof entry === 'string') return { src: entry, alt: '' };
+  return { src: entry.src, alt: entry.alt ?? '' };
+}
+
+function normalizeTag(tag: string): string {
+  return tag.startsWith('#') ? tag : '#' + tag;
+}
+
+const images = post.images.map(normalizeImage);
+const total = images.length;
+const author = AUTHORS[post.author];
+---
+<article class="posts-card" data-kind={post.kind}>
+  <header class="posts-card-head">
+    <div class="posts-card-author">
+      <div class="posts-card-avatar"><PostAvatar handle={post.author} size={36} /></div>
+      <div class="posts-card-author-text">
+        <div class="posts-card-handle">
+          <span class="posts-card-at">@</span>{post.author}
+          {author.kind === 'dog' && (
+            <span class="posts-card-dogbadge" title="this account is a dog">✦</span>
+          )}
+        </div>
+        {post.location && (
+          <div class="posts-card-location">
+            <svg viewBox="0 0 12 12" width="9" height="9" aria-hidden="true" fill="currentColor" style="vertical-align: -1px; margin-right: 3px">
+              <path d="M6 1.5 C3.8 1.5 2.2 3.1 2.2 5.2 C2.2 7.6 5 10.4 5.6 10.8 C5.8 10.95 6.2 10.95 6.4 10.8 C7 10.4 9.8 7.6 9.8 5.2 C9.8 3.1 8.2 1.5 6 1.5 Z M6 6.4 C5.3 6.4 4.7 5.85 4.7 5.15 C4.7 4.45 5.3 3.9 6 3.9 C6.7 3.9 7.3 4.45 7.3 5.15 C7.3 5.85 6.7 6.4 6 6.4 Z"/>
+            </svg>{post.location}
+          </div>
+        )}
+      </div>
+    </div>
+    <span class="posts-card-time">{relTime}</span>
+  </header>
+
+  <div class="posts-card-media" data-carousel data-multi={total > 1 ? '1' : '0'} data-natural={natural ? '1' : '0'}>
+    <div class="posts-card-photo">
+      <div class="posts-card-track" data-track style="transform: translateX(0)">
+        {images.map((im) => (
+          <div class="posts-card-slide">
+            <img src={im.src} alt={im.alt} loading="lazy" />
+          </div>
+        ))}
+      </div>
+
+      {post.kind === 'video' && (
+        <span class="posts-card-play" aria-hidden="true">
+          <svg viewBox="0 0 14 14" width="11" height="11" fill="currentColor"><path d="M4 3 L11 7 L4 11 Z"/></svg>
+          {post.duration && <em>{post.duration}</em>}
+        </span>
+      )}
+
+      {total > 1 && (
+        <>
+          <button type="button" class="posts-card-arrow left" data-arrow="prev" aria-label="Previous photo" hidden>‹</button>
+          <button type="button" class="posts-card-arrow right" data-arrow="next" aria-label="Next photo">›</button>
+          <span class="posts-card-counter" data-counter>1 / {total}</span>
+        </>
+      )}
+    </div>
+
+    {total > 1 && (
+      <div class="posts-card-dots" aria-hidden="true">
+        {images.map((_, i) => (
+          <span class={'posts-card-dot' + (i === 0 ? ' on' : '')} data-dot></span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <div class="posts-card-body">
+    <p class="posts-card-caption">
+      <span class="posts-card-byline">@{post.author}</span>
+      {' '}{post.caption}
+    </p>
+    {post.tags && post.tags.length > 0 && (
+      <div class="posts-card-tags">
+        {post.tags.map((tg) => (
+          <a class="posts-card-tag" href={`/posts?tag=${encodeURIComponent(tg.replace(/^#/, ''))}`}>{normalizeTag(tg)}</a>
+        ))}
+      </div>
+    )}
+  </div>
+</article>

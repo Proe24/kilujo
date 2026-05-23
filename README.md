@@ -56,6 +56,30 @@ Per-collection extras:
 | `vlogs`    | `video: "https://www.youtube.com/watch?v=..."` — auto-embeds inline at the top of the post (uses `youtube-nocookie.com`). |
 | `gaming`   | `game: "Title"`, `rating: "★★★★½"`. |
 
+### Posts (instagram-style short form)
+
+Short updates with one or more photos and a caption. Authors include both
+of us **and** the dogs. Manage them via Pages CMS (recommended) or by
+dropping a markdown file into `src/content/posts/`. Required frontmatter:
+
+```yaml
+---
+author: gianna            # gianna | stephen | kilo | kujo
+date:   2026-05-22T15:40
+kind:   photo             # photo | video
+caption: "Two-sentence caption. Plain text."
+images:
+  - { src: "/uploads/posts/01.jpg", alt: "What the photo shows" }
+---
+```
+
+Optional fields: `location` (free text), `tags` (array), `draft` (boolean).
+Video posts add `duration` ("0:36") and optional `youtubeId`. Multiple
+`images` automatically become a swipeable carousel.
+
+Images upload via the CMS into `public/uploads/posts/` (flat folder —
+Pages CMS doesn't support per-entry subfolders).
+
 ### Guides
 
 Drop a self-contained static guide into `public/guides/<slug>/`, then add a card to `src/data/guides.ts`. The guide keeps its own styles — the landing page wraps it with the main site palette.

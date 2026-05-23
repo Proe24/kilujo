@@ -1,8 +1,9 @@
 # Pages CMS — kilujo.com
 # https://pagescms.org/docs/configuration/
 #
-# Three editable surfaces:
+# Four editable surfaces:
 #   - Journal: unified feed (writing / video / gaming)
+#   - Posts:   short-form, instagram-style feed (gianna / stephen / kilo / kujo)
 #   - Projects: small things we've made
 #   - About: a single markdown page
 #
@@ -10,15 +11,21 @@
 # (src/lib/flickr.ts) and live entirely outside the CMS.
 
 # ─── Media stores ────────────────────────────────────────────────────────
-# Three named stores so each surface uploads into a distinct subfolder
+# Four named stores so each surface uploads into a distinct subfolder
 # of /public/uploads/. Pages CMS does not support dynamic per-entry
-# subfolders (e.g. uploads/journal/<post-slug>/), so journal images
-# all land in one folder. Filenames are kept unique via `rename: safe`.
+# subfolders, so journal+posts images all land flat in one folder each.
+# Filenames are kept unique via `rename: safe`.
 media:
   - name: journal
     label: Journal images
     input: public/uploads/journal
     output: /uploads/journal
+    extensions: [jpg, jpeg, png, webp, gif]
+    rename: safe
+  - name: posts
+    label: Post images
+    input: public/uploads/posts
+    output: /uploads/posts
     extensions: [jpg, jpeg, png, webp, gif]
     rename: safe
   - name: projects
@@ -171,6 +178,95 @@ content:
         label: Body
         description: 'The post itself. Supports headings (## ###), paragraphs, and blockquotes (> ...).'
         type: rich-text
+
+  # ── Posts: short-form, instagram-style feed ───────────────────────────
+  # Four "accounts" share one feed (gianna / stephen / kilo / kujo). The
+  # dogs are first-class authors — their avatars come from DogAvatars.astro.
+  - name: posts
+    label: Posts
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{fields.author}.md"
+    view:
+      primary: caption
+      sort: date
+      order: desc
+      fields: [author, kind, date, location]
+    fields:
+      - name: author
+        label: Account
+        description: Whose voice this post is in. The dogs each have their own account.
+        type: select
+        required: true
+        options:
+          values:
+            - { name: gianna,  label: "@gianna — Gianna Yim" }
+            - { name: stephen, label: "@stephen — Stephen Underwood" }
+            - { name: kilo,    label: "@kilo — Kilo (shiba)" }
+            - { name: kujo,    label: "@kujo — Kujo (jindo mix)" }
+
+      - name: date
+        label: Date
+        description: When this post was written. Drives the timestamp shown on the card and the feed sort order.
+        type: date-time
+        required: true
+        default: now
+
+      - name: kind
+        label: Kind
+        description: 'Photo (one or many images) or Video (still poster + optional YouTube id).'
+        type: select
+        required: true
+        default: photo
+        options:
+          values:
+            - { name: photo, label: Photo }
+            - { name: video, label: Video }
+
+      - name: caption
+        label: Caption
+        description: 'Short, instagram-length. One or two sentences. Plain text — markdown not rendered.'
+        type: text
+        required: true
+
+      - name: images
+        label: Images
+        description: >-
+          One photo for a single-image post; two or more to enable the
+          carousel. Video posts use just one (the poster frame).
+        type: image
+        required: true
+        options:
+          media: posts
+          multiple: true
+
+      - name: location
+        label: Location
+        description: 'Free text — "Uruma, Okinawa", "Couch", "Front window". Leave blank to omit the pin.'
+        type: string
+
+      - name: tags
+        label: Hashtags
+        description: 'With or without the # — it gets added automatically. Each tag becomes a filter link.'
+        type: string
+        list: true
+
+      # ── Kind: video ─────────────────────────────────────────────────
+      - name: youtubeId
+        label: YouTube video ID
+        description: 'Only for kind = Video. Just the ID (e.g. "wpQQxUeekks"), not the full URL. Leave blank for a non-YouTube clip.'
+        type: string
+
+      - name: duration
+        label: Duration label
+        description: 'Only for kind = Video. Cosmetic — e.g. "0:36". Shown on the still frame.'
+        type: string
+
+      - name: draft
+        label: Draft (hide from the public feed)
+        type: boolean
 
   # ── Projects: small things we've made ─────────────────────────────────
   - name: projects

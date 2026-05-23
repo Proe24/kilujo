@@ -61,12 +61,14 @@ npm run preview    # serve the build locally
 │   └── uploads/                # self-hosted media
 │       ├── about/
 │       ├── journal/<post-slug>/
+│       ├── posts/               # flat — CMS doesn't support per-entry subfolders
 │       └── projects/<project-slug>/
 └── src/
     ├── components/             # Nav, Footer, Gallery, DogAvatars
     ├── content/
-    │   ├── config.ts           # zod schemas (journal/projects/pages)
+    │   ├── config.ts           # zod schemas (journal/posts/projects/pages)
     │   ├── journal/            # unified feed
+    │   ├── posts/              # short-form, instagram-style feed
     │   ├── projects/           # cards on /projects
     │   └── pages/              # singletons: about.md, home.md
     ├── layouts/Layout.astro
@@ -75,6 +77,7 @@ npm run preview    # serve the build locally
     │   ├── index.astro         # home
     │   ├── about.astro         # renders src/content/pages/about.md
     │   ├── journal/{index,[...slug],tag/[tag]}.astro
+    │   ├── posts/index.astro    # one-page feed (no per-post route)
     │   ├── photos/{index,[albumId]}.astro
     │   └── projects/index.astro
     └── styles/global.css
@@ -84,7 +87,7 @@ npm run preview    # serve the build locally
 
 ## Content model
 
-Four editable surfaces, all defined in `.pages.yml` and `src/content/config.ts`:
+Five editable surfaces, all defined in `.pages.yml` and `src/content/config.ts`:
 
 ### Journal (`src/content/journal/`)
 Unified feed of **writing / video / gaming**. The `kind` field discriminates which extra fields apply:
@@ -97,6 +100,26 @@ Unified feed of **writing / video / gaming**. The `kind` field discriminates whi
 | `game`, `rating` (1–5), `platform`, `hours` | Only when `kind: gaming`. |
 
 The Astro schema (`src/content/config.ts`) uses a **Zod discriminated union** so invalid combinations fail at build time. Pages CMS sends them all as optional and we narrow on the kind.
+
+### Posts (`src/content/posts/`)
+Instagram-style short-form feed at `/posts`. Four "accounts" share one
+feed; the dogs are first-class authors with their own avatars.
+
+| Field | Notes |
+| --- | --- |
+| `author` | Required. One of `gianna` \| `stephen` \| `kilo` \| `kujo` (handles, not display names — those are looked up in `PostAvatar.astro`). |
+| `date` | Required. ISO datetime — drives both relative-time display and sort order. |
+| `kind` | Required. `photo` or `video`. Zod discriminated union enforces shape. |
+| `caption` | Required. Short plain text. |
+| `images` | Required, array of `{ src, alt }` or strings. ≥1 image; for video, exactly one (the poster). >1 → carousel. |
+| `location`, `tags`, `draft` | Optional, all kinds. |
+| `youtubeId`, `duration` | Only for `kind: video`. |
+
+The page (`src/pages/posts/index.astro`) server-renders all three layouts (feed/grid/masonry) into one DOM, and an inline JS island switches between them via a `data-layout` attribute on the page root. State persists to `localStorage` and mirrors to `?author=`/`?layout=`/`?tag=` URL params.
+
+No per-post detail page (no `[slug].astro`). Instagram-style feeds don't usually have permalinks; grid tiles deep-link to `#post-<slug>` anchors so in-page scroll-to works. Add `src/pages/posts/[...slug].astro` later if that changes.
+
+The schema lives in `src/content/config.ts` next to `journalSchema`. The CMS surface is configured in `.pages.yml` under `content[name=posts]`, with its own media store (`posts`) pointing at `public/uploads/posts/`.
 
 ### Projects (`src/content/projects/`)
 Small things we've made — guides, experiments, tools. Drives `/projects`.
@@ -147,7 +170,7 @@ The site uses the warm **"kilujo"** design (Claude Design handoff, May 2026):
   `--bg: #faf7f2`, `--bg-alt: #f1ece4`, `--text: #2f2a26`, `--muted: #76695f`, `--accent: #c08a6f`, `--border: #e6ddd1`.
 - **Type:** italic **Newsreader** for display headings, **Iowan Old Style / Georgia** for body. Sans only for UI chrome (eyebrow labels, post meta, nav links).
 - **Texture:** subtle SVG paper-grain + warm vignette on `body::before` / `body::after`.
-- **Nav:** fixed at top, 64px tall, italic wordmark "kilujo." with terracotta dot. Five items: Home · Journal · Photos · Projects · About.
+- **Nav:** fixed at top, 64px tall, italic wordmark "kilujo." with terracotta dot. Six items: Home · Journal · Posts · Photos · Projects · About.
 - **Shapes:** 14px corner radius on cards, soft drop shadows, rounded pill tags.
 - **Dark mode:** CSS tokens defined under `[data-theme="dark"]`. No UI toggle wired yet — to test, set `data-theme="dark"` on `<html>`.
 - **Wrappers:** pages provide their own `<div class="page"><div class="wrap">…</div></div>`. Three widths: `.wrap` (820px), `.wrap-wide` (1080px), `.wrap-narrow` (640px).
