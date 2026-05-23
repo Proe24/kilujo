@@ -18,9 +18,76 @@ function isActive(href: string) {
   <a href="/" class="nav-marks" aria-label="kilujo, home">
     <span class="nav-mark"><span>kilujo</span><span class="dot">.</span></span>
   </a>
-  <div class="nav-links">
+
+  <div class="nav-links" id="nav-links-inline">
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
   </div>
+
+  <button
+    type="button"
+    class="nav-toggle"
+    aria-label="Open menu"
+    aria-expanded="false"
+    aria-controls="nav-panel"
+    data-nav-toggle
+  >
+    <span class="nav-toggle-bars" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>
+  </button>
 </nav>
+
+<div class="nav-panel" id="nav-panel" hidden data-nav-panel>
+  <div class="nav-panel-inner">
+    {links.map(({ href, label }) => (
+      <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+    ))}
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const toggle = document.querySelector('[data-nav-toggle]');
+    const panel  = document.querySelector('[data-nav-panel]');
+    if (!toggle || !panel) return;
+
+    function open() {
+      panel.hidden = false;
+      /* next frame so the transition runs */
+      requestAnimationFrame(() => panel.setAttribute('data-open', ''));
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close menu');
+      document.documentElement.classList.add('nav-open');
+    }
+    function close() {
+      panel.removeAttribute('data-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
+      document.documentElement.classList.remove('nav-open');
+      /* wait for the transition to finish before hiding */
+      setTimeout(() => { if (toggle.getAttribute('aria-expanded') === 'false') panel.hidden = true; }, 220);
+    }
+    function isOpen() { return toggle.getAttribute('aria-expanded') === 'true'; }
+
+    toggle.addEventListener('click', () => { isOpen() ? close() : open(); });
+
+    /* Close on any link tap inside the panel. */
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+
+    /* Esc closes; outside click closes. */
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) close(); });
+    document.addEventListener('click', (e) => {
+      if (!isOpen()) return;
+      const t = e.target;
+      if (t instanceof Node && !panel.contains(t) && !toggle.contains(t)) close();
+    });
+
+    /* Close if we cross the desktop breakpoint while open. */
+    const mq = window.matchMedia('(min-width: 720px)');
+    const handler = () => { if (mq.matches && isOpen()) close(); };
+    if (mq.addEventListener) mq.addEventListener('change', handler);
+    else if (mq.addListener) mq.addListener(handler);
+  })();
+</script>

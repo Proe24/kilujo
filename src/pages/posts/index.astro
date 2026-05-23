@@ -113,13 +113,20 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
 
         <ul class="posts-header-roster" aria-label="Authors">
           {voices.map((h) => (
-            <li class="posts-roster-item" data-roster={h}>
-              <span class="posts-roster-avatar"><PostAvatar handle={h} size={44} /></span>
-              <div class="posts-roster-text">
-                <div class="posts-roster-name">{AUTHORS[h].short}</div>
-                <div class="posts-roster-handle">@{h}</div>
-                <div class="posts-roster-count">{perAuthor[h]} {perAuthor[h] === 1 ? 'post' : 'posts'}</div>
-              </div>
+            <li>
+              <button
+                type="button"
+                class="posts-roster-item"
+                data-roster={h}
+                aria-label={`Show posts from ${AUTHORS[h].short}`}
+              >
+                <span class="posts-roster-avatar"><PostAvatar handle={h} size={44} /></span>
+                <div class="posts-roster-text">
+                  <div class="posts-roster-name">{AUTHORS[h].short}</div>
+                  <div class="posts-roster-handle">@{h}</div>
+                  <div class="posts-roster-count">{perAuthor[h]} {perAuthor[h] === 1 ? 'post' : 'posts'}</div>
+                </div>
+              </button>
             </li>
           ))}
         </ul>
@@ -244,7 +251,10 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
     });
 
     /* ── Author filter ─────────────────────────────────────────────── */
-    const filterChips = page.querySelectorAll('[data-author]');
+    /* Scoped to .posts-filter so we don't accidentally pick up the
+       [data-author] attribute on .posts-item wrappers (used by applyFilter). */
+    const filterChips = page.querySelectorAll('.posts-filter [data-author]');
+    const rosterItems = page.querySelectorAll('[data-roster]');
     const items = page.querySelectorAll('.posts-item');
     const empty = page.querySelector('[data-empty]');
     let currentAuthor = 'all';
@@ -264,13 +274,25 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
       filterChips.forEach((c) => {
         c.classList.toggle('active', c.getAttribute('data-author') === currentAuthor);
       });
+      rosterItems.forEach((r) => {
+        r.classList.toggle('active', r.getAttribute('data-roster') === currentAuthor);
+      });
       if (empty) empty.hidden = shown !== 0;
     }
+    function setAuthor(handle) {
+      currentAuthor = handle || 'all';
+      writeUrl();
+      applyFilter();
+    }
     filterChips.forEach((c) => {
-      c.addEventListener('click', () => {
-        currentAuthor = c.getAttribute('data-author') || 'all';
-        writeUrl();
-        applyFilter();
+      c.addEventListener('click', () => setAuthor(c.getAttribute('data-author')));
+    });
+    rosterItems.forEach((r) => {
+      r.addEventListener('click', () => {
+        setAuthor(r.getAttribute('data-roster'));
+        /* Scroll to the toolbar so the user can see the filter applied. */
+        const tb = page.querySelector('.posts-toolbar');
+        if (tb && 'scrollIntoView' in tb) tb.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
 
