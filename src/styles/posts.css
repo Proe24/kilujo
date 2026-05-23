@@ -407,8 +407,13 @@
   aspect-ratio: auto;
 }
 /* Cropped mode (multi-image carousels): photo container gets an explicit
-   aspect-ratio via inline style, and every slide image fills it with
-   object-fit: cover. Overrides the natural-mode rule above. */
+   aspect-ratio via inline style (the carousel JS updates it on each
+   navigation so the container animates to match the current slide).
+   Slides fill via object-fit:cover so transitions look clean.
+   Overrides the natural-mode rule above. */
+.posts-card-media[data-cropped="1"] .posts-card-photo {
+  transition: aspect-ratio .4s cubic-bezier(.25,.7,.3,1);
+}
 .posts-card-media[data-cropped="1"] .posts-card-slide img {
   height: 100%;
   aspect-ratio: auto;

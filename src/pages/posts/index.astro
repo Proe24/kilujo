@@ -12,32 +12,37 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 /**
- * For multi-photo carousels, every slide should match the first photo's
- * aspect ratio (cropped via object-fit:cover). This keeps the carousel
- * a single visual height instead of letting the tallest slide leave
- * whitespace on shorter ones. Single-photo posts stay natural.
+ * For multi-photo carousels, every slide is shown at its own natural
+ * aspect ratio — the photo container resizes as the user clicks
+ * prev/next. We read all image dimensions at build time and ship them
+ * to the page as a data-aspects JSON array on .posts-card-media; the
+ * carousel JS reads that array and updates the container's
+ * aspect-ratio inline style on each navigation.
  *
- * Built once at page-build time. Returns the ratio as a CSS-ready
- * "W / H" string, or null when the post shouldn't be cropped.
+ * Single-photo posts get no aspect array (they stay natural without JS).
+ * If image-size can't read a file, that slide falls back to "1 / 1" and
+ * a [posts] warning is logged — never breaks the build.
  */
-async function firstImageAspect(post: typeof posts[number]): Promise<string | null> {
+async function imageAspects(post: typeof posts[number]): Promise<string[] | null> {
   if (post.data.kind !== 'photo' || post.data.images.length < 2) return null;
-  const first = post.data.images[0];
-  const src = typeof first === 'string' ? first : first.src;
-  const fsPath = join('public', src.replace(/^\//, ''));
-  try {
-    const buf = await readFile(fsPath);
-    const dim = imageSize(buf);
-    if (!dim?.width || !dim?.height) return '1 / 1';
-    return `${dim.width} / ${dim.height}`;
-  } catch (err) {
-    console.warn(`[posts] could not read first-image dimensions for ${post.slug}:`, err);
-    return '1 / 1';
+  const out: string[] = [];
+  for (const img of post.data.images) {
+    const src = typeof img === 'string' ? img : img.src;
+    const fsPath = join('public', src.replace(/^\//, ''));
+    try {
+      const buf = await readFile(fsPath);
+      const dim = imageSize(buf);
+      out.push(dim?.width && dim?.height ? `${dim.width} / ${dim.height}` : '1 / 1');
+    } catch (err) {
+      console.warn(`[posts] could not read dimensions for ${src}:`, err);
+      out.push('1 / 1');
+    }
   }
+  return out;
 }
 
-const aspectBySlug = new Map<string, string | null>();
-for (const p of posts) aspectBySlug.set(p.slug, await firstImageAspect(p));
+const aspectsBySlug = new Map<string, string[] | null>();
+for (const p of posts) aspectsBySlug.set(p.slug, await imageAspects(p));
 
 const NOW = new Date();
 
@@ -174,10 +179,10 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
               return (
                 <div class="posts-item" data-author={p.data.author} data-tags={(p.data.tags ?? []).map((t) => t.replace(/^#/, '')).join('|')}>
                   <div class="posts-item-feed">
-                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`feed-${p.slug}`} aspectRatio={aspectBySlug.get(p.slug) ?? undefined} />
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`feed-${p.slug}`} aspectRatios={aspectsBySlug.get(p.slug) ?? undefined} />
                   </div>
                   <div class="posts-item-masonry">
-                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`masonry-${p.slug}`} aspectRatio={aspectBySlug.get(p.slug) ?? undefined} />
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`masonry-${p.slug}`} aspectRatios={aspectsBySlug.get(p.slug) ?? undefined} />
                   </div>
                   <a class="posts-item-grid" href={`#post-${p.slug}`} data-grid-tile>
                     <img src={thumbOf(p).src} alt={thumbOf(p).alt} loading="lazy" />
@@ -298,7 +303,11 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
       const dots    = media.querySelectorAll('[data-dot]');
       const prev    = media.querySelector('[data-arrow="prev"]');
       const next    = media.querySelector('[data-arrow="next"]');
+      const photo   = media.querySelector('.posts-card-photo');
       const total   = dots.length;
+      let aspects = null;
+      const raw = media.getAttribute('data-aspects');
+      if (raw) { try { aspects = JSON.parse(raw); } catch (e) {} }
       let i = 0;
 
       function go(n) {
@@ -308,6 +317,7 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
         dots.forEach((d, j) => d.classList.toggle('on', j === i));
         if (prev) prev.hidden = i === 0;
         if (next) next.hidden = i === total - 1;
+        if (photo && aspects && aspects[i]) photo.style.aspectRatio = aspects[i];
       }
       if (prev) prev.addEventListener('click', () => go(i - 1));
       if (next) next.addEventListener('click', () => go(i + 1));
