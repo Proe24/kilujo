@@ -1,7 +1,7 @@
 ---
 heroImage: /uploads/about/family.jpg
 heroAlt: Gianna, Stephen, Kilo and Kujo on a grassy hillside.
-heroCaption: The four of us, on a hillside, last spring.
+heroCaption: Top of the mountain in Carmel.
 eyebrow: A small notebook · Kept since 2024 · Currently in Okinawa
 greeting: |
   Hello, we're
