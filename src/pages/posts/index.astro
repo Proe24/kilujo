@@ -143,10 +143,10 @@ function thumbOf(post: typeof posts[number]): { src: string; alt: string } {
               return (
                 <div class="posts-item" data-author={p.data.author} data-tags={(p.data.tags ?? []).map((t) => t.replace(/^#/, '')).join('|')}>
                   <div class="posts-item-feed">
-                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} />
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`feed-${p.slug}`} />
                   </div>
                   <div class="posts-item-masonry">
-                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} />
+                    <PostCard post={p.data} relTime={relTime(p.data.date)} natural={true} group={`masonry-${p.slug}`} />
                   </div>
                   <a class="posts-item-grid" href={`#post-${p.slug}`} data-grid-tile>
                     <img src={thumbOf(p).src} alt={thumbOf(p).alt} loading="lazy" />

@@ -29,9 +29,11 @@ interface Props {
   natural?: boolean;
   /** Computed at build time. Page passes this in to avoid drift. */
   relTime: string;
+  /** Lightbox group name. When set, photo slides become clickable lightbox triggers. */
+  group?: string;
 }
 
-const { post, natural = false, relTime } = Astro.props;
+const { post, natural = false, relTime, group } = Astro.props;
 
 function normalizeImage(entry: ImageEntry): { src: string; alt: string } {
   if (typeof entry === 'string') return { src: entry, alt: '' };
@@ -73,9 +75,23 @@ const author = AUTHORS[post.author];
     <div class="posts-card-photo">
       <div class="posts-card-track" data-track style="transform: translateX(0)">
         {images.map((im) => (
-          <div class="posts-card-slide">
-            <img src={im.src} alt={im.alt} loading="lazy" />
-          </div>
+          group && post.kind === 'photo' ? (
+            <a
+              class="posts-card-slide"
+              href={im.src}
+              data-lightbox
+              data-lightbox-group={group}
+              data-src={im.src}
+              data-alt={im.alt}
+              aria-label={im.alt || 'Open photo'}
+            >
+              <img src={im.src} alt={im.alt} loading="lazy" />
+            </a>
+          ) : (
+            <div class="posts-card-slide">
+              <img src={im.src} alt={im.alt} loading="lazy" />
+            </div>
+          )
         ))}
       </div>
 
