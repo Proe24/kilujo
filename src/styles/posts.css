@@ -248,9 +248,11 @@
 .posts-page[data-layout="masonry"] .posts-item-masonry { display: block; }
 
 /* ─── Grid tile (square, hover meta) ────────────────────────────────── */
+/* NOTE: don't set `display: block` here — the base `.posts-item-grid
+   { display: none }` rule above is what hides this tile in feed/masonry
+   layouts. The `[data-layout="grid"]` rule re-enables it. */
 .posts-item-grid {
   position: relative;
-  display: block;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--bg-alt);
