@@ -101,7 +101,7 @@ const greetingHtml = (h.greeting ?? '')
             const k = kindLabel[post.data.kind];
             const thumb = postThumb(post);
             return (
-              <a href={`/journal/${post.slug}`} class="entry-row">
+              <a href={`/journal/${post.id}`} class="entry-row">
                 <div class="thumb">
                   {thumb && <img src={thumb} alt="" loading="lazy" />}
                   {post.data.kind === 'video' && <div class="thumb-play" aria-hidden="true">▶</div>}

@@ -76,7 +76,7 @@ const kindsInUse = kindOrder.filter((k) => allKinds.includes(k));
             const thumb = postThumb(post);
             return (
               <a
-                href={`/journal/${post.slug}`}
+                href={`/journal/${post.id}`}
                 class="entry-row"
                 data-entry
                 data-kind={post.data.kind}
