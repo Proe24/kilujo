@@ -3,18 +3,19 @@ title: Custom Zhongwen — Chinese reading assistant
 year: 2026
 kind: Tool
 status: Live
-blurb: "A Chrome extension fork of Zhongwen, the Chinese-English pop-up
-  dictionary. Adds AI-powered sentence breakdowns, source-grouped vocab lists,
-  a mini spaced-repetition study mode, and one-click export to Anki or Pleco."
+blurb: A Chrome extension fork of Zhongwen, the Chinese-English pop-up
+  dictionary. Adds AI-powered sentence breakdowns, source-grouped vocab lists, a
+  mini spaced-repetition study mode, and one-click export to Anki or Pleco.
 tech:
   - Chrome extension
   - JavaScript
   - Claude / Gemini / OpenAI APIs
+cover: /uploads/projects/zhongwen.png
 link: https://github.com/Proe24/custom-zhongwen
 accent: "#7a2a20"
 ---
 Hover over a Chinese character on any webpage to get the dictionary entry, just
-like the original Zhongwen. Press <kbd>S</kbd> over a sentence and an AI tutor
+like the original Zhongwen. Press S over a sentence and an AI tutor
 breaks it down — idiomatic translation, literal gloss, every word with its
 pinyin and grammatical role, plus a short set of grammar notes — rendered in a
 side panel.
