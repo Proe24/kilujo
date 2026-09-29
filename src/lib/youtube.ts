@@ -122,9 +122,12 @@ async function fetchPlayer(videoId: string): Promise<PlayerResponse> {
       throw new YouTubeError(json.playabilityStatus?.reason || 'Video not found.', 404);
     }
     if (status === 'LOGIN_REQUIRED') {
+      // YouTube refuses unauthenticated player requests from most cloud
+      // provider IP ranges ("Sign in to confirm you're not a bot"). Retrying
+      // from the same host does not help; say so plainly.
       lastReason =
-        json.playabilityStatus?.reason ||
-        'YouTube asked the server to sign in (bot check). Try again in a little while.';
+        "YouTube is blocking requests from this site's server (it wants a sign-in to prove it's not a bot). " +
+        'That is a block on the hosting provider, so retrying will not help.';
       continue;
     }
     lastReason = json.playabilityStatus?.reason || `Video is ${String(status).toLowerCase()}.`;
