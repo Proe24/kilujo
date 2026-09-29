@@ -1,0 +1,399 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="YouTube transcript — Kilujo" description="Pull the captions off a YouTube video as plain text, in whichever language the video offers.">
+  <div class="page">
+    <div class="wrap">
+      <header class="page-header">
+        <div class="eyebrow" style="margin-bottom: 12px">Tools</div>
+        <h1><em>YouTube transcript.</em></h1>
+        <p class="lede">Paste a link, pick a language, copy the words.</p>
+      </header>
+
+      <form class="tx-form" id="tx-form" autocomplete="off">
+        <label class="sr-only" for="tx-url">YouTube link or video ID</label>
+        <input
+          id="tx-url"
+          name="v"
+          type="text"
+          inputmode="url"
+          placeholder="https://www.youtube.com/watch?v=…"
+          spellcheck="false"
+          required
+        />
+        <button type="submit" class="tx-btn tx-btn--primary" id="tx-go">Fetch</button>
+      </form>
+
+      <p class="tx-status" id="tx-status" role="status" aria-live="polite"></p>
+
+      <section class="tx-result" id="tx-result" hidden>
+        <div class="tx-video">
+          <div class="eyebrow" id="tx-author"></div>
+          <h2 class="tx-title" id="tx-title"></h2>
+        </div>
+
+        <div class="tx-controls">
+          <label class="tx-field">
+            <span class="tx-label">Language</span>
+            <select id="tx-lang"></select>
+          </label>
+          <label class="tx-check">
+            <input type="checkbox" id="tx-times" />
+            <span>Timestamps</span>
+          </label>
+          <div class="tx-actions">
+            <button type="button" class="tx-btn" id="tx-copy">Copy</button>
+            <button type="button" class="tx-btn" id="tx-txt">.txt</button>
+            <button type="button" class="tx-btn" id="tx-srt">.srt</button>
+          </div>
+        </div>
+
+        <div class="tx-out-wrap">
+          <pre class="tx-out" id="tx-out" tabindex="0"></pre>
+          <div class="tx-meta" id="tx-meta"></div>
+        </div>
+      </section>
+
+      <p class="tx-note">
+        Nothing is stored. The words come straight from the captions YouTube already
+        has for the video, so a video with no captions gives you nothing, and
+        auto-generated ones are only as good as YouTube's ear.
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .tx-form {
+    display: flex;
+    gap: 10px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .tx-form input {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 12px 16px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .tx-form input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .tx-btn {
+    appearance: none;
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: .04em;
+    padding: 9px 16px;
+    color: var(--text);
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+  }
+  .tx-btn:hover { background: var(--accent-soft); border-color: var(--accent-soft); }
+  .tx-btn:disabled { opacity: .5; cursor: default; }
+  .tx-btn--primary {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+    padding: 12px 22px;
+    font-size: 14px;
+  }
+  .tx-btn--primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .tx-status {
+    text-align: center;
+    color: var(--muted);
+    font-style: italic;
+    min-height: 1.6em;
+    margin: 16px 0 0;
+  }
+  .tx-status.is-error { color: #a4553a; }
+
+  .tx-result {
+    margin-top: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+  .tx-video { padding: 24px 28px 18px; }
+  .tx-title {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.2;
+    margin: 6px 0 0;
+  }
+
+  .tx-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 18px;
+    padding: 0 28px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tx-field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 220px; }
+  .tx-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tx-field select {
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 9px 12px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    max-width: 100%;
+  }
+  .tx-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    padding-bottom: 9px;
+    cursor: pointer;
+  }
+  .tx-check input { accent-color: var(--accent); width: 15px; height: 15px; }
+  .tx-actions { display: flex; gap: 6px; margin-left: auto; padding-bottom: 2px; }
+
+  .tx-out-wrap { position: relative; }
+  .tx-out {
+    margin: 0;
+    padding: 22px 28px 26px;
+    max-height: 60vh;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: var(--serif-body);
+    font-size: 16.5px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--surface);
+  }
+  .tx-out:focus { outline: 2px solid var(--accent-soft); outline-offset: -2px; }
+  .tx-out .t {
+    font-family: var(--sans);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-right: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .tx-meta {
+    padding: 10px 28px 14px;
+    border-top: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .02em;
+  }
+  .tx-note {
+    margin: 28px auto 0;
+    max-width: 560px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 15px;
+    font-style: italic;
+  }
+  @media (max-width: 560px) {
+    .tx-form { flex-direction: column; }
+    .tx-btn--primary { width: 100%; }
+    .tx-video, .tx-controls, .tx-out, .tx-meta { padding-left: 18px; padding-right: 18px; }
+    .tx-actions { margin-left: 0; width: 100%; }
+  }
+</style>
+
+<script is:inline>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const form = $('tx-form'), input = $('tx-url'), go = $('tx-go');
+  const status = $('tx-status'), result = $('tx-result');
+  const titleEl = $('tx-title'), authorEl = $('tx-author');
+  const langSel = $('tx-lang'), timesCb = $('tx-times');
+  const out = $('tx-out'), meta = $('tx-meta');
+  const copyBtn = $('tx-copy'), txtBtn = $('tx-txt'), srtBtn = $('tx-srt');
+
+  let info = null;        // { videoId, title, author, lengthSeconds, tracks }
+  let segments = [];      // [{ start, dur, text }]
+  let track = null;       // { lang, name, kind }
+  const cache = new Map();
+
+  const setStatus = (msg, isError) => {
+    status.textContent = msg || '';
+    status.classList.toggle('is-error', !!isError);
+  };
+
+  const api = async (params) => {
+    const qs = new URLSearchParams(params).toString();
+    const res = await fetch('/api/transcript?' + qs, { headers: { 'x-requested-with': 'kilujo' } });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Something went wrong (' + res.status + ').');
+    return data;
+  };
+
+  const pad = (n, w) => String(Math.floor(n)).padStart(w, '0');
+  const fmtTime = (s) => {
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return (h ? pad(h, 1) + ':' : '') + pad(m, 2) + ':' + pad(sec, 2);
+  };
+  const fmtSrt = (s) => {
+    const ms = Math.round((s % 1) * 1000);
+    return pad(s / 3600, 2) + ':' + pad((s % 3600) / 60, 2) + ':' + pad(s % 60, 2) + ',' + String(ms).padStart(3, '0');
+  };
+
+  const plainText = () =>
+    timesCb.checked
+      ? segments.map((s) => '[' + fmtTime(s.start) + '] ' + s.text).join('\n')
+      : segments.map((s) => s.text).join('\n');
+
+  const srtText = () =>
+    segments
+      .map((s, i) => (i + 1) + '\n' + fmtSrt(s.start) + ' --> ' + fmtSrt(s.start + s.dur) + '\n' + s.text + '\n')
+      .join('\n');
+
+  const render = () => {
+    out.replaceChildren();
+    const frag = document.createDocumentFragment();
+    segments.forEach((s, i) => {
+      if (timesCb.checked) {
+        const t = document.createElement('span');
+        t.className = 't';
+        t.textContent = fmtTime(s.start);
+        frag.appendChild(t);
+      }
+      frag.appendChild(document.createTextNode(s.text));
+      if (i < segments.length - 1) frag.appendChild(document.createTextNode('\n'));
+    });
+    out.appendChild(frag);
+    const words = segments.reduce((n, s) => n + s.text.split(/\s+/).filter(Boolean).length, 0);
+    const chars = segments.reduce((n, s) => n + s.text.length, 0);
+    // Languages without spaces (zh/ja/th…) make "words" meaningless; show characters instead.
+    const size = words * 6 < chars ? chars.toLocaleString() + ' characters' : 'about ' + words.toLocaleString() + ' words';
+    meta.textContent = track.name + ' · ' + segments.length + ' lines · ' + size;
+  };
+
+  const loadTrack = async () => {
+    const opt = langSel.selectedOptions[0];
+    if (!opt || !info) return;
+    const key = info.videoId + '|' + opt.value;
+    setStatus('Fetching ' + opt.textContent + '…');
+    try {
+      let data = cache.get(key);
+      if (!data) {
+        data = await api({ v: info.videoId, lang: opt.dataset.lang, kind: opt.dataset.kind });
+        cache.set(key, data);
+      }
+      segments = data.segments;
+      track = data.track;
+      render();
+      setStatus('');
+    } catch (err) {
+      setStatus(err.message, true);
+    }
+  };
+
+  const safeName = (s) => (s || 'transcript').replace(/[\\/:*?"<>|]+/g, '').trim().slice(0, 80);
+  const download = (text, ext) => {
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = safeName(info.title) + ' (' + track.lang + ').' + ext;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const v = input.value.trim();
+    if (!v) return;
+    go.disabled = true;
+    result.hidden = true;
+    setStatus('Looking up video…');
+    try {
+      info = await api({ v });
+      titleEl.textContent = info.title || info.videoId;
+      authorEl.textContent = (info.author ? info.author + ' · ' : '') + fmtTime(info.lengthSeconds);
+      langSel.replaceChildren();
+      if (!info.tracks.length) {
+        setStatus('This video has no captions, in any language.', true);
+        return;
+      }
+      const groups = { manual: 'Captions', auto: 'Auto-generated' };
+      for (const kind of ['manual', 'auto']) {
+        const list = info.tracks.filter((t) => t.kind === kind);
+        if (!list.length) continue;
+        const og = document.createElement('optgroup');
+        og.label = groups[kind];
+        for (const t of list) {
+          const o = document.createElement('option');
+          o.value = t.kind + ':' + t.lang;
+          o.textContent = t.name;
+          o.dataset.lang = t.lang;
+          o.dataset.kind = t.kind;
+          og.appendChild(o);
+        }
+        langSel.appendChild(og);
+      }
+      // Prefer English if present, otherwise the first (manual) track.
+      const en = [...langSel.options].find((o) => /^en/.test(o.dataset.lang));
+      if (en) en.selected = true;
+      result.hidden = false;
+      history.replaceState(null, '', '?v=' + info.videoId);
+      await loadTrack();
+    } catch (err) {
+      setStatus(err.message, true);
+    } finally {
+      go.disabled = false;
+    }
+  });
+
+  langSel.addEventListener('change', loadTrack);
+  timesCb.addEventListener('change', () => segments.length && render());
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(plainText());
+      copyBtn.textContent = 'Copied';
+      setTimeout(() => (copyBtn.textContent = 'Copy'), 1400);
+    } catch {
+      setStatus('Could not copy. Select the text and copy it by hand.', true);
+    }
+  });
+  txtBtn.addEventListener('click', () => download(plainText(), 'txt'));
+  srtBtn.addEventListener('click', () => download(srtText(), 'srt'));
+
+  // Deep link: /tools/transcript?v=<id>
+  const preset = new URLSearchParams(location.search).get('v');
+  if (preset) {
+    input.value = preset;
+    form.requestSubmit();
+  }
+})();
+</script>

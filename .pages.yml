@@ -368,7 +368,7 @@ content:
 
       - name: link
         label: Link
-        description: 'Internal route (e.g. "/guides/barotrauma/baro_index.html") or external URL.'
+        description: 'Internal route (e.g. "/tools/transcript") or external URL.'
         type: string
         required: true
 

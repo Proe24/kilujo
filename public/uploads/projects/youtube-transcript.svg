@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <rect width="640" height="360" fill="#f1ece4"/>
+  <g font-family="Newsreader, 'Iowan Old Style', Georgia, serif" font-style="italic" fill="#2f2a26">
+    <text x="64" y="118" font-size="30" fill="#76695f">00:00</text>
+    <text x="64" y="176" font-size="42">paste a link,</text>
+    <text x="64" y="232" font-size="42">pick a language,</text>
+    <text x="64" y="288" font-size="42">copy the words<tspan fill="#c08a6f">.</tspan></text>
+  </g>
+  <g fill="none" stroke="#e6ddd1" stroke-width="2">
+    <line x1="64" y1="72" x2="576" y2="72"/>
+  </g>
+  <circle cx="556" cy="112" r="20" fill="#9b8c5a"/>
+  <polygon points="550,102 550,122 566,112" fill="#f1ece4"/>
+</svg>

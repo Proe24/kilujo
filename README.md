@@ -2,7 +2,7 @@
 
 A small Astro-built personal site for Gianna, Stephen, Kilo and Kujo. Live at **kilujo.com**.
 
-Sections: Home, Journal, Vlogs, Gaming, Photos, Guides, About.
+Sections: Home, Journal, Posts, Photos, Projects, About.
 
 ## Local development
 
@@ -80,11 +80,14 @@ Video posts add `duration` ("0:36") and optional `youtubeId`. Multiple
 Images upload via the CMS into `public/uploads/posts/` (flat folder —
 Pages CMS doesn't support per-entry subfolders).
 
-### Guides
+### Projects
 
-Drop a self-contained static guide into `public/guides/<slug>/`, then add a card to `src/data/guides.ts`. The guide keeps its own styles — the landing page wraps it with the main site palette.
+Cards on `/projects` come from `src/content/projects/*.md` (or the Projects surface in Pages CMS). `link` is either an internal route or an external URL; external links open in a new tab. Current entries: **Yiju** (readyiju.com, lives in its own repo) and the **YouTube transcript** tool below.
 
-**The Barotrauma guide** at `public/guides/barotrauma/` has its own global nav (sticky topbar + responsive sidebar + auto prev/next) handled by `baro_nav.js`. The sidebar is pinned open on viewports ≥ 1280 px and slides in from the right below that. To add or rename a mod page, edit the `PAGES` array at the top of that file — every page picks it up automatically. Any new HTML page in that folder just needs `<script defer src="baro_nav.js"></script>` before `</body>`.
+### Tools
+
+- **`/tools/shrink-photo`** — client-side photo resizer used before uploading to the CMS. Plain HTML in `public/tools/`.
+- **`/tools/transcript`** — YouTube transcript extractor. Paste a link, pick one of the caption languages the video offers, copy or download as `.txt`/`.srt`. The page is static; it calls `/api/transcript`, a small Vercel function (`src/pages/api/transcript.ts` + `src/lib/youtube.ts`) that asks YouTube for the caption tracks and returns the chosen one. No API key, nothing stored. If YouTube rate-limits the server the page shows the error and you can just retry.
 
 ### Photos
 
@@ -106,8 +109,7 @@ Drop images into `public/uploads/<post-slug>/` (any image format). Reference the
 ├── package.json
 ├── public/
 │   ├── favicon.svg
-│   ├── guides/
-│   │   └── barotrauma/      # static Barotrauma guide
+│   ├── tools/shrink-photo.html
 │   └── uploads/             # per-post images (uploads/<slug>/*.jpg)
 ├── src/
 │   ├── components/          # Nav, Footer, Gallery, DogAvatars
@@ -126,7 +128,10 @@ Drop images into `public/uploads/<post-slug>/` (any image format). Reference the
 │   │   ├── vlogs/{index,[...slug]}.astro
 │   │   ├── gaming/{index,[...slug]}.astro
 │   │   ├── photos/{index,[albumId]}.astro
-│   │   └── guides/index.astro
+│   │   ├── projects/index.astro
+│   │   ├── tools/transcript.astro   # static page
+│   │   └── api/transcript.ts        # on-demand Vercel function
+│   ├── lib/youtube.ts               # YouTube caption fetcher (server only)
 │   └── styles/global.css
 └── tsconfig.json
 ```

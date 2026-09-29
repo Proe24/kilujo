@@ -28,7 +28,7 @@ npm run preview    # serve the build locally
 3. **Privacy by default.** No analytics, no third-party trackers, no external CDNs, no embedded social widgets unless the owner explicitly asks. Self-host anything that can be self-hosted (fonts via `@fontsource/*`, images via `public/uploads/`).
 4. **Update docs when behavior changes.** Touch `README.md` for user-facing things; this file for how the project is operated.
 5. **Tell the owner clearly when you change existing Astro files** — they want to know what to expect before pushing.
-6. **The Barotrauma guide is a self-contained drop.** See the dedicated section below; don't restyle it to match the main site.
+6. **The site is static except one route.** `src/pages/api/transcript.ts` is the only on-demand (serverless) code. Don't add more server routes without surfacing it first — every one is a new attack surface and a new thing that can break at deploy time.
 
 ---
 
@@ -43,7 +43,7 @@ npm run preview    # serve the build locally
 | Content | Astro content collections + markdown |
 | External data | **Flickr API** at build time (only for `/photos`) |
 | CMS | **Pages CMS** (`.pages.yml` at root, free, GitHub-OAuth) |
-| Deploy | Vercel, auto on push to `main` |
+| Deploy | Vercel, auto on push to `main`. `@astrojs/vercel` adapter is installed **only** so `/api/transcript` can run as a function; every page is still prerendered. |
 
 ---
 
@@ -53,13 +53,11 @@ npm run preview    # serve the build locally
 .
 ├── .pages.yml                  # Pages CMS configuration
 ├── astro.config.mjs
-├── package.json                # deps: astro, @fontsource/newsreader
+├── package.json                # deps: astro, @astrojs/vercel, @fontsource/newsreader
 ├── docs/
 │   └── adding-photos.md        # plain-English guide for Gianna on the two photo paths
 ├── public/
 │   ├── favicon.svg
-│   ├── guides/
-│   │   └── barotrauma/         # self-contained dark-theme guide (see below)
 │   ├── tools/
 │   │   └── shrink-photo.html   # client-side photo resizer for Path A uploads
 │   └── uploads/                # self-hosted media
@@ -77,13 +75,16 @@ npm run preview    # serve the build locally
     │   └── pages/              # singletons: about.md, home.md
     ├── layouts/Layout.astro
     ├── lib/flickr.ts           # build-time Flickr fetcher
+    ├── lib/youtube.ts          # server-only YouTube caption fetcher (InnerTube)
     ├── pages/
     │   ├── index.astro         # home
     │   ├── about.astro         # renders src/content/pages/about.md
     │   ├── journal/{index,[...slug],tag/[tag]}.astro
     │   ├── posts/index.astro    # one-page feed (no per-post route)
     │   ├── photos/{index,[albumId]}.astro
-    │   └── projects/index.astro
+    │   ├── projects/index.astro
+    │   ├── tools/transcript.astro  # static page for the transcript tool
+    │   └── api/transcript.ts       # the one on-demand route (prerender = false)
     └── styles/global.css
 ```
 
@@ -134,7 +135,7 @@ Small things we've made — guides, experiments, tools. Drives `/projects`.
 | `title`, `year`, `kind`, `status`, `blurb`, `link` | Required. `kind` ∈ {Guide, Experiment, Tool}. `status` ∈ {Live, In progress, Proof of concept, Archived}. |
 | `tech`, `cover`, `accent`, `body` | Optional. `accent` is a hex string for the card's top stripe (default `#c08a6f`). |
 
-`link` is either an internal path (e.g. `/guides/barotrauma/baro_index.html`) or an external URL. The Barotrauma guide is one project entry; its static files still live under `public/guides/barotrauma/`.
+`link` is either an internal path (e.g. `/tools/transcript`) or an external URL (opens in a new tab). Current entries: `yiju.md` (external, readyiju.com — the app lives in its own repo at github.com/Proe24/yiju) and `youtube-transcript.md` (internal, see below). Covers live in `public/uploads/projects/`.
 
 ### Pages (`src/content/pages/`)
 Single-file content. Two singletons today:
@@ -223,13 +224,15 @@ Local `.env` mirrors these for `npm run dev`/`build`. Gitignored.
 
 ---
 
-## Barotrauma guide (`public/guides/barotrauma/`)
+## YouTube transcript tool (`/tools/transcript`)
 
-A self-contained static site living under `public/guides/`. **Treat as a sealed drop** — don't restyle it to match the main site. The dark "submarine" theme is intentional once you click in.
+Paste a YouTube link or ID, choose one of the caption languages the video actually has, read/copy/download (`.txt` or `.srt`, timestamps optional). Deep-linkable via `/tools/transcript?v=<id>`.
 
-- **Single source of truth: `baro_nav.js`.** The `PAGES` array at the top of that file lists the hub, the playbook, and all 17 mod pages with their categories. Edit there and every page updates automatically.
-- **Nav UX:** sticky topbar on every page with a back link to `/projects`, breadcrumb, position chip ("6 / 17"), and an "All mods" menu. The mod list is a **persistent right sidebar on viewports ≥ 1280 px**, and a **slide-in drawer below that breakpoint** (Esc / `/` / J / K shortcuts wired). Auto-injected prev/next at the bottom of every mod page.
-- **To add a new page** in `public/guides/barotrauma/`: add the entry to the `PAGES` array in `baro_nav.js`, and include `<script defer src="baro_nav.js"></script>` before `</body>` in the new HTML file.
+- **Page:** `src/pages/tools/transcript.astro` — static, uses the main `Layout`, inline vanilla JS.
+- **API:** `src/pages/api/transcript.ts` (`prerender = false`, runs as a Vercel function). `GET ?v=<id|url>` returns `{ title, author, lengthSeconds, tracks[] }`; add `&lang=<code>&kind=<auto|manual>` to get `{ track, segments[] }`. Responses carry `s-maxage=3600` so the CDN absorbs repeats. Requests must send `x-requested-with: kilujo` (the page does) — a light guard against other sites using it as a free proxy.
+- **Fetcher:** `src/lib/youtube.ts`. Calls YouTube's InnerTube `player` endpoint with the ANDROID client identity (falls back to IOS), reads `captionTracks`, then downloads the chosen `baseUrl` as `fmt=json3`. No API key. Per-video player responses are cached in memory for 5 min per warm function instance.
+- **Known limits:** YouTube's `tlang=` on-the-fly translation returns 429 from servers, so only the video's own tracks are offered (no "translate to"). YouTube also sometimes bot-checks cloud IPs (`LOGIN_REQUIRED`); the API surfaces that as a 502 with a plain message and the user retries. Nothing is stored server-side.
+- **Local Node is 24, Vercel functions run Node 22.** The build warns about this; harmless.
 
 ---
 
@@ -239,6 +242,7 @@ A self-contained static site living under `public/guides/`. **Treat as a sealed 
 | --- | --- | --- |
 | **YouTube (youtube-nocookie.com)** | `/journal/<slug>` when `kind: video` | Lowest-tracking variant. Approved. |
 | **Flickr static URLs** | `/photos` and inline `<FlickrPhoto>` embeds in journal posts | Owner's own account; images served directly from `live.staticflickr.com`. |
+| **YouTube InnerTube (server-side)** | `/api/transcript` | The Vercel function talks to youtube.com; the visitor's browser only talks to kilujo.com. No third-party requests from the page. |
 
 Nothing else. No analytics, no fonts CDN, no widgets.
 
