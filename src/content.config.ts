@@ -1,4 +1,15 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
+
+/**
+ * Content collections (Astro Content Layer API).
+ *
+ * Each collection loads markdown from its folder under src/content/ via the
+ * glob loader. Entry ids are the slugified filenames (no extension), which is
+ * what the routes use: /journal/<id>, #post-<id>, getEntry('pages', 'about').
+ */
+const md = (dir: string) => glob({ pattern: '**/[^_]*.md', base: `./src/content/${dir}` });
 
 /**
  * Shared frontmatter fields used by every authorable post.
@@ -160,8 +171,8 @@ const videoFeedPost = postBase.extend({
 const postsSchema = z.discriminatedUnion('kind', [photoPost, videoFeedPost]);
 
 export const collections = {
-  journal:  defineCollection({ type: 'content', schema: journalSchema }),
-  projects: defineCollection({ type: 'content', schema: projectsSchema }),
-  pages:    defineCollection({ type: 'content', schema: pagesSchema }),
-  posts:    defineCollection({ type: 'content', schema: postsSchema }),
+  journal:  defineCollection({ loader: md('journal'),  schema: journalSchema }),
+  projects: defineCollection({ loader: md('projects'), schema: projectsSchema }),
+  pages:    defineCollection({ loader: md('pages'),    schema: pagesSchema }),
+  posts:    defineCollection({ loader: md('posts'),    schema: postsSchema }),
 };

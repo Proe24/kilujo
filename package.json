@@ -11,9 +11,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/vercel": "^8.2.11",
+    "@astrojs/vercel": "^11.0.11",
     "@fontsource/newsreader": "^5.2.10",
-    "astro": "^5.1.1",
-    "image-size": "^2.0.2"
+    "astro": "^7.3.5",
+    "image-size": "^2.0.4"
+  },
+  "overrides": {
+    "@vercel/routing-utils": {
+      "path-to-regexp": "6.3.0"
+    }
   }
 }

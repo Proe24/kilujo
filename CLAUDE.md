@@ -36,7 +36,7 @@ npm run preview    # serve the build locally
 
 | Layer | Choice |
 | --- | --- |
-| Framework | **Astro 5** (static output) |
+| Framework | **Astro 7** (static output; Content Layer collections, Node 22+) |
 | Language | TypeScript |
 | Styling | Hand-written CSS in `src/styles/global.css` (design tokens + utilities) |
 | Fonts | **Self-hosted Newsreader** via `@fontsource/newsreader` (no Google CDN) |
@@ -68,7 +68,7 @@ npm run preview    # serve the build locally
 └── src/
     ├── components/             # Nav, Footer, Gallery, DogAvatars, FlickrPhoto
     ├── content/
-    │   ├── config.ts           # zod schemas (journal/posts/projects/pages)
+    │   └── (schemas live in src/content.config.ts, not here)
     │   ├── journal/            # unified feed
     │   ├── posts/              # short-form, instagram-style feed
     │   ├── projects/           # cards on /projects
@@ -92,7 +92,7 @@ npm run preview    # serve the build locally
 
 ## Content model
 
-Five editable surfaces, all defined in `.pages.yml` and `src/content/config.ts`:
+Five editable surfaces, all defined in `.pages.yml` and `src/content.config.ts`:
 
 ### Journal (`src/content/journal/`)
 Unified feed of **writing / video / gaming**. The `kind` field discriminates which extra fields apply:
@@ -105,7 +105,7 @@ Unified feed of **writing / video / gaming**. The `kind` field discriminates whi
 | `youtubeId` | Only when `kind: video`. Just the ID (e.g. `wpQQxUeekks`), not the URL. |
 | `game`, `rating` (1–5), `platform`, `hours` | Only when `kind: gaming`. |
 
-The Astro schema (`src/content/config.ts`) uses a **Zod discriminated union** so invalid combinations fail at build time. Pages CMS sends them all as optional and we narrow on the kind.
+The Astro schema (`src/content.config.ts`) uses a **Zod discriminated union** so invalid combinations fail at build time. Pages CMS sends them all as optional and we narrow on the kind.
 
 ### Posts (`src/content/posts/`)
 Instagram-style short-form feed at `/posts`. Four "accounts" share one
@@ -125,7 +125,7 @@ The page (`src/pages/posts/index.astro`) server-renders all three layouts (feed/
 
 No per-post detail page (no `[slug].astro`). Instagram-style feeds don't usually have permalinks; grid tiles deep-link to `#post-<slug>` anchors so in-page scroll-to works. Add `src/pages/posts/[...slug].astro` later if that changes.
 
-The schema lives in `src/content/config.ts` next to `journalSchema`. The CMS surface is configured in `.pages.yml` under `content[name=posts]`, with its own media store (`posts`) pointing at `public/uploads/posts/`.
+The schema lives in `src/content.config.ts` next to `journalSchema`. The CMS surface is configured in `.pages.yml` under `content[name=posts]`, with its own media store (`posts`) pointing at `public/uploads/posts/`.
 
 ### Projects (`src/content/projects/`)
 Small things we've made — guides, experiments, tools. Drives `/projects`.

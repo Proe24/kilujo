@@ -114,7 +114,7 @@ Drop images into `public/uploads/<post-slug>/` (any image format). Reference the
 ├── src/
 │   ├── components/          # Nav, Footer, Gallery, DogAvatars
 │   ├── content/
-│   │   ├── config.ts        # zod schemas
+│   ├── content.config.ts    # zod schemas + glob loaders
 │   │   ├── journal/         # *.md
 │   │   ├── vlogs/           # *.md
 │   │   └── gaming/          # *.md
