@@ -82,7 +82,7 @@ Pages CMS doesn't support per-entry subfolders).
 
 ### Projects
 
-Cards on `/projects` come from `src/content/projects/*.md` (or the Projects surface in Pages CMS). `link` is either an internal route or an external URL; external links open in a new tab. Current entries: **Yiju** (readyiju.com, lives in its own repo) and the **YouTube transcript** tool below.
+Cards on `/projects` come from `src/content/projects/*.md` (or the Projects surface in Pages CMS). `link` is either an internal route or an external URL; external links open in a new tab. Current entries: **Yiju** (readyiju.com), **Custom Zhongwen** (GitHub), and the **YouTube transcript** tool below.
 
 ### Tools
 

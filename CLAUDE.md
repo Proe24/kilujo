@@ -135,7 +135,7 @@ Small things we've made — guides, experiments, tools. Drives `/projects`.
 | `title`, `year`, `kind`, `status`, `blurb`, `link` | Required. `kind` ∈ {Guide, Experiment, Tool}. `status` ∈ {Live, In progress, Proof of concept, Archived}. |
 | `tech`, `cover`, `accent`, `body` | Optional. `accent` is a hex string for the card's top stripe (default `#c08a6f`). |
 
-`link` is either an internal path (e.g. `/tools/transcript`) or an external URL (opens in a new tab). Current entries: `yiju.md` (external, readyiju.com — the app lives in its own repo at github.com/Proe24/yiju) and `youtube-transcript.md` (internal, see below). Covers live in `public/uploads/projects/`.
+`link` is either an internal path (e.g. `/tools/transcript`) or an external URL (opens in a new tab). Current entries: `yiju.md` (external, readyiju.com — repo at github.com/Proe24/yiju), `custom-zhongwen.md` (external, GitHub, added via the CMS), and `youtube-transcript.md` (internal, see below). Covers live in `public/uploads/projects/`.
 
 ### Pages (`src/content/pages/`)
 Single-file content. Two singletons today:
